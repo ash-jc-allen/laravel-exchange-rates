@@ -5,7 +5,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Providers;
 use AshAllenDesign\LaravelExchangeRates\Facades\ExchangeRate;
 use Illuminate\Support\ServiceProvider;
 
-class ExchangeRateServiceProvider extends ServiceProvider
+class ExchangeRatesProvider extends ServiceProvider
 {
     /**
      * Register any application services.

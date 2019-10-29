@@ -3,7 +3,7 @@
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
 use AshAllenDesign\LaravelExchangeRates\Facades\ExchangeRate;
-use AshAllenDesign\LaravelExchangeRates\Providers\ExchangeRateServiceProvider;
+use AshAllenDesign\LaravelExchangeRates\Providers\ExchangeRatesProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -17,7 +17,7 @@ abstract class TestCase extends OrchestraTestCase
      */
     protected function getPackageProviders($app)
     {
-        return [ExchangeRateServiceProvider::class];
+        return [ExchangeRatesProvider::class];
     }
 
     /**

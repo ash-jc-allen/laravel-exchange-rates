@@ -27,7 +27,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AshAllenDesign\\LaravelExchangeRates\\Providers\\LaravelExchangeRatesProvider"
+                "AshAllenDesign\\LaravelExchangeRates\\Providers\\ExchangeRatesProvider"
             ]
         }
     },
