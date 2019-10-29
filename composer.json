@@ -5,7 +5,8 @@
     "require": {
         "nesbot/carbon": "~2.0",
         "guzzlehttp/guzzle": "^6.3",
-        "moneyphp/money": "^3.2"
+        "moneyphp/money": "^3.2",
+        "ext-json": "*"
     },
     "license": "MIT",
     "authors": [

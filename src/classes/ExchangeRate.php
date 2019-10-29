@@ -11,7 +11,7 @@ use Money\Money;
 class ExchangeRate
 {
     /** @var string */
-    private $BASE_URL;
+    private $baseUrl = 'https://api.exchangeratesapi.io';
 
     /** @var Client */
     private $client;
@@ -22,8 +22,6 @@ class ExchangeRate
      */
     public function __construct(Client $client = null)
     {
-        $this->BASE_URL = 'https://api.exchangeratesapi.io';
-
         $this->client = $client ?? (new Client());
     }
 
@@ -125,7 +123,7 @@ class ExchangeRate
      */
     private function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->BASE_URL . $path . '?';
+        $url = $this->baseUrl . $path . '?';
 
         foreach ($queryParams as $param => $value) {
             $url .= '&' . urlencode($param) . '=' . urlencode($value);
