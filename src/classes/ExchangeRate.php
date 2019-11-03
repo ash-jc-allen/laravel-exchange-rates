@@ -64,8 +64,13 @@ class ExchangeRate
      * @return mixed
      * @throws \Exception
      */
-    public function exchangeRateBetweenDateRange(string $from, string $to, Carbon $date, Carbon $endDate, $conversions = [])
-    {
+    public function exchangeRateBetweenDateRange(
+        string $from,
+        string $to,
+        Carbon $date,
+        Carbon $endDate,
+        array $conversions = []
+    ) {
         $result = $this->makeRequest('/history', [
             'base' => $from,
             'start_at' => $date->format('Y-m-d'),
@@ -81,13 +86,13 @@ class ExchangeRate
     }
 
     /**
-     * @param integer $value
+     * @param string $value
      * @param string $from
      * @param string $to
      * @param Carbon|null $date
      * @return float|int
      */
-    public function convert(int $value, string $from, string $to, Carbon $date = null)
+    public function convert(string $value, string $from, string $to, Carbon $date = null)
     {
         $result = Money::{$to}($value)->multiply($this->exchangeRate($from, $to, $date));
 
@@ -104,11 +109,17 @@ class ExchangeRate
      * @return array
      * @throws \Exception
      */
-    public function convertBetweenDateRange(int $value, string $from, string $to, Carbon $date, Carbon $endDate, array $conversions = [])
-    {
+    public function convertBetweenDateRange(
+        string $value,
+        string $from,
+        string $to,
+        Carbon $date,
+        Carbon $endDate,
+        array $conversions = []
+    ) {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
             $result = Money::{$from}($value)->multiply($exchangeRate);
-            $conversions[$date] = (float) (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
+            $conversions[$date] = (float)(new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
         }
 
         ksort($conversions);
