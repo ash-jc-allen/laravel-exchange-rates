@@ -2,6 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates;
 
+use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\Currencies\ISOCurrencies;
 use GuzzleHttp\Client;
@@ -10,19 +11,18 @@ use Money\Money;
 
 class ExchangeRate
 {
-    /** @var string */
-    private $baseUrl = 'https://api.exchangeratesapi.io';
-
-    /** @var Client */
-    private $client;
+    /**
+     * @var RequestBuilder
+     */
+    private $requestBuilder;
 
     /**
      * ExchangeRate constructor.
-     * @param Client|null $client
+     * @param RequestBuilder|null $requestBuilder
      */
-    public function __construct(Client $client = null)
+    public function __construct(RequestBuilder $requestBuilder = null)
     {
-        $this->client = $client ?? (new Client());
+        $this->requestBuilder = $requestBuilder ?? (new RequestBuilder(new Client()));
     }
 
     /**
@@ -31,11 +31,11 @@ class ExchangeRate
      */
     public function currencies(array $currencies = [])
     {
-        $response = $this->makeRequest('/latest');
+        $response = $this->requestBuilder->makeRequest('/latest', []);
 
-        $currencies[] = $response->base;
+        $currencies[] = $response['base'];
 
-        foreach ($response->rates as $currency => $rate) {
+        foreach ($response['rates'] as $currency => $rate) {
             $currencies[] = $currency;
         }
 
@@ -50,9 +50,11 @@ class ExchangeRate
      */
     public function exchangeRate(string $from, string $to, Carbon $date = null)
     {
-        return $date
-            ? $this->makeRequest('/' . $date->format('Y-m-d'), ['base' => $from])->rates->$to
-            : $this->makeRequest('/latest', ['base' => $from])->rates->$to;
+        if ($date) {
+            return $this->requestBuilder->makeRequest('/' . $date->format('Y-m-d'), ['base' => $from])['rates'][$to];
+        }
+
+        return $this->requestBuilder->makeRequest('/latest', ['base' => $from])['rates'][$to];
     }
 
     /**
@@ -71,28 +73,30 @@ class ExchangeRate
         Carbon $endDate,
         array $conversions = []
     ) {
-        $result = $this->makeRequest('/history', [
-            'base' => $from,
+        $result = $this->requestBuilder->makeRequest('/history', [
+            'base'     => $from,
             'start_at' => $date->format('Y-m-d'),
-            'end_at' => $endDate->format('Y-m-d'),
-            'symbols' => $to,
+            'end_at'   => $endDate->format('Y-m-d'),
+            'symbols'  => $to,
         ]);
 
-        foreach ($result->rates as $date => $rate) {
-            $conversions[$date] = $rate->{$to};
+        foreach ($result['rates'] as $date => $rate) {
+            $conversions[$date] = $rate[$to];
         }
+
+        ksort($conversions);
 
         return $conversions;
     }
 
     /**
-     * @param string $value
+     * @param int $value
      * @param string $from
      * @param string $to
      * @param Carbon|null $date
      * @return float|int
      */
-    public function convert(string $value, string $from, string $to, Carbon $date = null)
+    public function convert(int $value, string $from, string $to, Carbon $date = null)
     {
         $result = Money::{$to}($value)->multiply($this->exchangeRate($from, $to, $date));
 
@@ -100,7 +104,7 @@ class ExchangeRate
     }
 
     /**
-     * @param integer $value
+     * @param int $value
      * @param string $from
      * @param string $to
      * @param Carbon $date
@@ -110,7 +114,7 @@ class ExchangeRate
      * @throws \Exception
      */
     public function convertBetweenDateRange(
-        string $value,
+        int $value,
         string $from,
         string $to,
         Carbon $date,
@@ -125,21 +129,5 @@ class ExchangeRate
         ksort($conversions);
 
         return $conversions;
-    }
-
-    /**
-     * @param string $path
-     * @param array ...$queryParams
-     * @return mixed
-     */
-    private function makeRequest(string $path, array $queryParams = [])
-    {
-        $url = $this->baseUrl . $path . '?';
-
-        foreach ($queryParams as $param => $value) {
-            $url .= '&' . urlencode($param) . '=' . urlencode($value);
-        }
-
-        return json_decode($this->client->get($url)->getBody()->getContents());
     }
 }
