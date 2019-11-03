@@ -10,9 +10,10 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 abstract class TestCase extends OrchestraTestCase
 {
     /**
-     * Load package service provider
+     * Load package service provider.
      *
      * @param $app
+     *
      * @return array
      */
     protected function getPackageProviders($app)
@@ -21,9 +22,10 @@ abstract class TestCase extends OrchestraTestCase
     }
 
     /**
-     * Load package alias
+     * Load package alias.
      *
      * @param Application $app
+     *
      * @return array
      */
     protected function getPackageAliases($app)

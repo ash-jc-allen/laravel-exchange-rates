@@ -3,10 +3,10 @@
 namespace AshAllenDesign\LaravelExchangeRates;
 
 use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
-use Money\Formatter\DecimalMoneyFormatter;
-use Money\Currencies\ISOCurrencies;
-use GuzzleHttp\Client;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 
 class ExchangeRate
@@ -18,6 +18,7 @@ class ExchangeRate
 
     /**
      * ExchangeRate constructor.
+     *
      * @param RequestBuilder|null $requestBuilder
      */
     public function __construct(RequestBuilder $requestBuilder = null)
@@ -27,6 +28,7 @@ class ExchangeRate
 
     /**
      * @param array $currencies
+     *
      * @return array
      */
     public function currencies(array $currencies = [])
@@ -43,15 +45,16 @@ class ExchangeRate
     }
 
     /**
-     * @param string $from
-     * @param string $to
+     * @param string      $from
+     * @param string      $to
      * @param Carbon|null $date
+     *
      * @return mixed
      */
     public function exchangeRate(string $from, string $to, Carbon $date = null)
     {
         if ($date) {
-            return $this->requestBuilder->makeRequest('/' . $date->format('Y-m-d'), ['base' => $from])['rates'][$to];
+            return $this->requestBuilder->makeRequest('/'.$date->format('Y-m-d'), ['base' => $from])['rates'][$to];
         }
 
         return $this->requestBuilder->makeRequest('/latest', ['base' => $from])['rates'][$to];
@@ -62,9 +65,11 @@ class ExchangeRate
      * @param string $to
      * @param Carbon $date
      * @param Carbon $endDate
-     * @param array $conversions
-     * @return mixed
+     * @param array  $conversions
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -90,10 +95,11 @@ class ExchangeRate
     }
 
     /**
-     * @param int $value
-     * @param string $from
-     * @param string $to
+     * @param int         $value
+     * @param string      $from
+     * @param string      $to
      * @param Carbon|null $date
+     *
      * @return float|int
      */
     public function convert(int $value, string $from, string $to, Carbon $date = null)
@@ -104,14 +110,16 @@ class ExchangeRate
     }
 
     /**
-     * @param int $value
+     * @param int    $value
      * @param string $from
      * @param string $to
      * @param Carbon $date
      * @param Carbon $endDate
-     * @param array $conversions
-     * @return array
+     * @param array  $conversions
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function convertBetweenDateRange(
         int $value,
@@ -123,7 +131,7 @@ class ExchangeRate
     ) {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
             $result = Money::{$from}($value)->multiply($exchangeRate);
-            $conversions[$date] = (float)(new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
+            $conversions[$date] = (float) (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
         }
 
         ksort($conversions);

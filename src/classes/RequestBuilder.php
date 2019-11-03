@@ -16,6 +16,7 @@ class RequestBuilder
 
     /**
      * RequestBuilder constructor.
+     *
      * @param Client|null $client
      */
     public function __construct(Client $client = null)
@@ -25,15 +26,16 @@ class RequestBuilder
 
     /**
      * @param string $path
-     * @param array ...$queryParams
+     * @param array  ...$queryParams
+     *
      * @return mixed
      */
     public function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->baseUrl . $path . '?';
+        $url = $this->baseUrl.$path.'?';
 
         foreach ($queryParams as $param => $value) {
-            $url .= '&' . urlencode($param) . '=' . urlencode($value);
+            $url .= '&'.urlencode($param).'='.urlencode($value);
         }
 
         return json_decode($this->client->get($url)->getBody()->getContents(), true);
