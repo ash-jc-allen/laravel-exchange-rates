@@ -2,8 +2,12 @@
 
 namespace AshAllenDesign\LaravelExchangeRates;
 
+use AshAllenDesign\LaravelExchangeRates\classes\Currencies;
 use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidCurrencyException;
+use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidDateException;
 use Carbon\Carbon;
+use Exception;
 use GuzzleHttp\Client;
 use Money\Currencies\ISOCurrencies;
 use Money\Formatter\DecimalMoneyFormatter;
@@ -45,16 +49,22 @@ class ExchangeRate
     }
 
     /**
-     * @param string      $from
-     * @param string      $to
+     * @param string $from
+     * @param string $to
      * @param Carbon|null $date
      *
      * @return mixed
+     * @throws InvalidCurrencyException
+     * @throws InvalidDateException
      */
     public function exchangeRate(string $from, string $to, Carbon $date = null)
     {
+        $this->validateCurrencyCode($from);
+        $this->validateCurrencyCode($to);
+
         if ($date) {
-            return $this->requestBuilder->makeRequest('/'.$date->format('Y-m-d'), ['base' => $from])['rates'][$to];
+            $this->validateDate($date);
+            return $this->requestBuilder->makeRequest('/' . $date->format('Y-m-d'), ['base' => $from])['rates'][$to];
         }
 
         return $this->requestBuilder->makeRequest('/latest', ['base' => $from])['rates'][$to];
@@ -65,11 +75,11 @@ class ExchangeRate
      * @param string $to
      * @param Carbon $date
      * @param Carbon $endDate
-     * @param array  $conversions
-     *
-     * @throws \Exception
+     * @param array $conversions
      *
      * @return mixed
+     * @throws Exception
+     *
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -95,12 +105,13 @@ class ExchangeRate
     }
 
     /**
-     * @param int         $value
-     * @param string      $from
-     * @param string      $to
+     * @param int $value
+     * @param string $from
+     * @param string $to
      * @param Carbon|null $date
      *
      * @return float|int
+     * @throws InvalidCurrencyException
      */
     public function convert(int $value, string $from, string $to, Carbon $date = null)
     {
@@ -110,16 +121,16 @@ class ExchangeRate
     }
 
     /**
-     * @param int    $value
+     * @param int $value
      * @param string $from
      * @param string $to
      * @param Carbon $date
      * @param Carbon $endDate
-     * @param array  $conversions
-     *
-     * @throws \Exception
+     * @param array $conversions
      *
      * @return array
+     * @throws Exception
+     *
      */
     public function convertBetweenDateRange(
         int $value,
@@ -131,11 +142,57 @@ class ExchangeRate
     ) {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
             $result = Money::{$from}($value)->multiply($exchangeRate);
-            $conversions[$date] = (float) (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
+            $conversions[$date] = (float)(new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
         }
 
         ksort($conversions);
 
         return $conversions;
+    }
+
+    /**
+     * @param string $currencyCode
+     * @throws InvalidCurrencyException
+     */
+    private function validateCurrencyCode(string $currencyCode)
+    {
+        $currencies = new Currencies();
+
+        if (!$currencies->isAllowableCurrency($currencyCode)) {
+            throw new InvalidCurrencyException($currencyCode . ' is not a valid country code.');
+        }
+    }
+
+    /**
+     * Validate that both of the dates are in the
+     * past. After this, check that the 'from'
+     * date is not after the 'to' date.
+     *
+     * @param Carbon $from
+     * @param Carbon $to
+     * @throws InvalidDateException
+     */
+    private function validateFromAndToDates(Carbon $from, Carbon $to)
+    {
+        $this->validateDate($from);
+        $this->validateDate($to);
+
+        if ($from->isAfter($to)) {
+            throw new InvalidDateException('The \'from\' date must be before the \'to\' date.');
+        }
+    }
+
+    /**
+     * Validate the date that has been passed.
+     * We check that the date is in the past.
+     *
+     * @param Carbon $date
+     * @throws InvalidDateException
+     */
+    private function validateDate(Carbon $date)
+    {
+        if (!$date->isPast()) {
+            throw new InvalidDateException('The date must be in the past.');
+        }
     }
 }
