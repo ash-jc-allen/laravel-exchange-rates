@@ -143,8 +143,7 @@ class ExchangeRate
         array $conversions = []
     ) {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
-            $result = Money::{$from}($value)->multiply($exchangeRate);
-            $conversions[$date] = (float)(new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
+            $conversions[$date] = (float)$exchangeRate * $value;
         }
 
         ksort($conversions);

@@ -43,8 +43,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public
-    function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future()
+    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future()
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
@@ -54,8 +53,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public
-    function exception_is_thrown_if_the_end_date_parameter_passed_is_in_the_future()
+    public function exception_is_thrown_if_the_end_date_parameter_passed_is_in_the_future()
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
@@ -65,8 +63,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public
-    function exception_is_thrown_if_the_end_date_is_before_the_start_date()
+    public function exception_is_thrown_if_the_end_date_is_before_the_start_date()
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage("The 'from' date must be before the 'to' date.");
@@ -76,8 +73,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public
-    function exception_is_thrown_if_the_from_parameter_is_invalid()
+    public function exception_is_thrown_if_the_from_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid country code.');
@@ -87,8 +83,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public
-    function exception_is_thrown_if_the_to_parameter_is_invalid()
+    public function exception_is_thrown_if_the_to_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid country code.');
@@ -97,8 +92,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $exchangeRate->exchangeRateBetweenDateRange('INVALID', 'GBP', now()->subWeek(), now()->subDay());
     }
 
-    private
-    function mockResponse()
+    private function mockResponse()
     {
         return [
             "rates"    => [
