@@ -2,8 +2,8 @@
 
 namespace AshAllenDesign\LaravelExchangeRates;
 
-use AshAllenDesign\LaravelExchangeRates\classes\Currencies;
 use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\classes\Validation;
 use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidDateException;
 use Carbon\Carbon;
@@ -59,11 +59,11 @@ class ExchangeRate
      */
     public function exchangeRate(string $from, string $to, Carbon $date = null)
     {
-        $this->validateCurrencyCode($from);
-        $this->validateCurrencyCode($to);
+        Validation::validateCurrencyCode($from);
+        Validation::validateCurrencyCode($to);
 
         if ($date) {
-            $this->validateDate($date);
+            Validation::validateDate($date);
             return $this->requestBuilder->makeRequest('/' . $date->format('Y-m-d'), ['base' => $from])['rates'][$to];
         }
 
@@ -88,9 +88,9 @@ class ExchangeRate
         Carbon $endDate,
         array $conversions = []
     ) {
-        $this->validateCurrencyCode($from);
-        $this->validateCurrencyCode($to);
-        $this->validateStartAndEndDates($date, $endDate);
+        Validation::validateCurrencyCode($from);
+        Validation::validateCurrencyCode($to);
+        Validation::validateStartAndEndDates($date, $endDate);
 
         $result = $this->requestBuilder->makeRequest('/history', [
             'base'     => $from,
@@ -114,14 +114,13 @@ class ExchangeRate
      * @param string $to
      * @param Carbon|null $date
      *
-     * @return float|int
+     * @return float
      * @throws InvalidCurrencyException
+     * @throws InvalidDateException
      */
-    public function convert(int $value, string $from, string $to, Carbon $date = null)
+    public function convert(int $value, string $from, string $to, Carbon $date = null): float
     {
-        $result = Money::{$to}($value)->multiply($this->exchangeRate($from, $to, $date));
-
-        return (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
+        return (float)$this->exchangeRate($from, $to, $date) * $value;
     }
 
     /**
@@ -134,7 +133,6 @@ class ExchangeRate
      *
      * @return array
      * @throws Exception
-     *
      */
     public function convertBetweenDateRange(
         int $value,
@@ -152,51 +150,5 @@ class ExchangeRate
         ksort($conversions);
 
         return $conversions;
-    }
-
-    /**
-     * @param string $currencyCode
-     * @throws InvalidCurrencyException
-     */
-    private function validateCurrencyCode(string $currencyCode)
-    {
-        $currencies = new Currencies();
-
-        if (!$currencies->isAllowableCurrency($currencyCode)) {
-            throw new InvalidCurrencyException($currencyCode . ' is not a valid country code.');
-        }
-    }
-
-    /**
-     * Validate that both of the dates are in the
-     * past. After this, check that the 'from'
-     * date is not after the 'to' date.
-     *
-     * @param Carbon $from
-     * @param Carbon $to
-     * @throws InvalidDateException
-     */
-    private function validateStartAndEndDates(Carbon $from, Carbon $to)
-    {
-        $this->validateDate($from);
-        $this->validateDate($to);
-
-        if ($from->isAfter($to)) {
-            throw new InvalidDateException('The \'from\' date must be before the \'to\' date.');
-        }
-    }
-
-    /**
-     * Validate the date that has been passed.
-     * We check that the date is in the past.
-     *
-     * @param Carbon $date
-     * @throws InvalidDateException
-     */
-    private function validateDate(Carbon $date)
-    {
-        if (!$date->isPast()) {
-            throw new InvalidDateException('The date must be in the past.');
-        }
     }
 }
