@@ -10,6 +10,7 @@ class Validation
 {
     /**
      * @param string $currencyCode
+     *
      * @throws InvalidCurrencyException
      */
     public static function validateCurrencyCode(string $currencyCode)
@@ -17,7 +18,7 @@ class Validation
         $currencies = new Currencies();
 
         if (!$currencies->isAllowableCurrency($currencyCode)) {
-            throw new InvalidCurrencyException($currencyCode . ' is not a valid country code.');
+            throw new InvalidCurrencyException($currencyCode.' is not a valid country code.');
         }
     }
 
@@ -28,6 +29,7 @@ class Validation
      *
      * @param Carbon $from
      * @param Carbon $to
+     *
      * @throws InvalidDateException
      */
     public static function validateStartAndEndDates(Carbon $from, Carbon $to)
@@ -45,6 +47,7 @@ class Validation
      * We check that the date is in the past.
      *
      * @param Carbon $date
+     *
      * @throws InvalidDateException
      */
     public static function validateDate(Carbon $date)
