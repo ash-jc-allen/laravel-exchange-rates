@@ -88,6 +88,10 @@ class ExchangeRate
         Carbon $endDate,
         array $conversions = []
     ) {
+        $this->validateCurrencyCode($from);
+        $this->validateCurrencyCode($to);
+        $this->validateStartAndEndDates($date, $endDate);
+
         $result = $this->requestBuilder->makeRequest('/history', [
             'base'     => $from,
             'start_at' => $date->format('Y-m-d'),
@@ -172,7 +176,7 @@ class ExchangeRate
      * @param Carbon $to
      * @throws InvalidDateException
      */
-    private function validateFromAndToDates(Carbon $from, Carbon $to)
+    private function validateStartAndEndDates(Carbon $from, Carbon $to)
     {
         $this->validateDate($from);
         $this->validateDate($to);
