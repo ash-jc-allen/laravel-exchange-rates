@@ -2,9 +2,9 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
+use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidDateException;
-use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
 use Mockery;
 
@@ -24,8 +24,8 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
                     'base'     => 'GBP',
                     'start_at' => $fromDate->format('Y-m-d'),
                     'end_at'   => $toDate->format('Y-m-d'),
-                    'symbols'  => 'EUR'
-                ]
+                    'symbols'  => 'EUR',
+                ],
             ])
             ->once()
             ->andReturn($this->mockResponse());
@@ -34,11 +34,11 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
 
         $this->assertEquals([
-            "2019-11-08" => 1.1606583254,
-            "2019-11-06" => 1.1623446817,
-            "2019-11-07" => 1.1568450522,
-            "2019-11-05" => 1.1612648497,
-            "2019-11-04" => 1.1578362356,
+            '2019-11-08' => 1.1606583254,
+            '2019-11-06' => 1.1623446817,
+            '2019-11-07' => 1.1568450522,
+            '2019-11-05' => 1.1612648497,
+            '2019-11-04' => 1.1578362356,
         ], $currencies);
     }
 
@@ -95,26 +95,26 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     private function mockResponse()
     {
         return [
-            "rates"    => [
-                "2019-11-08" => [
-                    "EUR" => 1.1606583254
+            'rates'    => [
+                '2019-11-08' => [
+                    'EUR' => 1.1606583254,
                 ],
-                "2019-11-06" => [
-                    "EUR" => 1.1623446817
+                '2019-11-06' => [
+                    'EUR' => 1.1623446817,
                 ],
-                "2019-11-07" => [
-                    "EUR" => 1.1568450522
+                '2019-11-07' => [
+                    'EUR' => 1.1568450522,
                 ],
-                "2019-11-05" => [
-                    "EUR" => 1.1612648497
+                '2019-11-05' => [
+                    'EUR' => 1.1612648497,
                 ],
-                "2019-11-04" => [
-                    "EUR" => 1.1578362356
+                '2019-11-04' => [
+                    'EUR' => 1.1578362356,
                 ],
             ],
-            "start_at" => "2019-11-03",
-            "base"     => "GBP",
-            "end_at"   => "2019-11-10"
+            'start_at' => '2019-11-03',
+            'base'     => 'GBP',
+            'end_at'   => '2019-11-10',
         ];
     }
 }
