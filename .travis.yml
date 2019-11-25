@@ -33,4 +33,4 @@ install:
   - travis_retry composer du -o
 
 script:
-  - vendor/bin/phpunit --testdox
+  - vendor/bin/phpunit
