@@ -17,7 +17,7 @@ class Validation
     {
         $currencies = new Currencies();
 
-        if (!$currencies->isAllowableCurrency($currencyCode)) {
+        if (! $currencies->isAllowableCurrency($currencyCode)) {
             throw new InvalidCurrencyException($currencyCode.' is not a valid country code.');
         }
     }
@@ -52,7 +52,7 @@ class Validation
      */
     public static function validateDate(Carbon $date)
     {
-        if (!$date->isPast()) {
+        if (! $date->isPast()) {
             throw new InvalidDateException('The date must be in the past.');
         }
     }
