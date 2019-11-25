@@ -30,6 +30,7 @@ before_install:
 
 install:
   - travis_retry composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction --no-suggest
+  - travis_retry composer du -o
 
 script:
   - vendor/bin/phpunit --testdox
