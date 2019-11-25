@@ -13,6 +13,9 @@ use GuzzleHttp\Client;
 class ExchangeRate
 {
     /**
+     * The object used for making requests to the currency
+     * conversion API.
+     *
      * @var RequestBuilder
      */
     private $requestBuilder;
@@ -28,11 +31,14 @@ class ExchangeRate
     }
 
     /**
+     * Return an array of available currencies that
+     * can be used with this package.
+     *
      * @param array $currencies
      *
      * @return array
      */
-    public function currencies(array $currencies = [])
+    public function currencies(array $currencies = []): array
     {
         $response = $this->requestBuilder->makeRequest('/latest', []);
 
@@ -46,6 +52,10 @@ class ExchangeRate
     }
 
     /**
+     * Return the exchange rate between the $from and $to
+     * parameters. If no $date parameter is passed, we
+     * use today's date instead.
+     *
      * @param string      $from
      * @param string      $to
      * @param Carbon|null $date
@@ -53,9 +63,9 @@ class ExchangeRate
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      *
-     * @return mixed
+     * @return string
      */
-    public function exchangeRate(string $from, string $to, Carbon $date = null)
+    public function exchangeRate(string $from, string $to, Carbon $date = null): string
     {
         Validation::validateCurrencyCode($from);
         Validation::validateCurrencyCode($to);
@@ -70,6 +80,9 @@ class ExchangeRate
     }
 
     /**
+     * Return the exchange rates between the given
+     * date range.
+     *
      * @param string $from
      * @param string $to
      * @param Carbon $date
@@ -78,7 +91,7 @@ class ExchangeRate
      *
      * @throws Exception
      *
-     * @return mixed
+     * @return array
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -108,6 +121,10 @@ class ExchangeRate
     }
 
     /**
+     * Return the converted values between the $from and $to
+     * parameters. If no $date parameter is passed, we
+     * use today's date instead.
+     *
      * @param int         $value
      * @param string      $from
      * @param string      $to
@@ -124,6 +141,9 @@ class ExchangeRate
     }
 
     /**
+     * Return an array of the converted values between
+     * the given date range.
+     *
      * @param int    $value
      * @param string $from
      * @param string $to
@@ -142,7 +162,7 @@ class ExchangeRate
         Carbon $date,
         Carbon $endDate,
         array $conversions = []
-    ) {
+    ): array {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
             $conversions[$date] = (float) $exchangeRate * $value;
         }
