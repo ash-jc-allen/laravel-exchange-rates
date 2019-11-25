@@ -2,11 +2,11 @@
 
 <div style="text-align:center">
 
-[![Build Status](https://img.shields.io/travis/ash-jc-allen/laravel-exchange-rates/master.svg?style=flat-square)](https://travis-ci.org/ash-jc-allen/laravel-exchange-rates)
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates)](https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ashallendesign/laravel-exchange-rates.svg?style=flat-square)](https://packagist.org/packages/ashallendesign/laravel-exchange-rates)
+[![Build Status](https://img.shields.io/travis/ash-jc-allen/laravel-exchange-rates/master.svg?style=flat-square)](https://travis-ci.org/ash-jc-allen/laravel-exchange-rates)
 [![Total Downloads](https://img.shields.io/packagist/dt/ashallendesign/laravel-exchange-rates.svg?style=flat-square)](https://packagist.org/packages/ashallendesign/laravel-exchange-rates)
-[![GitHub license](https://img.shields.io/github/license/ash-jc-allen/laravel-exchange-rates)](https://github.com/ash-jc-allen/laravel-exchange-rates/blob/master/LICENSE)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates?style=flat-square)](https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates)
+[![GitHub license](https://img.shields.io/github/license/ash-jc-allen/laravel-exchange-rates?style=flat-square)](https://github.com/ash-jc-allen/laravel-exchange-rates/blob/master/LICENSE)
 
 </div>
 
