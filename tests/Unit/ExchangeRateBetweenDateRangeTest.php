@@ -6,12 +6,13 @@ use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
+use Illuminate\Support\Facades\Cache;
 use Mockery;
 
 class ExchangeRateBetweenDateRangeTest extends TestCase
 {
     /** @test */
-    public function exchange_rates_between_date_range_are_returned()
+    public function exchange_rates_between_date_range_are_returned_if_exchange_rates_are_not_cached()
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -32,6 +33,77 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
+
+        $expectedArray = [
+            '2019-11-08' => 1.1606583254,
+            '2019-11-06' => 1.1623446817,
+            '2019-11-07' => 1.1568450522,
+            '2019-11-05' => 1.1612648497,
+            '2019-11-04' => 1.1578362356,
+        ];
+
+        $this->assertEquals($expectedArray, $currencies);
+        $this->assertEquals($expectedArray,
+            Cache::get('GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+    }
+
+    /** @test */
+    public function cached_exchange_rates_are_returned_if_they_exist()
+    {
+        $fromDate = now()->subWeek();
+        $toDate = now();
+
+        $cacheKey = 'GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
+        $cachedValues = $expectedArray = [
+            '2019-11-08' => 1,
+            '2019-11-06' => 2,
+            '2019-11-07' => 3,
+            '2019-11-05' => 4,
+            '2019-11-04' => 5,
+        ];
+        Cache::forever($cacheKey, $cachedValues);
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')->never();
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
+
+        $this->assertEquals($expectedArray, $currencies);
+    }
+
+    /** @test */
+    public function cached_exchange_rates_are_ignored_if_should_bust_cache_method_is_called()
+    {
+        $fromDate = now()->subWeek();
+        $toDate = now();
+
+        $cacheKey = 'GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
+        $cachedValues = $expectedArray = [
+            '2019-11-08' => 1,
+            '2019-11-06' => 2,
+            '2019-11-07' => 3,
+            '2019-11-05' => 4,
+            '2019-11-04' => 5,
+        ];
+        Cache::forever($cacheKey, $cachedValues);
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs([
+                '/history',
+                [
+                    'base'     => 'GBP',
+                    'start_at' => $fromDate->format('Y-m-d'),
+                    'end_at'   => $toDate->format('Y-m-d'),
+                    'symbols'  => 'EUR',
+                ],
+            ])
+            ->once()
+            ->andReturn($this->mockResponse());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->shouldBustCache()->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
 
         $this->assertEquals([
             '2019-11-08' => 1.1606583254,
