@@ -35,7 +35,7 @@ class CacheRepository
         return $this;
     }
 
-    public function storeInCache(string $key, string $value)
+    public function storeInCache(string $key, $value)
     {
         return $this->cache->forever($key, $value);
     }

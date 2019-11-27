@@ -55,6 +55,11 @@ class ExchangeRate
      */
     public function currencies(array $currencies = []): array
     {
+        $cacheKey = 'currencies';
+        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
+            return $cachedExchangeRate;
+        }
+
         $response = $this->requestBuilder->makeRequest('/latest', []);
 
         $currencies[] = $response['base'];
@@ -62,6 +67,9 @@ class ExchangeRate
         foreach ($response['rates'] as $currency => $rate) {
             $currencies[] = $currency;
         }
+
+        $this->cacheRepository->storeInCache($cacheKey, $currencies);
+
 
         return $currencies;
     }
