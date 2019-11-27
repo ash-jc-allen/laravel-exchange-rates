@@ -89,15 +89,9 @@ class ExchangeRate
             Validation::validateDate($date);
         }
 
-        // TODO Extract this into it's own method?
-
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? now());
-
-        if ($this->shouldBustCache) {
-            $this->cacheRepository->forget($cacheKey);
-            $this->shouldBustCache = false;
-        } elseif ($cachedExchangeRate = $this->cacheRepository->getFromCache($cacheKey)) {
-            return (string) $cachedExchangeRate;
+        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
+            return $cachedExchangeRate;
         }
 
         if ($date) {
@@ -210,5 +204,15 @@ class ExchangeRate
         $this->shouldBustCache = $bustCache;
 
         return $this;
+    }
+
+    private function attemptToResolveFromCache(string $cacheKey)
+    {
+        if ($this->shouldBustCache) {
+            $this->cacheRepository->forget($cacheKey);
+            $this->shouldBustCache = false;
+        } elseif ($cachedValue = $this->cacheRepository->getFromCache($cacheKey)) {
+            return $cachedValue;
+        }
     }
 }
