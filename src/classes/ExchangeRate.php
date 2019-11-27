@@ -139,6 +139,11 @@ class ExchangeRate
         Validation::validateCurrencyCode($to);
         Validation::validateStartAndEndDates($date, $endDate);
 
+        $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
+        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
+            return $cachedExchangeRate;
+        }
+
         $result = $this->requestBuilder->makeRequest('/history', [
             'base'     => $from,
             'start_at' => $date->format('Y-m-d'),
@@ -151,6 +156,8 @@ class ExchangeRate
         }
 
         ksort($conversions);
+
+        $this->cacheRepository->storeInCache($cacheKey, $conversions);
 
         return $conversions;
     }

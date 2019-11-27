@@ -70,6 +70,8 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
 
         $this->assertEquals($expectedArray, $currencies);
+        $this->assertEquals($expectedArray,
+            Cache::get('GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -79,7 +81,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $toDate = now();
 
         $cacheKey = 'GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
-        $cachedValues = $expectedArray = [
+        $cachedValues = [
             '2019-11-08' => 1,
             '2019-11-06' => 2,
             '2019-11-07' => 3,
@@ -105,13 +107,17 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->shouldBustCache()->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
 
-        $this->assertEquals([
+        $expectedArray = [
             '2019-11-08' => 1.1606583254,
             '2019-11-06' => 1.1623446817,
             '2019-11-07' => 1.1568450522,
             '2019-11-05' => 1.1612648497,
             '2019-11-04' => 1.1578362356,
-        ], $currencies);
+        ];
+
+        $this->assertEquals($expectedArray, $currencies);
+        $this->assertEquals($expectedArray,
+            Cache::get('GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */

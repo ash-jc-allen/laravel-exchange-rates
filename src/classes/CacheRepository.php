@@ -50,8 +50,14 @@ class CacheRepository
         return $this->cache->has($key);
     }
 
-    public function buildCacheKey(string $from, string $to, Carbon $date): string
+    public function buildCacheKey(string $from, string $to, Carbon $date, Carbon $endDate = null): string
     {
-        return $from.'_'.$to.'_'.$date->format('Y-m-d');
+        $key = $from.'_'.$to.'_'.$date->format('Y-m-d');
+
+        if($endDate) {
+            $key .= '_'.$endDate->format('Y-m-d');
+        }
+
+        return $key;
     }
 }
