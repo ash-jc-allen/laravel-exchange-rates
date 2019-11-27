@@ -4,12 +4,13 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
 use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
+use Illuminate\Support\Facades\Cache;
 use Mockery;
 
 class CurrenciesTest extends TestCase
 {
     /** @test */
-    public function currencies_are_returned_as_an_array()
+    public function currencies_are_returned_as_an_array_if_no_currencies_are_cached()
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
@@ -19,6 +20,37 @@ class CurrenciesTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->currencies();
+
+        $this->assertEquals($this->expectedResponse(), $currencies);
+    }
+
+    /** @test */
+    public function cached_currencies_are_returned_if_they_are_in_the_cache()
+    {
+        Cache::forever('currencies', ['CUR1', 'CUR2', 'CUR3']);
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')->never();
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->currencies();
+
+        $this->assertEquals(['CUR1', 'CUR2', 'CUR3'], $currencies);
+    }
+
+    /** @test */
+    public function currencies_are_fetched_if_the_currencies_are_cached_but_the_should_bust_cache_method_called()
+    {
+        Cache::forever('currencies', ['CUR1', 'CUR2', 'CUR3']);
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/latest', []])
+            ->once()
+            ->andReturn($this->mockResponse());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->shouldBustCache()->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
     }
