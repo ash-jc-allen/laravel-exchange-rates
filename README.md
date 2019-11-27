@@ -28,70 +28,51 @@ The package has been developed and tested to work with the following minimum req
 
 ## Usage
 
-### Available Currencies
+### Methods
+#### Available Currencies
 ``` php
-<?php
-    
-    namespace App\Http\Controllers;
-    
-    use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
-    
-    class TestController extends Controller
-    {
-        public function index()
-        {
-            $exchangeRates = new ExchangeRate();
-            return $exchangeRates->currencies();
-        }
-    }
+$exchangeRates = new ExchangeRate();
+$exchangeRates->currencies();
 ```
 
-### Exchange Rate
+#### Exchange Rate
+``` php
+<?php
+$exchangeRates = new ExchangeRate();
+$exchangeRates->exchangeRate('GBP', 'EUR');
+```
 Note: If a Carbon date is passed as the third parameter, the exchange rate for that day will be returned (if valid).
 If no date is passed, today's exchange rate will be used.
 
+#### Exchange Rates Between Date Range
 ``` php
-<?php
-    
-    namespace App\Http\Controllers;
-    
-    use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
-    
-    class TestController extends Controller
-    {
-        public function index()
-        {
-            $exchangeRates = new ExchangeRate();
-            return $exchangeRates->exchangeRate('GBP', 'EUR');
-        }
-    }
+$exchangeRates = new ExchangeRate();
+$exchangeRates->exchangeRateBetweenDateRange('GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
 ```
 
-### Exchange Rates Between Date Range
-``` php
-<?php
-    
-    namespace App\Http\Controllers;
-    
-    use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
-    
-    class TestController extends Controller
-    {
-        public function index()
-        {
-            $exchangeRates = new ExchangeRate();
-            return $exchangeRates->exchangeRateBetweenDateRange('GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
-        }
-    }
-```
-
-### Convert Currencies
+#### Convert Currencies
 When passing in the monetary value (first parameter) that is to be converted, it's important that you pass it in the lowest
 denomination of that currency. For example, £1 GBP would be passed in as 100 (as £1 = 100 pence).
 
+``` php
+$exchangeRates = new ExchangeRate();
+$exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now());
+```
+
 Note: If a Carbon date is passed as the third parameter, the exchange rate for that day will be returned (if valid).
 If no date is passed, today's exchange rate will be used.
 
+#### Convert Currencies Between Date Range
+When passing in the monetary value (first parameter) that is to be converted, it's important that you pass it in the lowest
+denomination of that currency. For example, £1 GBP would be passed in as 100 (as £1 = 100 pence).
+
+``` php
+$exchangeRates = new ExchangeRate();
+$exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
+```
+
+### Examples
+This example shows how to convert 100 pence (£1) from Great British Pounds to Euros. The current exchange rate will be used (unless a cached rate for this date already exists).
 ``` php
 <?php
     
@@ -109,9 +90,12 @@ If no date is passed, today's exchange rate will be used.
     }
 ```
 
-### Convert Currencies Between Date Range
-When passing in the monetary value (first parameter) that is to be converted, it's important that you pass it in the lowest
-denomination of that currency. For example, £1 GBP would be passed in as 100 (as £1 = 100 pence).
+#### Caching
+By default, the responses all of the requests to the [exchangeratesapi.io](http://exchangeratesapi.io) API are cached.
+This allows for significant performance improvements and reduced bandwidth from your server. 
+
+However, if for any reason you require a fresh result from the API and not a cached result, the ``` ->shouldBustCache() ```
+method can be used. The example below shows how to ignore the cached value (if one exists) and make a new API request.
 
 ``` php
 <?php
@@ -125,10 +109,18 @@ denomination of that currency. For example, £1 GBP would be passed in as 100 (a
         public function index()
         {
             $exchangeRates = new ExchangeRate();
-            return $exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
+            return $exchangeRates->shouldBustCache()->convert(100, 'GBP', 'EUR', Carbon::now());
         }
     }
 ```
+
+Note: The caching works by storing exchange rates after fetching them from the API. As an example, if you were to fetch
+the exchange rates for 'GBP' to 'EUR' for 20-11-2019 - 27-11-2019, the rates between these dates will be cached as a single
+cache item. This cache item will only be retrieved if you attempt to fetch the same exchange rates on with the exact same
+currencies and date range.
+
+Therefore, if you were to try and get 'GBP' to 'EUR' for 20-11-2019 - 26-11-2019, a new API request would be made because
+the date range is different.
 
 ### Supported Countries
 Laravel Exchange Rates supports working with the following currencies (sorted in A-Z order):
