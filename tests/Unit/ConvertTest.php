@@ -39,7 +39,7 @@ class ConvertTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', 'GBP', $mockDate);
         $this->assertEquals('87.053', $rate);
-        $this->assertEquals('0.87053', Cache::get('EUR_GBP_'.$mockDate->format('Y-m-d')));
+        $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -47,7 +47,7 @@ class ConvertTest extends TestCase
     {
         $mockDate = now();
 
-        Cache::forever('EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
+        Cache::forever('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->never();
@@ -55,7 +55,7 @@ class ConvertTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', 'GBP', $mockDate);
         $this->assertEquals('12.3456', $rate);
-        $this->assertEquals('0.123456', Cache::get('EUR_GBP_'.$mockDate->format('Y-m-d')));
+        $this->assertEquals('0.123456', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -63,7 +63,7 @@ class ConvertTest extends TestCase
     {
         $mockDate = now();
 
-        Cache::forever('EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
+        Cache::forever('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
@@ -74,7 +74,7 @@ class ConvertTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->shouldBustCache()->convert(100, 'EUR', 'GBP', $mockDate);
         $this->assertEquals('87.053', $rate);
-        $this->assertEquals('0.87053', Cache::get('EUR_GBP_'.$mockDate->format('Y-m-d')));
+        $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
     }
 
     /** @test */

@@ -27,7 +27,7 @@ class CurrenciesTest extends TestCase
     /** @test */
     public function cached_currencies_are_returned_if_they_are_in_the_cache()
     {
-        Cache::forever('currencies', ['CUR1', 'CUR2', 'CUR3']);
+        Cache::forever('laravel_xr_currencies', ['CUR1', 'CUR2', 'CUR3']);
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')->never();
