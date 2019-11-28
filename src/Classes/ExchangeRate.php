@@ -2,11 +2,11 @@
 
 namespace AshAllenDesign\LaravelExchangeRates;
 
-use AshAllenDesign\LaravelExchangeRates\classes\CacheRepository;
-use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
-use AshAllenDesign\LaravelExchangeRates\classes\Validation;
-use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidCurrencyException;
-use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidDateException;
+use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
+use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;

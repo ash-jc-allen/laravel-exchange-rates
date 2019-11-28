@@ -2,7 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
-use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
