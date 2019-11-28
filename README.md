@@ -10,6 +10,27 @@
 
 </div>
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Methods](#methods)
+        - [Available Currencies](#available-currencies)
+        - [Exchange Rate](#exchange-rate)
+        - [Exchange Rates Between Date Range](#exchange-rates-between-date-range)
+        - [Convert Currencies](#convert-currencies)
+        - [Convert Currencies Between Date Range](#convert-currencies-between-date-range)
+    - [Examples](#examples)
+    - [Caching](#caching)
+    - [Supported Countries](#supported-countries)
+- [Testing](#testing)
+- [Security](#security)
+- [Contribution](#contribution)
+- [License](#license)
+    
+## Overview
+
 A simple Laravel package used for interacting with the [exchangeratesapi.io](http://exchangeratesapi.io) API. 'Laravel Exchange Rates'
 allow you to get the latest or historical exchange rates and convert monetary values between different currencies.
 
@@ -90,7 +111,7 @@ This example shows how to convert 100 pence (£1) from Great British Pounds to E
     }
 ```
 
-#### Caching
+### Caching
 By default, the responses all of the requests to the [exchangeratesapi.io](http://exchangeratesapi.io) API are cached.
 This allows for significant performance improvements and reduced bandwidth from your server. 
 
