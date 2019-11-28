@@ -70,7 +70,6 @@ class ExchangeRate
 
         $this->cacheRepository->storeInCache($cacheKey, $currencies);
 
-
         return $currencies;
     }
 
@@ -126,7 +125,6 @@ class ExchangeRate
      *
      * @return array
      * @throws Exception
-     *
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -195,7 +193,6 @@ class ExchangeRate
      *
      * @return array
      * @throws Exception
-     *
      */
     public function convertBetweenDateRange(
         int $value,

@@ -2,8 +2,8 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
-use Illuminate\Cache\Repository;
 use Carbon\Carbon;
+use Illuminate\Cache\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -54,7 +54,7 @@ class CacheRepository
     {
         $key = $from.'_'.$to.'_'.$date->format('Y-m-d');
 
-        if($endDate) {
+        if ($endDate) {
             $key .= '_'.$endDate->format('Y-m-d');
         }
 
