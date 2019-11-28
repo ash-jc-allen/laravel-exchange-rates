@@ -2,16 +2,17 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
-use AshAllenDesign\LaravelExchangeRates\classes\RequestBuilder;
-use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidCurrencyException;
-use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidDateException;
+use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
+use Illuminate\Support\Facades\Cache;
 use Mockery;
 
 class ExchangeRateTest extends TestCase
 {
     /** @test */
-    public function exchange_rate_for_today_is_returned_if_no_date_parameter_passed()
+    public function exchange_rate_for_today_is_returned_if_no_date_parameter_passed_and_rate_is_not_cached()
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
@@ -25,7 +26,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exchange_rate_in_the_past_is_returned_if_date_parameter_passed()
+    public function exchange_rate_in_the_past_is_returned_if_date_parameter_passed_and_rate_is_not_cached()
     {
         $mockDate = now();
 
@@ -38,6 +39,42 @@ class ExchangeRateTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP', $mockDate);
         $this->assertEquals('0.87053', $rate);
+        $this->assertEquals('0.87053', Cache::get('EUR_GBP_'.$mockDate->format('Y-m-d')));
+    }
+
+    /** @test */
+    public function cached_exchange_rate_is_returned_if_it_exists()
+    {
+        $mockDate = now();
+
+        Cache::forever('EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')->never();
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $rate = $exchangeRate->exchangeRate('EUR', 'GBP', $mockDate);
+        $this->assertEquals('0.123456', $rate);
+        $this->assertEquals('0.123456', Cache::get('EUR_GBP_'.$mockDate->format('Y-m-d')));
+    }
+
+    /** @test */
+    public function cached_exchange_rate_is_not_used_if_should_bust_cache_method_is_called()
+    {
+        $mockDate = now();
+
+        Cache::forever('EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR']])
+            ->once()
+            ->andReturn($this->mockResponseForPastDate());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $rate = $exchangeRate->shouldBustCache()->exchangeRate('EUR', 'GBP', $mockDate);
+        $this->assertEquals('0.87053', $rate);
+        $this->assertEquals('0.87053', Cache::get('EUR_GBP_'.$mockDate->format('Y-m-d')));
     }
 
     /** @test */

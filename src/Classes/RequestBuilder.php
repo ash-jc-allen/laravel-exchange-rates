@@ -1,6 +1,6 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\classes;
+namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
 use GuzzleHttp\Client;
 
@@ -17,7 +17,7 @@ class RequestBuilder
     /**
      * RequestBuilder constructor.
      *
-     * @param Client|null $client
+     * @param  Client|null  $client
      */
     public function __construct(Client $client = null)
     {
@@ -25,14 +25,16 @@ class RequestBuilder
     }
 
     /**
-     * @param string $path
-     * @param array  ...$queryParams
+     * Make an API request to the ExchangeRatesAPI.
+     *
+     * @param  string  $path
+     * @param  array  ...$queryParams
      *
      * @return mixed
      */
     public function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->baseUrl.$path.'?';
+        $url = $this->baseUrl.$path;
 
         foreach ($queryParams as $param => $value) {
             $url .= '&'.urlencode($param).'='.urlencode($value);

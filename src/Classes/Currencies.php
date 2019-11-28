@@ -1,9 +1,14 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\classes;
+namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
 class Currencies
 {
+    /**
+     * Currencies supported by the API.
+     *
+     * @var array
+     */
     public $allowableCurrencies = [
         'EUR',
         'CAD',
@@ -40,7 +45,14 @@ class Currencies
         'MYR',
     ];
 
-    public function isAllowableCurrency(string $currency)
+    /**
+     * Determine if a currency that is being used is
+     * allowable and supported by the API.
+     *
+     * @param  string  $currency
+     * @return bool
+     */
+    public function isAllowableCurrency(string $currency): bool
     {
         return in_array($currency, $this->allowableCurrencies);
     }

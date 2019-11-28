@@ -1,0 +1,99 @@
+<?php
+
+namespace AshAllenDesign\LaravelExchangeRates\Classes;
+
+use Carbon\Carbon;
+use Illuminate\Cache\Repository;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\BindingResolutionException;
+
+class CacheRepository
+{
+    /**
+     * @var Repository
+     */
+    protected $cache;
+
+    /**
+     * Cache constructor.
+     * @throws BindingResolutionException
+     */
+    public function __construct()
+    {
+        $cache = Container::getInstance()->make('cache');
+        $config = Container::getInstance()->make('config')->get('cache.default');
+
+        $this->cache = $cache->store($config);
+    }
+
+    /**
+     * Forget the item from the cache.
+     *
+     * @param  string  $key
+     * @return CacheRepository
+     */
+    public function forget(string $key): self
+    {
+        $this->cache->forget($key);
+
+        return $this;
+    }
+
+    /**
+     * Store a new item in the cache.
+     *
+     * @param  string  $key
+     * @param $value
+     * @return bool
+     */
+    public function storeInCache(string $key, $value): bool
+    {
+        return $this->cache->forever($key, $value);
+    }
+
+    /**
+     * Get an item from the cache if it exists.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getFromCache(string $key)
+    {
+        return $this->cache->get($key);
+    }
+
+    /**
+     * Determine whether if an item exists in the cache.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function existsInCache(string $key): bool
+    {
+        return $this->cache->has($key);
+    }
+
+    /**
+     * Build the key that can be used for fetching or
+     * storing items in the cache. We can pass a
+     * fourth parameter if we are storing
+     * exchange rates for a given date
+     * range.
+     *
+     * @param  string  $from
+     * @param  string  $to
+     * @param  Carbon  $date
+     * @param  Carbon|null  $endDate
+     * @return string
+     */
+    public function buildCacheKey(string $from, string $to, Carbon $date, Carbon $endDate = null): string
+    {
+        $key = $from.'_'.$to.'_'.$date->format('Y-m-d');
+
+        if ($endDate) {
+            $key .= '_'.$endDate->format('Y-m-d');
+        }
+
+        return $key;
+    }
+}
