@@ -15,6 +15,11 @@ class CacheRepository
     protected $cache;
 
     /**
+     * @var string
+     */
+    protected $cachePrefix = 'laravel_xr_';
+
+    /**
      * Cache constructor.
      * @throws BindingResolutionException
      */
@@ -34,7 +39,7 @@ class CacheRepository
      */
     public function forget(string $key): self
     {
-        $this->cache->forget($key);
+        $this->cache->forget($this->cachePrefix.$key);
 
         return $this;
     }
@@ -48,7 +53,7 @@ class CacheRepository
      */
     public function storeInCache(string $key, $value): bool
     {
-        return $this->cache->forever($key, $value);
+        return $this->cache->forever($this->cachePrefix.$key, $value);
     }
 
     /**
@@ -59,7 +64,7 @@ class CacheRepository
      */
     public function getFromCache(string $key)
     {
-        return $this->cache->get($key);
+        return $this->cache->get($this->cachePrefix.$key);
     }
 
     /**
@@ -70,7 +75,7 @@ class CacheRepository
      */
     public function existsInCache(string $key): bool
     {
-        return $this->cache->has($key);
+        return $this->cache->has($this->cachePrefix.$key);
     }
 
     /**
