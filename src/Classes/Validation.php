@@ -9,6 +9,9 @@ use Carbon\Carbon;
 class Validation
 {
     /**
+     * Validate that the currency is supported by the
+     * Exchange Rates API.
+     *
      * @param string $currencyCode
      *
      * @throws InvalidCurrencyException

@@ -26,30 +26,66 @@ class CacheRepository
         $this->cache = $cache->store($config);
     }
 
+    /**
+     * Forget the item from the cache.
+     *
+     * @param  string  $key
+     * @return CacheRepository
+     */
     public function forget(string $key): self
     {
-        if ($key) {
-            $this->cache->forget($key);
-        }
+        $this->cache->forget($key);
 
         return $this;
     }
 
-    public function storeInCache(string $key, $value)
+    /**
+     * Store a new item in the cache.
+     *
+     * @param  string  $key
+     * @param $value
+     * @return bool
+     */
+    public function storeInCache(string $key, $value): bool
     {
         return $this->cache->forever($key, $value);
     }
 
+    /**
+     * Get an item from the cache if it exists.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
     public function getFromCache(string $key)
     {
         return $this->cache->get($key);
     }
 
+    /**
+     * Determine whether if an item exists in the cache.
+     *
+     * @param  string  $key
+     * @return bool
+     */
     public function existsInCache(string $key): bool
     {
         return $this->cache->has($key);
     }
 
+    /**
+     * Build the key that can be used for fetching or
+     * storing items in the cache. We can pass a
+     * fourth parameter if we are storing
+     * exchange rates for a given date
+     * range.
+     *
+     * @param  string  $from
+     * @param  string  $to
+     * @param  Carbon  $date
+     * @param  Carbon|null  $endDate
+     * @return string
+     */
     public function buildCacheKey(string $from, string $to, Carbon $date, Carbon $endDate = null): string
     {
         $key = $from.'_'.$to.'_'.$date->format('Y-m-d');
