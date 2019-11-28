@@ -1,6 +1,6 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\classes;
+namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
 use GuzzleHttp\Client;
 

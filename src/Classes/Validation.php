@@ -1,9 +1,9 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\classes;
+namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
-use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidCurrencyException;
-use AshAllenDesign\LaravelExchangeRates\exceptions\InvalidDateException;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
 
 class Validation
