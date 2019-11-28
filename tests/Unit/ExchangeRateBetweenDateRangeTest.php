@@ -44,7 +44,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $this->assertEquals($expectedArray, $currencies);
         $this->assertEquals($expectedArray,
-            Cache::get('GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -53,7 +53,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $fromDate = now()->subWeek();
         $toDate = now();
 
-        $cacheKey = 'GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
+        $cacheKey = 'laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
         $cachedValues = $expectedArray = [
             '2019-11-08' => 1,
             '2019-11-06' => 2,
@@ -71,7 +71,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $this->assertEquals($expectedArray, $currencies);
         $this->assertEquals($expectedArray,
-            Cache::get('GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -117,7 +117,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $this->assertEquals($expectedArray, $currencies);
         $this->assertEquals($expectedArray,
-            Cache::get('GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
