@@ -2,7 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
-class Currencies
+class Currency
 {
     /**
      * Currencies supported by the API.

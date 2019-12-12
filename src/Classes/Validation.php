@@ -18,7 +18,7 @@ class Validation
      */
     public static function validateCurrencyCode(string $currencyCode)
     {
-        $currencies = new Currencies();
+        $currencies = new Currency();
 
         if (! $currencies->isAllowableCurrency($currencyCode)) {
             throw new InvalidCurrencyException($currencyCode.' is not a valid country code.');
