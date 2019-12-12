@@ -56,6 +56,7 @@ class ExchangeRate
     public function currencies(array $currencies = []): array
     {
         $cacheKey = 'currencies';
+
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
             return $cachedExchangeRate;
         }
@@ -97,6 +98,7 @@ class ExchangeRate
         }
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? now());
+
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
             return $cachedExchangeRate;
         }
@@ -138,6 +140,7 @@ class ExchangeRate
         Validation::validateStartAndEndDates($date, $endDate);
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
+
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
             return $cachedExchangeRate;
         }
