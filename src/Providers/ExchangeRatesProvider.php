@@ -12,14 +12,18 @@ class ExchangeRatesProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->alias(ExchangeRate::class, 'exchange');
     }
 
-    public function boot()
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot(): void
     {
-        $this->publishes([dirname(__DIR__, 1).'/Config/exchange-rates.php' => config_path('exchange-rates.php')]);
-        $this->mergeConfigFrom(dirname(__DIR__, 1).'/Config/exchange-rates.php', 'exchange-rates');
+
     }
 }
