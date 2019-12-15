@@ -24,6 +24,5 @@ class ExchangeRatesProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
     }
 }
