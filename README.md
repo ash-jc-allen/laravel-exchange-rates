@@ -1,14 +1,14 @@
-# Laravel Exchange Rates
+<p align="center">
+<img src="https://ashallendesign.co.uk/images/custom/laravel-exchange-rates-logo.png" alt="Laravel Exchange Rates" width="600">
+</p>
 
-<div style="text-align:center">
-
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/ashallendesign/laravel-exchange-rates.svg?style=flat-square)](https://packagist.org/packages/ashallendesign/laravel-exchange-rates)
-[![Build Status](https://img.shields.io/travis/ash-jc-allen/laravel-exchange-rates/master.svg?style=flat-square)](https://travis-ci.org/ash-jc-allen/laravel-exchange-rates)
-[![Total Downloads](https://img.shields.io/packagist/dt/ashallendesign/laravel-exchange-rates.svg?style=flat-square)](https://packagist.org/packages/ashallendesign/laravel-exchange-rates)
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates?style=flat-square)](https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates)
-[![GitHub license](https://img.shields.io/github/license/ash-jc-allen/laravel-exchange-rates?style=flat-square)](https://github.com/ash-jc-allen/laravel-exchange-rates/blob/master/LICENSE)
-
-</div>
+<p align="center">
+<a href="https://packagist.org/packages/ashallendesign/laravel-exchange-rates"><img src="https://img.shields.io/packagist/v/ashallendesign/laravel-exchange-rates.svg?style=flat-square" alt="Latest Version on Packagist"></a>
+<a href="https://travis-ci.org/ash-jc-allen/laravel-exchange-rates"><img src="https://img.shields.io/travis/ash-jc-allen/laravel-exchange-rates/master.svg?style=flat-square" alt="Build Status"></a>
+<a href="https://packagist.org/packages/ashallendesign/laravel-exchange-rates"><img src="https://img.shields.io/packagist/dt/ashallendesign/laravel-exchange-rates.svg?style=flat-square" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/ashallendesign/laravel-exchange-rates"><img src="https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates?style=flat-square" alt="PHP from Packagist"></a>
+<a href="https://github.com/ash-jc-allen/short-url/blob/master/LICENSE"><img src="https://img.shields.io/github/license/ash-jc-allen/laravel-exchange-rates?style=flat-square" alt="GitHub license"></a>
+</p>
 
 ## Table of Contents
 
@@ -21,12 +21,16 @@
         - [Exchange Rates Between Date Range](#exchange-rates-between-date-range)
         - [Convert Currencies](#convert-currencies)
         - [Convert Currencies Between Date Range](#convert-currencies-between-date-range)
+    - [Facade](#facade)
     - [Examples](#examples)
     - [Caching](#caching)
     - [Supported Countries](#supported-countries)
 - [Testing](#testing)
 - [Security](#security)
 - [Contribution](#contribution)
+- [Credits](#credits)
+- [Changelog](#changelog)
+- [Upgrading](#upgrading)
 - [License](#license)
     
 ## Overview
@@ -57,7 +61,7 @@ $exchangeRates->currencies();
 ```
 
 #### Exchange Rate
-``` php
+```php
 <?php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->exchangeRate('GBP', 'EUR');
@@ -66,7 +70,7 @@ Note: If a Carbon date is passed as the third parameter, the exchange rate for t
 If no date is passed, today's exchange rate will be used.
 
 #### Exchange Rates Between Date Range
-``` php
+```php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->exchangeRateBetweenDateRange('GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
 ```
@@ -75,7 +79,7 @@ $exchangeRates->exchangeRateBetweenDateRange('GBP', 'EUR', Carbon::now()->subWee
 When passing in the monetary value (first parameter) that is to be converted, it's important that you pass it in the lowest
 denomination of that currency. For example, £1 GBP would be passed in as 100 (as £1 = 100 pence).
 
-``` php
+```php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now());
 ```
@@ -87,19 +91,40 @@ If no date is passed, today's exchange rate will be used.
 When passing in the monetary value (first parameter) that is to be converted, it's important that you pass it in the lowest
 denomination of that currency. For example, £1 GBP would be passed in as 100 (as £1 = 100 pence).
 
-``` php
+```php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
 ```
 
-### Examples
-This example shows how to convert 100 pence (£1) from Great British Pounds to Euros. The current exchange rate will be used (unless a cached rate for this date already exists).
-``` php
+### Facade
+If you prefer to use facades in Laravel, you can choose to use the provided ```ExchangeRate ``` facade instead of instantiating the ``` AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate ```
+class manually.
+
+The example below shows an example of how you could use the facade to get the available currencies:
+
+```php
 <?php
     
     namespace App\Http\Controllers;
     
-    use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
+    use ExchangeRate;
+    
+    class TestController extends Controller
+    {
+        public function index()
+        {
+            return ExchangeRate::currencies();
+        }
+    }
+```
+### Examples
+This example shows how to convert 100 pence (£1) from Great British Pounds to Euros. The current exchange rate will be used (unless a cached rate for this date already exists).
+```php
+<?php
+    
+    namespace App\Http\Controllers;
+    
+    use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
     
     class TestController extends Controller
     {
@@ -118,12 +143,12 @@ This allows for significant performance improvements and reduced bandwidth from 
 However, if for any reason you require a fresh result from the API and not a cached result, the ``` ->shouldBustCache() ```
 method can be used. The example below shows how to ignore the cached value (if one exists) and make a new API request.
 
-``` php
+```php
 <?php
     
     namespace App\Http\Controllers;
     
-    use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
+    use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
     
     class TestController extends Controller
     {
@@ -184,19 +209,31 @@ Note: Please note that the currencies are available because they are exposed in 
 
 ## Testing
 
-``` bash
+```bash
 vendor/bin/phpunit
 ```
 
 ## Security
 
-If you find any security related, please contact me directly at [mail@ashallendesign.co.uk](mailto:mail@ashallendesign.co.uk) to report it.
+If you find any security related issues, please contact me directly at [mail@ashallendesign.co.uk](mailto:mail@ashallendesign.co.uk) to report it.
 
 ## Contribution
 
 If you wish to make any changes or improvements to the package, feel free to make a pull request.
 
 Note: A contribution guide will be added soon.
+
+## Credits
+
+- [Ash Allen](https://ashallendesign.co.uk)
+- [Jess Pickup](https://jesspickup.co.uk) (Logo)
+- [All Contributors](https://github.com/ash-jc-allen/short-url/graphs/contributors)
+
+## Changelog
+Check the [CHANGELOG](CHANGELOG.md) to get more information about the latest changes.
+
+## Upgrading
+Check the [UPGRADE](UPGRADE.md) guide to get more information on how to update this library to newer versions.
 
 ## License
 
