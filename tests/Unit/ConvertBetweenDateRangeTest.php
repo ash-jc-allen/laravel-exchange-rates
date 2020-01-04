@@ -5,7 +5,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
-use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
+use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
