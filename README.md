@@ -21,6 +21,7 @@
         - [Exchange Rates Between Date Range](#exchange-rates-between-date-range)
         - [Convert Currencies](#convert-currencies)
         - [Convert Currencies Between Date Range](#convert-currencies-between-date-range)
+    - [Facade](#facade)
     - [Examples](#examples)
     - [Caching](#caching)
     - [Supported Countries](#supported-countries)
@@ -57,7 +58,7 @@ $exchangeRates->currencies();
 ```
 
 #### Exchange Rate
-``` php
+```php
 <?php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->exchangeRate('GBP', 'EUR');
@@ -66,7 +67,7 @@ Note: If a Carbon date is passed as the third parameter, the exchange rate for t
 If no date is passed, today's exchange rate will be used.
 
 #### Exchange Rates Between Date Range
-``` php
+```php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->exchangeRateBetweenDateRange('GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
 ```
@@ -75,7 +76,7 @@ $exchangeRates->exchangeRateBetweenDateRange('GBP', 'EUR', Carbon::now()->subWee
 When passing in the monetary value (first parameter) that is to be converted, it's important that you pass it in the lowest
 denomination of that currency. For example, £1 GBP would be passed in as 100 (as £1 = 100 pence).
 
-``` php
+```php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now());
 ```
@@ -87,19 +88,40 @@ If no date is passed, today's exchange rate will be used.
 When passing in the monetary value (first parameter) that is to be converted, it's important that you pass it in the lowest
 denomination of that currency. For example, £1 GBP would be passed in as 100 (as £1 = 100 pence).
 
-``` php
+```php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
 ```
 
-### Examples
-This example shows how to convert 100 pence (£1) from Great British Pounds to Euros. The current exchange rate will be used (unless a cached rate for this date already exists).
-``` php
+### Facade
+If you prefer to use facades in Laravel, you can choose to use the provided ```ExchangeRate ``` facade instead of instantiating the ``` AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate ```
+class manually.
+
+The example below shows an example of how you could use the facade to get the available currencies:
+
+```php
 <?php
     
     namespace App\Http\Controllers;
     
-    use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
+    use ExchangeRate;
+    
+    class TestController extends Controller
+    {
+        public function index()
+        {
+            return ExchangeRate::currencies();
+        }
+    }
+```
+### Examples
+This example shows how to convert 100 pence (£1) from Great British Pounds to Euros. The current exchange rate will be used (unless a cached rate for this date already exists).
+```php
+<?php
+    
+    namespace App\Http\Controllers;
+    
+    use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
     
     class TestController extends Controller
     {
@@ -118,12 +140,12 @@ This allows for significant performance improvements and reduced bandwidth from 
 However, if for any reason you require a fresh result from the API and not a cached result, the ``` ->shouldBustCache() ```
 method can be used. The example below shows how to ignore the cached value (if one exists) and make a new API request.
 
-``` php
+```php
 <?php
     
     namespace App\Http\Controllers;
     
-    use AshAllenDesign\LaravelExchangeRates\ExchangeRate;
+    use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
     
     class TestController extends Controller
     {
@@ -184,7 +206,7 @@ Note: Please note that the currencies are available because they are exposed in 
 
 ## Testing
 
-``` bash
+```bash
 vendor/bin/phpunit
 ```
 
