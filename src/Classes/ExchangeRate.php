@@ -1,10 +1,7 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates;
+namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
-use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
-use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
-use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
