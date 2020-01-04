@@ -1,14 +1,14 @@
-# Laravel Exchange Rates
+<p align="center">
+<img src="https://ashallendesign.co.uk/images/custom/laravel-exchange-rates-logo.png" alt="Laravel Exchange Rates" width="600">
+</p>
 
-<div style="text-align:center">
-
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/ashallendesign/laravel-exchange-rates.svg?style=flat-square)](https://packagist.org/packages/ashallendesign/laravel-exchange-rates)
-[![Build Status](https://img.shields.io/travis/ash-jc-allen/laravel-exchange-rates/master.svg?style=flat-square)](https://travis-ci.org/ash-jc-allen/laravel-exchange-rates)
-[![Total Downloads](https://img.shields.io/packagist/dt/ashallendesign/laravel-exchange-rates.svg?style=flat-square)](https://packagist.org/packages/ashallendesign/laravel-exchange-rates)
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates?style=flat-square)](https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates)
-[![GitHub license](https://img.shields.io/github/license/ash-jc-allen/laravel-exchange-rates?style=flat-square)](https://github.com/ash-jc-allen/laravel-exchange-rates/blob/master/LICENSE)
-
-</div>
+<p align="center">
+<a href="https://packagist.org/packages/ashallendesign/laravel-exchange-rates"><img src="https://img.shields.io/packagist/v/ashallendesign/laravel-exchange-rates.svg?style=flat-square" alt="Latest Version on Packagist"></a>
+<a href="https://travis-ci.org/ash-jc-allen/laravel-exchange-rates"><img src="https://img.shields.io/travis/ash-jc-allen/laravel-exchange-rates/master.svg?style=flat-square" alt="Build Status"></a>
+<a href="https://packagist.org/packages/ashallendesign/laravel-exchange-rates"><img src="https://img.shields.io/packagist/dt/ashallendesign/laravel-exchange-rates.svg?style=flat-square" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/ashallendesign/laravel-exchange-rates"><img src="https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates?style=flat-square" alt="PHP from Packagist"></a>
+<a href="https://github.com/ash-jc-allen/short-url/blob/master/LICENSE"><img src="https://img.shields.io/github/license/ash-jc-allen/laravel-exchange-rates?style=flat-square" alt="GitHub license"></a>
+</p>
 
 ## Table of Contents
 
@@ -28,6 +28,9 @@
 - [Testing](#testing)
 - [Security](#security)
 - [Contribution](#contribution)
+- [Credits](#credits)
+- [Changelog](#changelog)
+- [Upgrading](#upgrading)
 - [License](#license)
     
 ## Overview
@@ -212,13 +215,25 @@ vendor/bin/phpunit
 
 ## Security
 
-If you find any security related, please contact me directly at [mail@ashallendesign.co.uk](mailto:mail@ashallendesign.co.uk) to report it.
+If you find any security related issues, please contact me directly at [mail@ashallendesign.co.uk](mailto:mail@ashallendesign.co.uk) to report it.
 
 ## Contribution
 
 If you wish to make any changes or improvements to the package, feel free to make a pull request.
 
 Note: A contribution guide will be added soon.
+
+## Credits
+
+- [Ash Allen](https://ashallendesign.co.uk)
+- [Jess Pickup](https://jesspickup.co.uk) (Logo)
+- [All Contributors](https://github.com/ash-jc-allen/short-url/graphs/contributors)
+
+## Changelog
+Check the [CHANGELOG](CHANGELOG.md) to get more information about the latest changes.
+
+## Upgrading
+Check the [UPGRADE](UPGRADE.md) guide to get more information on how to update this library to newer versions.
 
 ## License
 
