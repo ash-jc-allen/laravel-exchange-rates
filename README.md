@@ -28,6 +28,9 @@
 - [Testing](#testing)
 - [Security](#security)
 - [Contribution](#contribution)
+- [Credits](#credits)
+- [Changelog](#changelog)
+- [Upgrading](#upgrading)
 - [License](#license)
     
 ## Overview
@@ -212,13 +215,25 @@ vendor/bin/phpunit
 
 ## Security
 
-If you find any security related, please contact me directly at [mail@ashallendesign.co.uk](mailto:mail@ashallendesign.co.uk) to report it.
+If you find any security related issues, please contact me directly at [mail@ashallendesign.co.uk](mailto:mail@ashallendesign.co.uk) to report it.
 
 ## Contribution
 
 If you wish to make any changes or improvements to the package, feel free to make a pull request.
 
 Note: A contribution guide will be added soon.
+
+## Credits
+
+- [Ash Allen](https://ashallendesign.co.uk)
+- [Jess Pickup](https://jesspickup.co.uk) (Logo)
+- [All Contributors](https://github.com/ash-jc-allen/short-url/graphs/contributors)
+
+## Changelog
+Check the [CHANGELOG](CHANGELOG.md) to get more information about the latest changes.
+
+## Upgrading
+Check the [UPGRADE](UPGRADE.md) guide to get more information on how to update this library to newer versions.
 
 ## License
 
