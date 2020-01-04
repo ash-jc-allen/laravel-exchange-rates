@@ -34,7 +34,7 @@ class RequestBuilder
      */
     public function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->baseUrl.$path;
+        $url = $this->baseUrl.$path.'?';
 
         foreach ($queryParams as $param => $value) {
             $url .= '&'.urlencode($param).'='.urlencode($value);
