@@ -2,7 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Providers;
 
-use AshAllenDesign\LaravelExchangeRates\Facades\ExchangeRate;
+use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use Illuminate\Support\ServiceProvider;
 
 class ExchangeRatesProvider extends ServiceProvider
@@ -14,7 +14,7 @@ class ExchangeRatesProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->alias(ExchangeRate::class, 'exchange');
+        $this->app->alias(ExchangeRate::class, 'exchange-rate');
     }
 
     /**

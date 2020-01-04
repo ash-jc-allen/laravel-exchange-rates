@@ -43,7 +43,10 @@
     "laravel": {
       "providers": [
         "AshAllenDesign\\LaravelExchangeRates\\Providers\\ExchangeRatesProvider"
-      ]
+      ],
+      "aliases": {
+        "ExchangeRate": "AshAllenDesign\\LaravelExchangeRates\\Facades\\ExchangeRate"
+      }
     }
   }
 }
