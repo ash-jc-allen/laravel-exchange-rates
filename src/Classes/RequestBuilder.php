@@ -6,8 +6,7 @@ use GuzzleHttp\Client;
 
 class RequestBuilder
 {
-    /** @var string */
-    private $baseUrl = 'https://api.exchangeratesapi.io';
+    private const BASE_URL = 'https://api.exchangeratesapi.io';
 
     /**
      * @var Client
@@ -34,7 +33,7 @@ class RequestBuilder
      */
     public function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->baseUrl.$path.'?';
+        $url = self::BASE_URL.$path.'?';
 
         foreach ($queryParams as $param => $value) {
             $url .= '&'.urlencode($param).'='.urlencode($value);
