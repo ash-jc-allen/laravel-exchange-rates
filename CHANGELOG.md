@@ -1,5 +1,8 @@
 # Changelog
 
+**2.1.0 (released 2020-05-03):**
+- Added support for Laravel 7. [#28](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/28)
+
 **2.0.0 (released 2020-01-04):**
 - Added an ``` ExchangeRate ``` facade that can auto-discovered by Laravel.
 - Updated documentation.
