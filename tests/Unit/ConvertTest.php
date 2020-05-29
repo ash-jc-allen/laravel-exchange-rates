@@ -25,7 +25,7 @@ class ConvertTest extends TestCase
         $this->assertEquals('86.158', $rate);
     }
 
-     /** @test */
+    /** @test */
     public function convert_still_works_if_to_and_from_value_are_identical()
     {
         $exchangeRate = new ExchangeRate();
