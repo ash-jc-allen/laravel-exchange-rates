@@ -26,12 +26,12 @@ class ConvertTest extends TestCase
     }
 
      /** @test */
-     public function convert_still_works_if_to_and_from_value_are_identical()
-     {
-         $exchangeRate = new ExchangeRate();
-         $rate = $exchangeRate->convert(100, 'EUR', 'EUR');
-         $this->assertEquals('100', $rate);
-     }
+    public function convert_still_works_if_to_and_from_value_are_identical()
+    {
+        $exchangeRate = new ExchangeRate();
+        $rate = $exchangeRate->convert(100, 'EUR', 'EUR');
+        $this->assertEquals('100', $rate);
+    }
 
     /** @test */
     public function converted_value_in_the_past_is_returned_if_date_parameter_passed_and_rate_is_not_cached()

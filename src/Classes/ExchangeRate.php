@@ -180,6 +180,7 @@ class ExchangeRate
         if ($from === $to) return $value;
 
         return (float) $this->exchangeRate($from, $to, $date) * $value;
+    }
 
     /**
      * Return an array of the converted values between
