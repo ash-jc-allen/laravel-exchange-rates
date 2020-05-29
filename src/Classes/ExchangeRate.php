@@ -140,6 +140,16 @@ class ExchangeRate
         Validation::validateCurrencyCode($to);
         Validation::validateStartAndEndDates($date, $endDate);
 
+        if ($from === $to) {
+            for ($startDate = $date; $startDate->lte($endDate); $startDate->addDay()) {
+                if ($date->isWeekday()) {
+                    $conversions[$date->format('Y-m-d')] = 1.0;
+                }
+            }
+
+            return $conversions;
+        }
+
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
 
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {

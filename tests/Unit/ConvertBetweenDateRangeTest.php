@@ -6,6 +6,7 @@ use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
@@ -137,6 +138,27 @@ class ConvertBetweenDateRangeTest extends TestCase
         ];
         $this->assertEquals($cachedExchangeRates,
             Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+    }
+
+    /** @test */
+    public function request_is_not_made_if_the_currencies_are_the_same()
+    {
+        $fromDate = Carbon::createFromDate(2019, 11, 4);
+        $toDate = Carbon::createFromDate(2019, 11, 10);
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')->withAnyArgs()->never();
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->convertBetweenDateRange(100, 'EUR', 'EUR', $fromDate, $toDate);
+
+        $this->assertEquals([
+            '2019-11-08' => 100.0,
+            '2019-11-06' => 100.0,
+            '2019-11-07' => 100.0,
+            '2019-11-05' => 100.0,
+            '2019-11-04' => 100.0,
+        ], $currencies);
     }
 
     /** @test */
