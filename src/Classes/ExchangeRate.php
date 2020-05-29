@@ -94,6 +94,10 @@ class ExchangeRate
             Validation::validateDate($date);
         }
 
+        if ($from === $to) {
+            return 1.0;
+        }
+
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? now());
 
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
