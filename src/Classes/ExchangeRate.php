@@ -177,7 +177,9 @@ class ExchangeRate
      */
     public function convert(int $value, string $from, string $to, Carbon $date = null): float
     {
-        if ($from === $to) return $value;
+        if ($from === $to) {
+            return $value;
+        }
 
         return (float) $this->exchangeRate($from, $to, $date) * $value;
     }
