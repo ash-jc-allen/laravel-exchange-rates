@@ -141,13 +141,7 @@ class ExchangeRate
         Validation::validateStartAndEndDates($date, $endDate);
 
         if ($from === $to) {
-            for ($startDate = $date; $startDate->lte($endDate); $startDate->addDay()) {
-                if ($date->isWeekday()) {
-                    $conversions[$date->format('Y-m-d')] = 1.0;
-                }
-            }
-
-            return $conversions;
+            return $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions);
         }
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
@@ -221,6 +215,31 @@ class ExchangeRate
         }
 
         ksort($conversions);
+
+        return $conversions;
+    }
+
+    /**
+     * If the 'from' and 'to' currencies are the same, we
+     * don't need to make a request to the API. Instead,
+     * we can build the response ourselves to improve
+     * the performance.
+     *
+     * @param  Carbon  $date
+     * @param  Carbon  $endDate
+     * @param  array  $conversions
+     * @return array
+     */
+    private function exchangeRateDateRangeResultWithSameCurrency(
+        Carbon $date,
+        Carbon $endDate,
+        array $conversions = []
+    ): array {
+        for ($startDate = $date; $startDate->lte($endDate); $startDate->addDay()) {
+            if ($date->isWeekday()) {
+                $conversions[$date->format('Y-m-d')] = 1.0;
+            }
+        }
 
         return $conversions;
     }
