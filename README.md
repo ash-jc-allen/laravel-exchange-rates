@@ -24,7 +24,7 @@
     - [Facade](#facade)
     - [Examples](#examples)
     - [Caching](#caching)
-    - [Supported Countries](#supported-countries)
+    - [Supported Currencies](#supported-currencies)
 - [Testing](#testing)
 - [Security](#security)
 - [Contribution](#contribution)
@@ -168,10 +168,10 @@ currencies and date range.
 Therefore, if you were to try and get 'GBP' to 'EUR' for 20-11-2019 - 26-11-2019, a new API request would be made because
 the date range is different.
 
-### Supported Countries
+### Supported Currencies
 Laravel Exchange Rates supports working with the following currencies (sorted in A-Z order):
 
-| Code | Country Name          |
+| Code | Currency Name         |
 |------|-----------------------|
 | AUD  | Australian dollar     |
 | BGN  | Bulgarian lev         |
