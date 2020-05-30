@@ -171,39 +171,41 @@ the date range is different.
 ### Supported Countries
 Laravel Exchange Rates supports working with the following currencies (sorted in A-Z order):
 
-- ***AUD*** - Australian dollar
-- ***BGN*** - Bulgarian lev
-- ***BRL*** - Brazilian real
-- ***CAD*** - Canadian
-- ***CHF*** - Swiss franc
-- ***CNY*** - Chinese yuan renminbi
-- ***CZK*** - Czech koruna
-- ***DKK*** - Danish krone
-- ***EUR*** - Euro
-- ***GBP*** - Pound sterling
-- ***HKD*** - Hong Kong dollar
-- ***HRK*** - Croatian kuna
-- ***HUF*** - Hungarian forint
-- ***IDR*** - Indonesian rupiah
-- ***ILS*** - Israeli shekel
-- ***INR*** - Indian rupee
-- ***ISK*** - Icelandic krone
-- ***JPY*** - Japanese yen
-- ***KRW*** - South Korean won
-- ***MXN*** - Mexican peso
-- ***MYR*** - Malaysian ringgit
-- ***NOK*** - Norwegian krone
-- ***NZD*** - New Zealand dollar
-- ***PHP*** - Philippine peso
-- ***PLN*** - Polish zloty
-- ***RON*** - Romanian leu
-- ***RUB*** - Russian rouble
-- ***SEK*** - Swedish krona
-- ***SGD*** - Singapore dollar
-- ***THB*** - Thai baht
-- ***TRY*** - Turkish lira
-- ***USD*** - US dollar
-- ***ZAR*** - South African rand
+| Code | Country Name          |
+|------|-----------------------|
+| AUD  | Australian dollar     |
+| BGN  | Bulgarian lev         |
+| BRL  | Brazilian real        |
+| CAD  | Canadian              |
+| CHF  | Swiss franc           |
+| CNY  | Chinese yuan renminbi |
+| CZK  | Czech koruna          |
+| DKK  | Danish krone          |
+| EUR  | Euro                  |
+| GBP  | Pound sterling        |
+| HKD  | Hong Kong dollar      |
+| HRK  | Croatian kuna         |
+| HUF  | Hungarian forint      |
+| IDR  | Indonesian rupiah     |
+| ILS  | Israeli shekel        |
+| INR  | Indian rupee          |
+| ISK  | Icelandic krone       |
+| JPY  | Japanese yen          |
+| KRW  | South Korean won      |
+| MXN  | Mexican peso          |
+| MYR  | Malaysian ringgit     |
+| NOK  | Norwegian krone       |
+| NZD  | New Zealand dollar    |
+| PHP  | Philippine peso       |
+| PLN  | Polish zloty          |
+| RON  | Romanian leu          |
+| RUB  | Russian rouble        |
+| SEK  | Swedish krona         |
+| SGD  | Singapore dollar      |
+| THB  | Thai baht             |
+| TRY  | Turkish lira          |
+| USD  | US dollar             |
+| ZAR  | South African rand    |
 
 Note: Please note that the currencies are available because they are exposed in the [exchangeratesapi.io](http://exchangeratesapi.io) API. 
 
