@@ -94,6 +94,10 @@ class ExchangeRate
             Validation::validateDate($date);
         }
 
+        if ($from === $to) {
+            return 1.0;
+        }
+
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? now());
 
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
@@ -142,18 +146,22 @@ class ExchangeRate
             return $cachedExchangeRate;
         }
 
-        $result = $this->requestBuilder->makeRequest('/history', [
-            'base'     => $from,
-            'start_at' => $date->format('Y-m-d'),
-            'end_at'   => $endDate->format('Y-m-d'),
-            'symbols'  => $to,
-        ]);
+        if ($from === $to) {
+            $conversions = $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions);
+        } else {
+            $result = $this->requestBuilder->makeRequest('/history', [
+                'base'     => $from,
+                'start_at' => $date->format('Y-m-d'),
+                'end_at'   => $endDate->format('Y-m-d'),
+                'symbols'  => $to,
+            ]);
 
-        foreach ($result['rates'] as $date => $rate) {
-            $conversions[$date] = $rate[$to];
+            foreach ($result['rates'] as $date => $rate) {
+                $conversions[$date] = $rate[$to];
+            }
+
+            ksort($conversions);
         }
-
-        ksort($conversions);
 
         $this->cacheRepository->storeInCache($cacheKey, $conversions);
 
@@ -211,6 +219,40 @@ class ExchangeRate
         return $conversions;
     }
 
+    /**
+     * If the 'from' and 'to' currencies are the same, we
+     * don't need to make a request to the API. Instead,
+     * we can build the response ourselves to improve
+     * the performance.
+     *
+     * @param  Carbon  $startDate
+     * @param  Carbon  $endDate
+     * @param  array  $conversions
+     * @return array
+     */
+    private function exchangeRateDateRangeResultWithSameCurrency(
+        Carbon $startDate,
+        Carbon $endDate,
+        array $conversions = []
+    ): array {
+        for ($date = clone $startDate; $date->lte($endDate); $date->addDay()) {
+            if ($date->isWeekday()) {
+                $conversions[$date->format('Y-m-d')] = 1.0;
+            }
+        }
+
+        return $conversions;
+    }
+
+    /**
+     * Determine whether if the cached result (if it
+     * exists) should be deleted. This will force
+     * a new exchange rate to be fetched from
+     * the API.
+     *
+     * @param  bool  $bustCache
+     * @return $this
+     */
     public function shouldBustCache(bool $bustCache = true): self
     {
         $this->shouldBustCache = $bustCache;
@@ -218,6 +260,15 @@ class ExchangeRate
         return $this;
     }
 
+    /**
+     * Attempt to fetch an item (more than likely an
+     * exchange rate) from the cache. If it exists,
+     * return it. If it has been specified, bust
+     * the cache.
+     *
+     * @param  string  $cacheKey
+     * @return mixed
+     */
     private function attemptToResolveFromCache(string $cacheKey)
     {
         if ($this->shouldBustCache) {

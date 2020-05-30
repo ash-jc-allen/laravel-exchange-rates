@@ -78,6 +78,17 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
+    public function request_is_not_made_if_the_currencies_are_the_same()
+    {
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')->withAnyArgs()->never();
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $rate = $exchangeRate->convert(100, 'EUR', 'EUR');
+        $this->assertEquals('100', $rate);
+    }
+
+    /** @test */
     public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future()
     {
         $this->expectException(InvalidDateException::class);
