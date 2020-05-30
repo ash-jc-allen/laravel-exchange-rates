@@ -225,19 +225,19 @@ class ExchangeRate
      * we can build the response ourselves to improve
      * the performance.
      *
-     * @param  Carbon  $date
+     * @param  Carbon  $startDate
      * @param  Carbon  $endDate
      * @param  array  $conversions
      * @return array
      */
     private function exchangeRateDateRangeResultWithSameCurrency(
-        Carbon $date,
+        Carbon $startDate,
         Carbon $endDate,
         array $conversions = []
     ): array {
-        for ($resultDate = clone $date; $resultDate->lte($endDate); $resultDate->addDay()) {
-            if ($resultDate->isWeekday()) {
-                $conversions[$resultDate->format('Y-m-d')] = 1.0;
+        for ($date = clone $startDate; $date->lte($endDate); $date->addDay()) {
+            if ($date->isWeekday()) {
+                $conversions[$date->format('Y-m-d')] = 1.0;
             }
         }
 
