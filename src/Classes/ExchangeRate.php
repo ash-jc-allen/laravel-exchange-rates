@@ -140,28 +140,28 @@ class ExchangeRate
         Validation::validateCurrencyCode($to);
         Validation::validateStartAndEndDates($date, $endDate);
 
-        if ($from === $to) {
-            return $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions);
-        }
-
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
 
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
             return $cachedExchangeRate;
         }
 
-        $result = $this->requestBuilder->makeRequest('/history', [
-            'base'     => $from,
-            'start_at' => $date->format('Y-m-d'),
-            'end_at'   => $endDate->format('Y-m-d'),
-            'symbols'  => $to,
-        ]);
+        if ($from === $to) {
+            $conversions = $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions);
+        } else {
+            $result = $this->requestBuilder->makeRequest('/history', [
+                'base'     => $from,
+                'start_at' => $date->format('Y-m-d'),
+                'end_at'   => $endDate->format('Y-m-d'),
+                'symbols'  => $to,
+            ]);
 
-        foreach ($result['rates'] as $date => $rate) {
-            $conversions[$date] = $rate[$to];
+            foreach ($result['rates'] as $date => $rate) {
+                $conversions[$date] = $rate[$to];
+            }
+
+            ksort($conversions);
         }
-
-        ksort($conversions);
 
         $this->cacheRepository->storeInCache($cacheKey, $conversions);
 
@@ -235,9 +235,9 @@ class ExchangeRate
         Carbon $endDate,
         array $conversions = []
     ): array {
-        for ($startDate = $date; $startDate->lte($endDate); $startDate->addDay()) {
-            if ($date->isWeekday()) {
-                $conversions[$date->format('Y-m-d')] = 1.0;
+        for ($resultDate = clone($date); $resultDate->lte($endDate); $resultDate->addDay()) {
+            if ($resultDate->isWeekday()) {
+                $conversions[$resultDate->format('Y-m-d')] = 1.0;
             }
         }
 

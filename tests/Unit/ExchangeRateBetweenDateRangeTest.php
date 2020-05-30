@@ -142,6 +142,9 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         ];
 
         $this->assertEquals($expectedArray, $currencies);
+
+        $this->assertEquals($expectedArray,
+            Cache::get('laravel_xr_EUR_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */

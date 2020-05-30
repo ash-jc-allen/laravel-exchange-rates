@@ -159,6 +159,16 @@ class ConvertBetweenDateRangeTest extends TestCase
             '2019-11-05' => 100.0,
             '2019-11-04' => 100.0,
         ], $currencies);
+
+        $cachedExchangeRates = [
+            '2019-11-08' => 1.0,
+            '2019-11-06' => 1.0,
+            '2019-11-07' => 1.0,
+            '2019-11-05' => 1.0,
+            '2019-11-04' => 1.0,
+        ];
+        $this->assertEquals($cachedExchangeRates,
+            Cache::get('laravel_xr_EUR_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
