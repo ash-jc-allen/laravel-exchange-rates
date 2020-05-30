@@ -235,7 +235,7 @@ class ExchangeRate
         Carbon $endDate,
         array $conversions = []
     ): array {
-        for ($resultDate = clone($date); $resultDate->lte($endDate); $resultDate->addDay()) {
+        for ($resultDate = clone $date; $resultDate->lte($endDate); $resultDate->addDay()) {
             if ($resultDate->isWeekday()) {
                 $conversions[$resultDate->format('Y-m-d')] = 1.0;
             }
