@@ -1,6 +1,11 @@
 # Changelog
 
-**2.1.0 (released 2020-05-03):**
+**2.2.0 (released 2020-05-30):**
+- Prevented requests from being made to the API if trying to get the exchange rate for the same currency.
+- Fixed bug that was caused if trying to get the exchange rate for 'EUR' to 'EUR'.
+- Updated documentation.
+
+**2.1.0 (released 2020-03-05):**
 - Added support for Laravel 7. [#28](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/28)
 
 **2.0.0 (released 2020-01-04):**
