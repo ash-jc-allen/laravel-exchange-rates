@@ -6,6 +6,7 @@ use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
@@ -131,6 +132,16 @@ class ExchangeRateTest extends TestCase
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->exchangeRate('GBP', 'INVALID', now()->subMinute());
+    }
+
+    /** @test */
+    public function exception_is_thrown_if_the_date_is_before_the_earliest_possible_date()
+    {
+        $this->expectException(InvalidDateException::class);
+        $this->expectExceptionMessage('The date cannot be before 4th January 1999.');
+
+        $exchangeRate = new ExchangeRate();
+        $exchangeRate->exchangeRate('GBP', 'USD', Carbon::createFromDate(1999, 1, 3));
     }
 
     private function mockResponseForCurrentDate()
