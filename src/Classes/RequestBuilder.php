@@ -6,7 +6,11 @@ use GuzzleHttp\Client;
 
 class RequestBuilder
 {
-    /** @var string */
+    /**
+     * The base URL for the Exchange Rates API.
+     *
+     * @var string
+     */
     private $baseUrl = 'https://api.exchangeratesapi.io';
 
     /**
@@ -28,7 +32,7 @@ class RequestBuilder
      * Make an API request to the ExchangeRatesAPI.
      *
      * @param  string  $path
-     * @param  array  ...$queryParams
+     * @param  string[]  $queryParams
      *
      * @return mixed
      */
