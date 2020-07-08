@@ -24,6 +24,8 @@
     - [Facade](#facade)
     - [Examples](#examples)
     - [Caching](#caching)
+        - [Busting Cached Exchange Rates](#busting-cached-exchange-rates)
+        - [Preventing Exchange Rates from Being Cached](#preventing-exchange-rates-from-being-cached)
     - [Supported Currencies](#supported-currencies)
 - [Testing](#testing)
 - [Security](#security)
@@ -62,7 +64,6 @@ $exchangeRates->currencies();
 
 #### Exchange Rate
 ```php
-<?php
 $exchangeRates = new ExchangeRate();
 $exchangeRates->exchangeRate('GBP', 'EUR');
 ```
@@ -137,6 +138,7 @@ This example shows how to convert 100 pence (£1) from Great British Pounds to E
 ```
 
 ### Caching
+#### Busting Cached Exchange Rates
 By default, the responses all of the requests to the [exchangeratesapi.io](http://exchangeratesapi.io) API are cached.
 This allows for significant performance improvements and reduced bandwidth from your server. 
 
@@ -156,6 +158,27 @@ method can be used. The example below shows how to ignore the cached value (if o
         {
             $exchangeRates = new ExchangeRate();
             return $exchangeRates->shouldBustCache()->convert(100, 'GBP', 'EUR', Carbon::now());
+        }
+    }
+```
+
+#### Preventing Exchange Rates from Being Cached
+It is also possible to prevent the exchange rates from being cached at all. To do this, you can use the ``` ->shouldCache(false) ```
+method. The example below shows how to get an exchange rate and not cache it:
+
+```php
+<?php
+    
+    namespace App\Http\Controllers;
+    
+    use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
+    
+    class TestController extends Controller
+    {
+        public function index()
+        {
+            $exchangeRates = new ExchangeRate();
+            return $exchangeRates->shouldCache(false)->convert(100, 'GBP', 'EUR', Carbon::now());
         }
     }
 ```

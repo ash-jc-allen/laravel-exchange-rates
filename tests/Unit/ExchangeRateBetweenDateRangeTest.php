@@ -122,6 +122,41 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
+    public function exchange_rates_are_not_cached_if_the_shouldCache_option_is_false()
+    {
+        $fromDate = now()->subWeek();
+        $toDate = now();
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs([
+                '/history',
+                [
+                    'base'     => 'GBP',
+                    'start_at' => $fromDate->format('Y-m-d'),
+                    'end_at'   => $toDate->format('Y-m-d'),
+                    'symbols'  => 'EUR',
+                ],
+            ])
+            ->once()
+            ->andReturn($this->mockResponse());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->shouldCache(false)->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
+
+        $expectedArray = [
+            '2019-11-08' => 1.1606583254,
+            '2019-11-06' => 1.1623446817,
+            '2019-11-07' => 1.1568450522,
+            '2019-11-05' => 1.1612648497,
+            '2019-11-04' => 1.1578362356,
+        ];
+
+        $this->assertEquals($expectedArray, $currencies);
+        $this->assertNull(Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+    }
+
+    /** @test */
     public function request_is_not_made_if_the_currencies_are_the_same()
     {
         $fromDate = Carbon::createFromDate(2019, 11, 4);
