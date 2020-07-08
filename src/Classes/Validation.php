@@ -11,7 +11,7 @@ class Validation
     /**
      * A Carbon object for the earliest possible date that
      * an exchange rate can be fetched for. The date is:
-     * 4th January 2020
+     * 4th January 2020.
      *
      * @var Carbon|null
      */
