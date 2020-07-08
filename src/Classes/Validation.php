@@ -69,7 +69,7 @@ class Validation
         }
 
         if (! self::$earliestPossibleDate) {
-            self::$earliestPossibleDate = Carbon::createFromDate(1999, 1, 3);
+            self::$earliestPossibleDate = Carbon::createFromDate(1999, 1, 4)->startOfDay();
         }
 
         if ($date->isBefore(static::$earliestPossibleDate)) {
