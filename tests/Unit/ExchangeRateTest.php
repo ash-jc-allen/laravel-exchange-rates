@@ -78,6 +78,21 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
+    public function exchange_rate_is_not_cached_if_the_shouldCache_option_is_false()
+    {
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/latest', ['base' => 'EUR']])
+            ->once()
+            ->andReturn($this->mockResponseForCurrentDate());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $rate = $exchangeRate->shouldCache(false)->exchangeRate('EUR', 'GBP');
+        $this->assertEquals('0.86158', $rate);
+        $this->assertNull(Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
+    }
+
+    /** @test */
     public function request_is_not_made_if_the_currencies_are_the_same()
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);

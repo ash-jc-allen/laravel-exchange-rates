@@ -7,7 +7,6 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 class ExchangeRate
 {
@@ -20,11 +19,24 @@ class ExchangeRate
     private $requestBuilder;
 
     /**
+     * The repository used for accessing the cache.
+     *
      * @var CacheRepository
      */
     private $cacheRepository;
 
     /**
+     * Whether of not the exchange rate should be cached
+     * after being fetched from the API.
+     *
+     * @var bool
+     */
+    private $shouldCache = true;
+
+    /**
+     * Whether or not the cache should be busted and a new
+     * value should be fetched from the API.
+     *
      * @var bool
      */
     private $shouldBustCache = false;
@@ -34,7 +46,6 @@ class ExchangeRate
      *
      * @param  RequestBuilder|null  $requestBuilder
      * @param  CacheRepository|null  $cacheRepository
-     * @throws BindingResolutionException
      */
     public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
     {
@@ -66,7 +77,9 @@ class ExchangeRate
             $currencies[] = $currency;
         }
 
-        $this->cacheRepository->storeInCache($cacheKey, $currencies);
+        if ($this->shouldCache) {
+            $this->cacheRepository->storeInCache($cacheKey, $currencies);
+        }
 
         return $currencies;
     }
@@ -111,7 +124,9 @@ class ExchangeRate
             $exchangeRate = $this->requestBuilder->makeRequest('/latest', ['base' => $from])['rates'][$to];
         }
 
-        $this->cacheRepository->storeInCache($cacheKey, $exchangeRate);
+        if ($this->shouldCache) {
+            $this->cacheRepository->storeInCache($cacheKey, $exchangeRate);
+        }
 
         return $exchangeRate;
     }
@@ -163,7 +178,9 @@ class ExchangeRate
             ksort($conversions);
         }
 
-        $this->cacheRepository->storeInCache($cacheKey, $conversions);
+        if ($this->shouldCache) {
+            $this->cacheRepository->storeInCache($cacheKey, $conversions);
+        }
 
         return $conversions;
     }
@@ -242,6 +259,20 @@ class ExchangeRate
         }
 
         return $conversions;
+    }
+
+    /**
+     * Determine whether if the exchange rate should be
+     * cached after it is fetched from the API.
+     *
+     * @param  bool  $shouldCache
+     * @return $this
+     */
+    public function shouldCache(bool $shouldCache = true): self
+    {
+        $this->shouldCache = $shouldCache;
+
+        return $this;
     }
 
     /**
