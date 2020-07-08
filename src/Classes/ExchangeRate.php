@@ -228,7 +228,7 @@ class ExchangeRate
         array $conversions = []
     ): array {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
-            $conversions[$date] = (float)$exchangeRate * $value;
+            $conversions[$date] = (float) $exchangeRate * $value;
         }
 
         ksort($conversions);
