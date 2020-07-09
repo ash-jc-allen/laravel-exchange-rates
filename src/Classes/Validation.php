@@ -25,12 +25,30 @@ class Validation
      *
      * @throws InvalidCurrencyException
      */
-    public static function validateCurrencyCode(string $currencyCode)
+    public static function validateCurrencyCode(string $currencyCode): void
     {
         $currencies = new Currency();
 
         if (! $currencies->isAllowableCurrency($currencyCode)) {
             throw new InvalidCurrencyException($currencyCode.' is not a valid country code.');
+        }
+    }
+
+    /**
+     * Validate that the currencies are all supported by
+     * the Exchange Rates API.
+     *
+     * @param  array  $currencyCodes
+     * @throws InvalidCurrencyException
+     */
+    public static function validateCurrencyCodes(array $currencyCodes): void
+    {
+        $currencies = new Currency();
+
+        foreach($currencyCodes as $currencyCode) {
+            if (! $currencies->isAllowableCurrency($currencyCode)) {
+                throw new InvalidCurrencyException($currencyCode.' is not a valid country code.');
+            }
         }
     }
 
@@ -44,7 +62,7 @@ class Validation
      *
      * @throws InvalidDateException
      */
-    public static function validateStartAndEndDates(Carbon $from, Carbon $to)
+    public static function validateStartAndEndDates(Carbon $from, Carbon $to): void
     {
         self::validateDate($from);
         self::validateDate($to);
@@ -62,7 +80,7 @@ class Validation
      *
      * @throws InvalidDateException
      */
-    public static function validateDate(Carbon $date)
+    public static function validateDate(Carbon $date): void
     {
         if (! $date->isPast()) {
             throw new InvalidDateException('The date must be in the past.');
