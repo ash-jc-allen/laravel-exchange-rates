@@ -51,7 +51,7 @@ composer require ashallendesign/laravel-exchange-rates
 The package has been developed and tested to work with the following minimum requirements:
 
 - PHP 7.2
-- Laravel 5.8
+- Laravel 6
 
 ## Usage
 
