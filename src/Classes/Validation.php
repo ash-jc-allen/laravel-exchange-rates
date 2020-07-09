@@ -9,6 +9,15 @@ use Carbon\Carbon;
 class Validation
 {
     /**
+     * A Carbon object for the earliest possible date that
+     * an exchange rate can be fetched for. The date is:
+     * 4th January 2020.
+     *
+     * @var Carbon|null
+     */
+    private static $earliestPossibleDate;
+
+    /**
      * Validate that the currency is supported by the
      * Exchange Rates API.
      *
@@ -57,6 +66,14 @@ class Validation
     {
         if (! $date->isPast()) {
             throw new InvalidDateException('The date must be in the past.');
+        }
+
+        if (! self::$earliestPossibleDate) {
+            self::$earliestPossibleDate = Carbon::createFromDate(1999, 1, 4)->startOfDay();
+        }
+
+        if ($date->isBefore(static::$earliestPossibleDate)) {
+            throw new InvalidDateException('The date cannot be before 4th January 1999.');
         }
     }
 }
