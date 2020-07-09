@@ -2,6 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
+use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use Carbon\Carbon;
 use Illuminate\Cache\Repository;
 use Illuminate\Container\Container;
@@ -86,13 +87,23 @@ class CacheRepository
      * range.
      *
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|  $to
      * @param  Carbon  $date
      * @param  Carbon|null  $endDate
      * @return string
+     * @throws ExchangeRateException
      */
-    public function buildCacheKey(string $from, string $to, Carbon $date, Carbon $endDate = null): string
+    public function buildCacheKey(string $from, $to, Carbon $date, Carbon $endDate = null): string
     {
+        if (! is_string($to) && ! is_array($to)) {
+            throw new ExchangeRateException('The \'to\' parameter must be a string or array.');
+        }
+
+        if (is_array($to)) {
+            asort($to);
+            $to = implode('_', $to);
+        }
+
         $key = $from.'_'.$to.'_'.$date->format('Y-m-d');
 
         if ($endDate) {
