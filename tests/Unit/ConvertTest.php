@@ -16,7 +16,7 @@ class ConvertTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR']])
+            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
             ->andReturn($this->mockResponseForCurrentDate());
 
@@ -32,7 +32,7 @@ class ConvertTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
             ->andReturn($this->mockResponseForPastDate());
 
@@ -67,7 +67,7 @@ class ConvertTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
             ->andReturn($this->mockResponseForPastDate());
 
