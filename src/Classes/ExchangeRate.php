@@ -207,17 +207,32 @@ class ExchangeRate
      *
      * @param  int  $value
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|array  $to
      * @param  Carbon|null  $date
      *
-     * @return float
+     * @return float|array
      * @throws InvalidDateException
      *
      * @throws InvalidCurrencyException
+     * @throws ExchangeRateException
      */
-    public function convert(int $value, string $from, string $to, Carbon $date = null): float
+    public function convert(int $value, string $from, $to, Carbon $date = null)
     {
-        return (float)$this->exchangeRate($from, $to, $date) * $value;
+        if (! is_string($to) && ! is_array($to)) {
+            throw new ExchangeRateException('The \'to\' parameter must be a string or array.');
+        }
+
+        if (is_string($to)) {
+            return (float)$this->exchangeRate($from, $to, $date) * $value;
+        }
+
+        $exchangeRates = $this->exchangeRate($from, $to, $date);
+
+        foreach($exchangeRates as $currency => $exchangeRate) {
+            $exchangeRates[$currency] = (float) $exchangeRate * $value;
+        }
+
+        return $exchangeRates;
     }
 
     /**
