@@ -2,6 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
+use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
@@ -87,26 +88,36 @@ class ExchangeRate
     /**
      * Return the exchange rate between the $from and $to
      * parameters. If no $date parameter is passed, we
-     * use today's date instead.
+     * use today's date instead. If $to is a string,
+     * the exchange rate will be returned as a
+     * string. If $to is an array, the rates
+     * will be returned within an array.
      *
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|array  $to
      * @param  Carbon|null  $date
      *
-     * @return string
+     * @return string|array
      * @throws InvalidDateException
      *
      * @throws InvalidCurrencyException
+     * @throws ExchangeRateException
      */
-    public function exchangeRate(string $from, string $to, ?Carbon $date = null): string
+    public function exchangeRate(string $from, $to, ?Carbon $date = null)
     {
-        Validation::validateCurrencyCode($from);
-        Validation::validateCurrencyCode($to);
+        if (! is_string($to) && ! is_array($to)) {
+            throw new ExchangeRateException('The \'to\' parameter must be a string or array.');
+        }
 
         if ($date) {
             Validation::validateDate($date);
         }
 
+        Validation::validateCurrencyCode($from);
+
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+
+        // TODO Add handling for if 'from' is 'EUR' and 'to' contains 'EUR'. The bug in the API still exists.
         if ($from === $to) {
             return 1.0;
         }
@@ -117,12 +128,16 @@ class ExchangeRate
             return $cachedExchangeRate;
         }
 
-        if ($date) {
-            $exchangeRate = $this->requestBuilder->makeRequest('/'.$date->format('Y-m-d'),
-                ['base' => $from])['rates'][$to];
-        } else {
-            $exchangeRate = $this->requestBuilder->makeRequest('/latest', ['base' => $from])['rates'][$to];
-        }
+        $symbols = is_string($to) ? $to : implode(',', $to);
+        $queryParams = ['base' => $from, 'symbols' => $symbols];
+
+        $url = $date
+            ? '/'.$date->format('Y-m-d')
+            : '/latest';
+
+        $response = $this->requestBuilder->makeRequest($url, $queryParams)['rates'];
+
+        $exchangeRate = is_string($to) ? $response[$to] : $response;
 
         if ($this->shouldCache) {
             $this->cacheRepository->storeInCache($cacheKey, $exchangeRate);
@@ -202,7 +217,7 @@ class ExchangeRate
      */
     public function convert(int $value, string $from, string $to, Carbon $date = null): float
     {
-        return (float) $this->exchangeRate($from, $to, $date) * $value;
+        return (float)$this->exchangeRate($from, $to, $date) * $value;
     }
 
     /**
@@ -228,7 +243,7 @@ class ExchangeRate
         array $conversions = []
     ): array {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
-            $conversions[$date] = (float) $exchangeRate * $value;
+            $conversions[$date] = (float)$exchangeRate * $value;
         }
 
         ksort($conversions);
