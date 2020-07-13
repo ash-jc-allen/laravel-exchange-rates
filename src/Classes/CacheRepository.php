@@ -87,7 +87,7 @@ class CacheRepository
      * range.
      *
      * @param  string  $from
-     * @param  string|  $to
+     * @param  string|array  $to
      * @param  Carbon  $date
      * @param  Carbon|null  $endDate
      * @return string
