@@ -167,7 +167,6 @@ class ExchangeRate
         Validation::validateStartAndEndDates($date, $endDate);
         Validation::validateIsStringOrArray($to);
 
-        // TODO: Push this into the validateCurrencyCodes. Do the 'if' statement inside that method.
         is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
