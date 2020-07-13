@@ -117,7 +117,6 @@ class ExchangeRate
 
         is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
 
-        // TODO Add handling for if 'from' is 'EUR' and 'to' contains 'EUR'. The bug in the API still exists.
         if ($from === $to) {
             return 1.0;
         }
@@ -151,24 +150,32 @@ class ExchangeRate
      * date range.
      *
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|array  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
      *
-     * @return array
+     * @return string|array
      * @throws Exception
      */
     public function exchangeRateBetweenDateRange(
         string $from,
-        string $to,
+        $to,
         Carbon $date,
         Carbon $endDate,
         array $conversions = []
     ) {
         Validation::validateCurrencyCode($from);
-        Validation::validateCurrencyCode($to);
         Validation::validateStartAndEndDates($date, $endDate);
+
+        // TODO: Extract into a validation method for readability.
+        // TODO: Move this method into the validateCurrencyCodes method.
+        if (! is_string($to) && ! is_array($to)) {
+            throw new ExchangeRateException('The \'to\' parameter must be a string or array.');
+        }
+
+        // TODO: Push this into the validateCurrencyCodes. Do the 'if' statement inside that method.
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
 
@@ -176,26 +183,37 @@ class ExchangeRate
             return $cachedExchangeRate;
         }
 
-        if ($from === $to) {
-            $conversions = $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions);
-        } else {
-            $result = $this->requestBuilder->makeRequest('/history', [
-                'base'     => $from,
-                'start_at' => $date->format('Y-m-d'),
-                'end_at'   => $endDate->format('Y-m-d'),
-                'symbols'  => $to,
-            ]);
-
-            foreach ($result['rates'] as $date => $rate) {
-                $conversions[$date] = $rate[$to];
-            }
-
-            ksort($conversions);
-        }
+        $conversions = $from === $to
+            ? $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions)
+            : $conversions = $this->makeRequestForExchangeRates($from, $to, $date, $endDate);
 
         if ($this->shouldCache) {
             $this->cacheRepository->storeInCache($cacheKey, $conversions);
         }
+
+        return $conversions;
+    }
+
+    private function makeRequestForExchangeRates($from, $to, $date, $endDate): array
+    {
+        $symbols = is_string($to) ? $to : implode(',', $to);
+
+        $result = $this->requestBuilder->makeRequest('/history', [
+            'base'     => $from,
+            'start_at' => $date->format('Y-m-d'),
+            'end_at'   => $endDate->format('Y-m-d'),
+            'symbols'  => $symbols,
+        ]);
+
+        $conversions = $result['rates'];
+
+        if (is_string($to)) {
+            foreach ($conversions as $date => $rate) {
+                $conversions[$date] = $rate[$to];
+            }
+        }
+
+        ksort($conversions);
 
         return $conversions;
     }
@@ -228,8 +246,8 @@ class ExchangeRate
 
         $exchangeRates = $this->exchangeRate($from, $to, $date);
 
-        foreach($exchangeRates as $currency => $exchangeRate) {
-            $exchangeRates[$currency] = (float) $exchangeRate * $value;
+        foreach ($exchangeRates as $currency => $exchangeRate) {
+            $exchangeRates[$currency] = (float)$exchangeRate * $value;
         }
 
         return $exchangeRates;
