@@ -103,7 +103,7 @@ class ExchangeRate
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
      */
-    public function exchangeRate(string $from, $to, ?Carbon $date = null)
+    public function exchangeRate(string $from, $to, Carbon $date = null)
     {
         Validation::validateIsStringOrArray($to);
 
