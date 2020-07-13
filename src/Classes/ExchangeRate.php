@@ -241,8 +241,6 @@ class ExchangeRate
      */
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
-        Validation::validateIsStringOrArray($to);
-
         if (is_string($to)) {
             return (float)$this->exchangeRate($from, $to, $date) * $value;
         }
@@ -278,8 +276,6 @@ class ExchangeRate
         Carbon $endDate,
         array $conversions = []
     ): array {
-        Validation::validateIsStringOrArray($to);
-
         $exchangeRates = $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
 
         if (is_array($to)) {
