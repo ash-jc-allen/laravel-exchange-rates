@@ -2,6 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
+use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
@@ -92,6 +93,19 @@ class Validation
 
         if ($date->isBefore(static::$earliestPossibleDate)) {
             throw new InvalidDateException('The date cannot be before 4th January 1999.');
+        }
+    }
+
+    /**
+     * Validate that the parameter is a string or array.
+     *
+     * @param $paramToValidate
+     * @throws ExchangeRateException
+     */
+    public static function validateIsStringOrArray($paramToValidate): void
+    {
+        if (! is_string($paramToValidate) && ! is_array($paramToValidate)) {
+            throw new ExchangeRateException($paramToValidate.' is not a string or array.');
         }
     }
 }

@@ -105,9 +105,7 @@ class ExchangeRate
      */
     public function exchangeRate(string $from, $to, ?Carbon $date = null)
     {
-        if (! is_string($to) && ! is_array($to)) {
-            throw new ExchangeRateException('The \'to\' parameter must be a string or array.');
-        }
+        Validation::validateIsStringOrArray($to);
 
         if ($date) {
             Validation::validateDate($date);
@@ -167,12 +165,7 @@ class ExchangeRate
     ) {
         Validation::validateCurrencyCode($from);
         Validation::validateStartAndEndDates($date, $endDate);
-
-        // TODO: Extract into a validation method for readability.
-        // TODO: Move this method into the validateCurrencyCodes method.
-        if (! is_string($to) && ! is_array($to)) {
-            throw new ExchangeRateException('The \'to\' parameter must be a string or array.');
-        }
+        Validation::validateIsStringOrArray($to);
 
         // TODO: Push this into the validateCurrencyCodes. Do the 'if' statement inside that method.
         is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
@@ -249,9 +242,7 @@ class ExchangeRate
      */
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
-        if (! is_string($to) && ! is_array($to)) {
-            throw new ExchangeRateException('The \'to\' parameter must be a string or array.');
-        }
+        Validation::validateIsStringOrArray($to);
 
         if (is_string($to)) {
             return (float)$this->exchangeRate($from, $to, $date) * $value;

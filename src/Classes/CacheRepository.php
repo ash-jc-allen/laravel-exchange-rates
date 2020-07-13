@@ -95,9 +95,7 @@ class CacheRepository
      */
     public function buildCacheKey(string $from, $to, Carbon $date, Carbon $endDate = null): string
     {
-        if (! is_string($to) && ! is_array($to)) {
-            throw new ExchangeRateException('The \'to\' parameter must be a string or array.');
-        }
+        Validation::validateIsStringOrArray($to);
 
         if (is_array($to)) {
             asort($to);
