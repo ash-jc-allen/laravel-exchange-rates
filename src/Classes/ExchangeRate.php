@@ -194,7 +194,20 @@ class ExchangeRate
         return $conversions;
     }
 
-    private function makeRequestForExchangeRates($from, $to, $date, $endDate): array
+    /**
+     * Make a request to the Exchange Rates API to get the
+     * exchange rates between a date range. If only one
+     * currency is being used, we flatten the array
+     * to remove currency symbol before returning
+     * it.
+     *
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon  $date
+     * @param  Carbon  $endDate
+     * @return array
+     */
+    private function makeRequestForExchangeRates(string $from, $to, Carbon $date, Carbon $endDate): array
     {
         $symbols = is_string($to) ? $to : implode(',', $to);
 
