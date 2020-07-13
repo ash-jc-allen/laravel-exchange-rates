@@ -74,7 +74,7 @@ class ExchangeRateTest extends TestCase
         $response = $exchangeRate->exchangeRate('EUR', ['GBP', 'USD', 'CAD']);
         $this->assertEquals(['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158], $response);
         $this->assertEquals(
-            ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158,],
+            ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158],
             Cache::get('laravel_xr_EUR_CAD_GBP_USD_'.now()->format('Y-m-d'))
         );
     }
@@ -107,7 +107,7 @@ class ExchangeRateTest extends TestCase
         Cache::forget('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'));
 
         Cache::forever('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'),
-            ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158,]
+            ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158]
         );
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);

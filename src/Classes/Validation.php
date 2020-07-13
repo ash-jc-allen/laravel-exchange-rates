@@ -46,7 +46,7 @@ class Validation
     {
         $currencies = new Currency();
 
-        foreach($currencyCodes as $currencyCode) {
+        foreach ($currencyCodes as $currencyCode) {
             if (! $currencies->isAllowableCurrency($currencyCode)) {
                 throw new InvalidCurrencyException($currencyCode.' is not a valid country code.');
             }
