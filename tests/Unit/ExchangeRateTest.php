@@ -221,10 +221,10 @@ class ExchangeRateTest extends TestCase
     public function exception_is_thrown_if_the_to_parameter_is_not_an_array_or_string()
     {
         $this->expectException(ExchangeRateException::class);
-        $this->expectExceptionMessage('The \'to\' parameter must be a string or array.');
+        $this->expectExceptionMessage('123 is not a string or array.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRate('GBP', false, now()->subMinute());
+        $exchangeRate->exchangeRate('GBP', 123, now()->subMinute());
     }
 
     private function mockResponseForCurrentDateAndOneSymbol(): array

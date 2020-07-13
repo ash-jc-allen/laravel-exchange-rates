@@ -284,10 +284,10 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array()
     {
         $this->expectException(ExchangeRateException::class);
-        $this->expectExceptionMessage('The \'to\' parameter must be a string or array.');
+        $this->expectExceptionMessage('123 is not a string or array.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('GBP', false, now()->subWeek(), now()->subDay());
+        $exchangeRate->exchangeRateBetweenDateRange('GBP', 123, now()->subWeek(), now()->subDay());
     }
 
     private function mockResponseForOneSymbol()
