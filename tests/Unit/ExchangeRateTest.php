@@ -4,6 +4,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
@@ -17,13 +18,14 @@ class ExchangeRateTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR']])
+            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
-            ->andReturn($this->mockResponseForCurrentDate());
+            ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP');
         $this->assertEquals('0.86158', $rate);
+        $this->assertEquals('0.86158', Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
     }
 
     /** @test */
@@ -33,9 +35,9 @@ class ExchangeRateTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
-            ->andReturn($this->mockResponseForPastDate());
+            ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP', $mockDate);
@@ -60,6 +62,67 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
+    public function multiple_exchange_rates_can_be_returned_if_no_date_parameter_passed_and_rate_is_not_cached()
+    {
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP,USD,CAD']])
+            ->once()
+            ->andReturn($this->mockResponseForCurrentDateAndMultipleSymbols());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $response = $exchangeRate->exchangeRate('EUR', ['GBP', 'USD', 'CAD']);
+        $this->assertEquals(['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158], $response);
+        $this->assertEquals(
+            ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158],
+            Cache::get('laravel_xr_EUR_CAD_GBP_USD_'.now()->format('Y-m-d'))
+        );
+    }
+
+    /** @test */
+    public function multiple_exchange_rates_can_be_returned_if_date_parameter_passed_and_rate_is_not_cached()
+    {
+        $mockDate = now();
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP,CAD,USD']])
+            ->once()
+            ->andReturn($this->mockResponseForPastDateAndMultipleSymbols());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $response = $exchangeRate->exchangeRate('EUR', ['GBP', 'CAD', 'USD'], $mockDate);
+        $this->assertEquals(['CAD' => 1.4969, 'USD' => 1.1346, 'GBP' => 0.87053], $response);
+        $this->assertEquals(
+            ['CAD' => 1.4969, 'USD' => 1.1346, 'GBP' => 0.87053],
+            Cache::get('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'))
+        );
+    }
+
+    /** @test */
+    public function multiple_cached_exchange_rates_are_returned_if_they_exist()
+    {
+        $mockDate = now();
+
+        Cache::forget('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'));
+
+        Cache::forever('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'),
+            ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158]
+        );
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')->never();
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $rate = $exchangeRate->exchangeRate('EUR', ['GBP', 'USD', 'CAD'], $mockDate);
+        $this->assertEquals(['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158], $rate);
+        $this->assertEquals(
+            ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158],
+            Cache::get('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'))
+        );
+    }
+
+    /** @test */
     public function cached_exchange_rate_is_not_used_if_should_bust_cache_method_is_called()
     {
         $mockDate = now();
@@ -68,9 +131,9 @@ class ExchangeRateTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
-            ->andReturn($this->mockResponseForPastDate());
+            ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->shouldBustCache()->exchangeRate('EUR', 'GBP', $mockDate);
@@ -83,9 +146,9 @@ class ExchangeRateTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR']])
+            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
-            ->andReturn($this->mockResponseForCurrentDate());
+            ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->shouldCache(false)->exchangeRate('EUR', 'GBP');
@@ -144,85 +207,70 @@ class ExchangeRateTest extends TestCase
         $exchangeRate->exchangeRate('GBP', 'USD', Carbon::createFromDate(1999, 1, 3));
     }
 
-    private function mockResponseForCurrentDate()
+    /** @test */
+    public function exception_is_thrown_if_the_to_parameter_array_is_invalid()
+    {
+        $this->expectException(InvalidCurrencyException::class);
+        $this->expectExceptionMessage('INVALID is not a valid country code.');
+
+        $exchangeRate = new ExchangeRate();
+        $exchangeRate->exchangeRate('GBP', ['INVALID'], now()->subMinute());
+    }
+
+    /** @test */
+    public function exception_is_thrown_if_the_to_parameter_is_not_an_array_or_string()
+    {
+        $this->expectException(ExchangeRateException::class);
+        $this->expectExceptionMessage('123 is not a string or array.');
+
+        $exchangeRate = new ExchangeRate();
+        $exchangeRate->exchangeRate('GBP', 123, now()->subMinute());
+    }
+
+    private function mockResponseForCurrentDateAndOneSymbol(): array
     {
         return [
             'rates' => [
-                'CAD' => 1.4561,
-                'HKD' => 8.6372,
-                'ISK' => 137.7,
-                'PHP' => 55.809,
-                'DKK' => 7.4727,
-                'HUF' => 333.37,
-                'CZK' => 25.486,
-                'AUD' => 1.6065,
-                'RON' => 4.7638,
-                'SEK' => 10.7025,
-                'IDR' => 15463.05,
-                'INR' => 78.652,
-                'BRL' => 4.5583,
-                'RUB' => 70.4653,
-                'HRK' => 7.4345,
-                'JPY' => 120.72,
-                'THB' => 33.527,
-                'CHF' => 1.0991,
-                'SGD' => 1.5002,
-                'PLN' => 4.261,
-                'BGN' => 1.9558,
-                'TRY' => 6.3513,
-                'CNY' => 7.7115,
-                'NOK' => 10.0893,
-                'NZD' => 1.7426,
-                'ZAR' => 16.3121,
-                'USD' => 1.1034,
-                'MXN' => 21.1383,
-                'ILS' => 3.8533,
                 'GBP' => 0.86158,
-                'KRW' => 1276.66,
-                'MYR' => 4.5609,
             ],
             'base'  => 'EUR',
             'date'  => '2019-11-08',
         ];
     }
 
-    private function mockResponseForPastDate()
+    private function mockResponseForCurrentDateAndMultipleSymbols(): array
+    {
+        return [
+            'rates' => [
+                'CAD' => 1.4561,
+                'USD' => 1.1034,
+                'GBP' => 0.86158,
+            ],
+            'base'  => 'EUR',
+            'date'  => '2019-11-08',
+        ];
+    }
+
+    private function mockResponseForPastDateAndOneSymbol(): array
+    {
+        return
+            [
+                'rates' => [
+                    'GBP' => 0.87053,
+                ],
+                'base'  => 'EUR',
+                'date'  => '2018-11-09',
+            ];
+    }
+
+    private function mockResponseForPastDateAndMultipleSymbols(): array
     {
         return
             [
                 'rates' => [
                     'CAD' => 1.4969,
-                    'HKD' => 8.8843,
-                    'ISK' => 138.5,
-                    'PHP' => 60.256,
-                    'DKK' => 7.4594,
-                    'HUF' => 321.31,
-                    'CZK' => 25.936,
-                    'AUD' => 1.5663,
-                    'RON' => 4.657,
-                    'SEK' => 10.2648,
-                    'IDR' => 16661.6,
-                    'INR' => 82.264,
-                    'BRL' => 4.254,
-                    'RUB' => 76.4283,
-                    'HRK' => 7.43,
-                    'JPY' => 129.26,
-                    'THB' => 37.453,
-                    'CHF' => 1.1414,
-                    'SGD' => 1.5627,
-                    'PLN' => 4.288,
-                    'BGN' => 1.9558,
-                    'TRY' => 6.2261,
-                    'CNY' => 7.8852,
-                    'NOK' => 9.5418,
-                    'NZD' => 1.6815,
-                    'ZAR' => 16.1884,
                     'USD' => 1.1346,
-                    'MXN' => 23.0001,
-                    'ILS' => 4.171,
                     'GBP' => 0.87053,
-                    'KRW' => 1278.77,
-                    'MYR' => 4.7399,
                 ],
                 'base'  => 'EUR',
                 'date'  => '2018-11-09',

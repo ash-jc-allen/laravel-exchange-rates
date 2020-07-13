@@ -4,6 +4,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
@@ -30,7 +31,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
                 ],
             ])
             ->once()
-            ->andReturn($this->mockResponse());
+            ->andReturn($this->mockResponseForOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
@@ -103,7 +104,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
                 ],
             ])
             ->once()
-            ->andReturn($this->mockResponse());
+            ->andReturn($this->mockResponseForOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->shouldBustCache()->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
@@ -139,7 +140,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
                 ],
             ])
             ->once()
-            ->andReturn($this->mockResponse());
+            ->andReturn($this->mockResponseForOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->shouldCache(false)->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
@@ -154,6 +155,43 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $this->assertEquals($expectedArray, $currencies);
         $this->assertNull(Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+    }
+
+    /** @test */
+    public function multiple_exchange_rates_between_date_range_are_returned_if_exchange_rates_are_not_cached()
+    {
+        $fromDate = now()->subWeek();
+        $toDate = now();
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs([
+                '/history',
+                [
+                    'base'     => 'GBP',
+                    'start_at' => $fromDate->format('Y-m-d'),
+                    'end_at'   => $toDate->format('Y-m-d'),
+                    'symbols'  => 'EUR,USD',
+                ],
+            ])
+            ->once()
+            ->andReturn($this->mockResponseForMultipleSymbols());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', ['EUR', 'USD'], $fromDate, $toDate);
+
+        $expectedArray = [
+            '2019-11-08' => ['EUR' => 1.1606583254, 'USD' => 1.1111111111],
+            '2019-11-06' => ['EUR' => 1.1623446817, 'USD' => 1.2222222222],
+            '2019-11-07' => ['EUR' => 1.1568450522, 'USD' => 1.3333333333],
+            '2019-11-05' => ['EUR' => 1.1612648497, 'USD' => 1.4444444444],
+            '2019-11-04' => ['EUR' => 1.1578362356, 'USD' => 1.5555555555],
+        ];
+
+        $this->assertEquals($expectedArray, $currencies);
+        $this->assertEquals($expectedArray,
+            Cache::get('laravel_xr_GBP_EUR_USD_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d'))
+        );
     }
 
     /** @test */
@@ -219,7 +257,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectExceptionMessage('INVALID is not a valid country code.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('GBP', 'INVALID', now()->subWeek(), now()->subDay());
+        $exchangeRate->exchangeRateBetweenDateRange('INVALID', 'GBP', now()->subWeek(), now()->subDay());
     }
 
     /** @test */
@@ -229,10 +267,30 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectExceptionMessage('INVALID is not a valid country code.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('INVALID', 'GBP', now()->subWeek(), now()->subDay());
+        $exchangeRate->exchangeRateBetweenDateRange('GBP', 'INVALID', now()->subWeek(), now()->subDay());
     }
 
-    private function mockResponse()
+    /** @test */
+    public function exception_is_thrown_if_one_of_the_to_parameter_currencies_are_invalid()
+    {
+        $this->expectException(InvalidCurrencyException::class);
+        $this->expectExceptionMessage('INVALID is not a valid country code.');
+
+        $exchangeRate = new ExchangeRate();
+        $exchangeRate->exchangeRateBetweenDateRange('GBP', ['USD', 'INVALID'], now()->subWeek(), now()->subDay());
+    }
+
+    /** @test */
+    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array()
+    {
+        $this->expectException(ExchangeRateException::class);
+        $this->expectExceptionMessage('123 is not a string or array.');
+
+        $exchangeRate = new ExchangeRate();
+        $exchangeRate->exchangeRateBetweenDateRange('GBP', 123, now()->subWeek(), now()->subDay());
+    }
+
+    private function mockResponseForOneSymbol()
     {
         return [
             'rates'    => [
@@ -250,6 +308,37 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
                 ],
                 '2019-11-04' => [
                     'EUR' => 1.1578362356,
+                ],
+            ],
+            'start_at' => '2019-11-03',
+            'base'     => 'GBP',
+            'end_at'   => '2019-11-10',
+        ];
+    }
+
+    private function mockResponseForMultipleSymbols()
+    {
+        return [
+            'rates'    => [
+                '2019-11-08' => [
+                    'EUR' => 1.1606583254,
+                    'USD' => 1.1111111111,
+                ],
+                '2019-11-06' => [
+                    'EUR' => 1.1623446817,
+                    'USD' => 1.2222222222,
+                ],
+                '2019-11-07' => [
+                    'EUR' => 1.1568450522,
+                    'USD' => 1.3333333333,
+                ],
+                '2019-11-05' => [
+                    'EUR' => 1.1612648497,
+                    'USD' => 1.4444444444,
+                ],
+                '2019-11-04' => [
+                    'EUR' => 1.1578362356,
+                    'USD' => 1.5555555555,
                 ],
             ],
             'start_at' => '2019-11-03',

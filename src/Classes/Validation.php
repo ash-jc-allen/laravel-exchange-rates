@@ -2,6 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
+use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
@@ -25,12 +26,30 @@ class Validation
      *
      * @throws InvalidCurrencyException
      */
-    public static function validateCurrencyCode(string $currencyCode)
+    public static function validateCurrencyCode(string $currencyCode): void
     {
         $currencies = new Currency();
 
         if (! $currencies->isAllowableCurrency($currencyCode)) {
             throw new InvalidCurrencyException($currencyCode.' is not a valid country code.');
+        }
+    }
+
+    /**
+     * Validate that the currencies are all supported by
+     * the Exchange Rates API.
+     *
+     * @param  array  $currencyCodes
+     * @throws InvalidCurrencyException
+     */
+    public static function validateCurrencyCodes(array $currencyCodes): void
+    {
+        $currencies = new Currency();
+
+        foreach ($currencyCodes as $currencyCode) {
+            if (! $currencies->isAllowableCurrency($currencyCode)) {
+                throw new InvalidCurrencyException($currencyCode.' is not a valid country code.');
+            }
         }
     }
 
@@ -44,7 +63,7 @@ class Validation
      *
      * @throws InvalidDateException
      */
-    public static function validateStartAndEndDates(Carbon $from, Carbon $to)
+    public static function validateStartAndEndDates(Carbon $from, Carbon $to): void
     {
         self::validateDate($from);
         self::validateDate($to);
@@ -62,7 +81,7 @@ class Validation
      *
      * @throws InvalidDateException
      */
-    public static function validateDate(Carbon $date)
+    public static function validateDate(Carbon $date): void
     {
         if (! $date->isPast()) {
             throw new InvalidDateException('The date must be in the past.');
@@ -74,6 +93,19 @@ class Validation
 
         if ($date->isBefore(static::$earliestPossibleDate)) {
             throw new InvalidDateException('The date cannot be before 4th January 1999.');
+        }
+    }
+
+    /**
+     * Validate that the parameter is a string or array.
+     *
+     * @param $paramToValidate
+     * @throws ExchangeRateException
+     */
+    public static function validateIsStringOrArray($paramToValidate): void
+    {
+        if (! is_string($paramToValidate) && ! is_array($paramToValidate)) {
+            throw new ExchangeRateException($paramToValidate.' is not a string or array.');
         }
     }
 }
