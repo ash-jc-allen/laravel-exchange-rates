@@ -153,7 +153,7 @@ class ExchangeRate
      * @param  Carbon  $endDate
      * @param  array  $conversions
      *
-     * @return string|array
+     * @return array
      * @throws Exception
      */
     public function exchangeRateBetweenDateRange(
@@ -162,7 +162,7 @@ class ExchangeRate
         Carbon $date,
         Carbon $endDate,
         array $conversions = []
-    ) {
+    ): array {
         Validation::validateCurrencyCode($from);
         Validation::validateStartAndEndDates($date, $endDate);
         Validation::validateIsStringOrArray($to);
@@ -257,12 +257,12 @@ class ExchangeRate
     }
 
     /**
-     * Return an array of the converted values between
-     * the given date range.
+     * Return an array of the converted values between the
+     * given date range.
      *
      * @param  int  $value
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|array  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
@@ -273,16 +273,28 @@ class ExchangeRate
     public function convertBetweenDateRange(
         int $value,
         string $from,
-        string $to,
+        $to,
         Carbon $date,
         Carbon $endDate,
         array $conversions = []
     ): array {
-        foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
-            $conversions[$date] = (float)$exchangeRate * $value;
+        Validation::validateIsStringOrArray($to);
+
+        $exchangeRates = $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
+
+        if (is_array($to)) {
+            foreach ($exchangeRates as $date => $exchangeRate) {
+                foreach ($exchangeRate as $currency => $rate) {
+                    $conversions[$date][$currency] = (float)$rate * $value;
+                }
+            }
+
+            return $conversions;
         }
 
-        ksort($conversions);
+        foreach ($exchangeRates as $date => $exchangeRate) {
+            $conversions[$date] = (float)$exchangeRate * $value;
+        }
 
         return $conversions;
     }
