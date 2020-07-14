@@ -385,7 +385,12 @@ If you find any security related issues, please contact me directly at [mail@ash
 
 If you wish to make any changes or improvements to the package, feel free to make a pull request.
 
-Note: A contribution guide will be added soon.
+To contribute to this library, please use the following guidelines before submitting your pull request:
+
+- Write tests for any new functions that are added. If you are updating existing code, make sure that the existing tests
+pass and write more if needed.
+- Follow [PSR-2](https://www.php-fig.org/psr/psr-2/) coding standards.
+- Make all pull requests to the ``` master ``` branch.
 
 ## Credits
 
@@ -394,9 +399,11 @@ Note: A contribution guide will be added soon.
 - [All Contributors](https://github.com/ash-jc-allen/short-url/graphs/contributors)
 
 ## Changelog
+
 Check the [CHANGELOG](CHANGELOG.md) to get more information about the latest changes.
 
 ## Upgrading
+
 Check the [UPGRADE](UPGRADE.md) guide to get more information on how to update this library to newer versions.
 
 ## License
