@@ -22,6 +22,8 @@ class CurrenciesTest extends TestCase
         $currencies = $exchangeRate->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
+
+        $this->assertNotNull(Cache::get('laravel_xr_currencies'));
     }
 
     /** @test */
@@ -53,6 +55,23 @@ class CurrenciesTest extends TestCase
         $currencies = $exchangeRate->shouldBustCache()->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
+    }
+
+    /** @test */
+    public function currencies_are_not_cached_if_the_shouldCache_option_is_false()
+    {
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/latest', []])
+            ->once()
+            ->andReturn($this->mockResponse());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->shouldCache(false)->currencies();
+
+        $this->assertEquals($this->expectedResponse(), $currencies);
+
+        $this->assertNull(Cache::get('laravel_xr_currencies'));
     }
 
     private function mockResponse()

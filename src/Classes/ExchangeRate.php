@@ -2,12 +2,12 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
+use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 class ExchangeRate
 {
@@ -20,11 +20,24 @@ class ExchangeRate
     private $requestBuilder;
 
     /**
+     * The repository used for accessing the cache.
+     *
      * @var CacheRepository
      */
     private $cacheRepository;
 
     /**
+     * Whether of not the exchange rate should be cached
+     * after being fetched from the API.
+     *
+     * @var bool
+     */
+    private $shouldCache = true;
+
+    /**
+     * Whether or not the cache should be busted and a new
+     * value should be fetched from the API.
+     *
      * @var bool
      */
     private $shouldBustCache = false;
@@ -34,7 +47,6 @@ class ExchangeRate
      *
      * @param  RequestBuilder|null  $requestBuilder
      * @param  CacheRepository|null  $cacheRepository
-     * @throws BindingResolutionException
      */
     public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
     {
@@ -66,7 +78,9 @@ class ExchangeRate
             $currencies[] = $currency;
         }
 
-        $this->cacheRepository->storeInCache($cacheKey, $currencies);
+        if ($this->shouldCache) {
+            $this->cacheRepository->storeInCache($cacheKey, $currencies);
+        }
 
         return $currencies;
     }
@@ -74,25 +88,32 @@ class ExchangeRate
     /**
      * Return the exchange rate between the $from and $to
      * parameters. If no $date parameter is passed, we
-     * use today's date instead.
+     * use today's date instead. If $to is a string,
+     * the exchange rate will be returned as a
+     * string. If $to is an array, the rates
+     * will be returned within an array.
      *
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|array  $to
      * @param  Carbon|null  $date
      *
-     * @return string
+     * @return string|array
      * @throws InvalidDateException
      *
      * @throws InvalidCurrencyException
+     * @throws ExchangeRateException
      */
-    public function exchangeRate(string $from, string $to, ?Carbon $date = null): string
+    public function exchangeRate(string $from, $to, Carbon $date = null)
     {
-        Validation::validateCurrencyCode($from);
-        Validation::validateCurrencyCode($to);
+        Validation::validateIsStringOrArray($to);
 
         if ($date) {
             Validation::validateDate($date);
         }
+
+        Validation::validateCurrencyCode($from);
+
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
 
         if ($from === $to) {
             return 1.0;
@@ -104,14 +125,20 @@ class ExchangeRate
             return $cachedExchangeRate;
         }
 
-        if ($date) {
-            $exchangeRate = $this->requestBuilder->makeRequest('/'.$date->format('Y-m-d'),
-                ['base' => $from])['rates'][$to];
-        } else {
-            $exchangeRate = $this->requestBuilder->makeRequest('/latest', ['base' => $from])['rates'][$to];
-        }
+        $symbols = is_string($to) ? $to : implode(',', $to);
+        $queryParams = ['base' => $from, 'symbols' => $symbols];
 
-        $this->cacheRepository->storeInCache($cacheKey, $exchangeRate);
+        $url = $date
+            ? '/'.$date->format('Y-m-d')
+            : '/latest';
+
+        $response = $this->requestBuilder->makeRequest($url, $queryParams)['rates'];
+
+        $exchangeRate = is_string($to) ? $response[$to] : $response;
+
+        if ($this->shouldCache) {
+            $this->cacheRepository->storeInCache($cacheKey, $exchangeRate);
+        }
 
         return $exchangeRate;
     }
@@ -121,7 +148,7 @@ class ExchangeRate
      * date range.
      *
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|array  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
@@ -131,14 +158,16 @@ class ExchangeRate
      */
     public function exchangeRateBetweenDateRange(
         string $from,
-        string $to,
+        $to,
         Carbon $date,
         Carbon $endDate,
         array $conversions = []
-    ) {
+    ): array {
         Validation::validateCurrencyCode($from);
-        Validation::validateCurrencyCode($to);
         Validation::validateStartAndEndDates($date, $endDate);
+        Validation::validateIsStringOrArray($to);
+
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
 
@@ -146,24 +175,50 @@ class ExchangeRate
             return $cachedExchangeRate;
         }
 
-        if ($from === $to) {
-            $conversions = $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions);
-        } else {
-            $result = $this->requestBuilder->makeRequest('/history', [
-                'base'     => $from,
-                'start_at' => $date->format('Y-m-d'),
-                'end_at'   => $endDate->format('Y-m-d'),
-                'symbols'  => $to,
-            ]);
+        $conversions = $from === $to
+            ? $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions)
+            : $conversions = $this->makeRequestForExchangeRates($from, $to, $date, $endDate);
 
-            foreach ($result['rates'] as $date => $rate) {
-                $conversions[$date] = $rate[$to];
-            }
-
-            ksort($conversions);
+        if ($this->shouldCache) {
+            $this->cacheRepository->storeInCache($cacheKey, $conversions);
         }
 
-        $this->cacheRepository->storeInCache($cacheKey, $conversions);
+        return $conversions;
+    }
+
+    /**
+     * Make a request to the Exchange Rates API to get the
+     * exchange rates between a date range. If only one
+     * currency is being used, we flatten the array
+     * to remove currency symbol before returning
+     * it.
+     *
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon  $date
+     * @param  Carbon  $endDate
+     * @return array
+     */
+    private function makeRequestForExchangeRates(string $from, $to, Carbon $date, Carbon $endDate): array
+    {
+        $symbols = is_string($to) ? $to : implode(',', $to);
+
+        $result = $this->requestBuilder->makeRequest('/history', [
+            'base'     => $from,
+            'start_at' => $date->format('Y-m-d'),
+            'end_at'   => $endDate->format('Y-m-d'),
+            'symbols'  => $symbols,
+        ]);
+
+        $conversions = $result['rates'];
+
+        if (is_string($to)) {
+            foreach ($conversions as $date => $rate) {
+                $conversions[$date] = $rate[$to];
+            }
+        }
+
+        ksort($conversions);
 
         return $conversions;
     }
@@ -175,26 +230,37 @@ class ExchangeRate
      *
      * @param  int  $value
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|array  $to
      * @param  Carbon|null  $date
      *
-     * @return float
+     * @return float|array
      * @throws InvalidDateException
      *
      * @throws InvalidCurrencyException
+     * @throws ExchangeRateException
      */
-    public function convert(int $value, string $from, string $to, Carbon $date = null): float
+    public function convert(int $value, string $from, $to, Carbon $date = null)
     {
-        return (float) $this->exchangeRate($from, $to, $date) * $value;
+        if (is_string($to)) {
+            return (float) $this->exchangeRate($from, $to, $date) * $value;
+        }
+
+        $exchangeRates = $this->exchangeRate($from, $to, $date);
+
+        foreach ($exchangeRates as $currency => $exchangeRate) {
+            $exchangeRates[$currency] = (float) $exchangeRate * $value;
+        }
+
+        return $exchangeRates;
     }
 
     /**
-     * Return an array of the converted values between
-     * the given date range.
+     * Return an array of the converted values between the
+     * given date range.
      *
      * @param  int  $value
      * @param  string  $from
-     * @param  string  $to
+     * @param  string|array  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
@@ -205,16 +271,26 @@ class ExchangeRate
     public function convertBetweenDateRange(
         int $value,
         string $from,
-        string $to,
+        $to,
         Carbon $date,
         Carbon $endDate,
         array $conversions = []
     ): array {
-        foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
-            $conversions[$date] = (float) $exchangeRate * $value;
+        $exchangeRates = $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
+
+        if (is_array($to)) {
+            foreach ($exchangeRates as $date => $exchangeRate) {
+                foreach ($exchangeRate as $currency => $rate) {
+                    $conversions[$date][$currency] = (float) $rate * $value;
+                }
+            }
+
+            return $conversions;
         }
 
-        ksort($conversions);
+        foreach ($exchangeRates as $date => $exchangeRate) {
+            $conversions[$date] = (float) $exchangeRate * $value;
+        }
 
         return $conversions;
     }
@@ -242,6 +318,20 @@ class ExchangeRate
         }
 
         return $conversions;
+    }
+
+    /**
+     * Determine whether if the exchange rate should be
+     * cached after it is fetched from the API.
+     *
+     * @param  bool  $shouldCache
+     * @return $this
+     */
+    public function shouldCache(bool $shouldCache = true): self
+    {
+        $this->shouldCache = $shouldCache;
+
+        return $this;
     }
 
     /**

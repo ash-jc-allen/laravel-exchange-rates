@@ -20,8 +20,8 @@
     "php": "^7.2",
     "nesbot/carbon": "~2.0",
     "guzzlehttp/guzzle": "^6.3",
-    "illuminate/container": "^5.8|^6.0|^7.0",
-    "illuminate/cache": "^5.8|^6.0|^7.0",
+    "illuminate/container": "^6.0|^7.0",
+    "illuminate/cache": "^6.0|^7.0",
     "ext-json": "*"
   },
   "require-dev": {

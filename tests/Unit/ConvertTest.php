@@ -4,6 +4,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Illuminate\Support\Facades\Cache;
@@ -16,13 +17,14 @@ class ConvertTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR']])
+            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
-            ->andReturn($this->mockResponseForCurrentDate());
+            ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', 'GBP');
         $this->assertEquals('86.158', $rate);
+        $this->assertEquals('0.86158', Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
     }
 
     /** @test */
@@ -32,9 +34,9 @@ class ConvertTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
-            ->andReturn($this->mockResponseForPastDate());
+            ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', 'GBP', $mockDate);
@@ -67,9 +69,9 @@ class ConvertTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
-            ->andReturn($this->mockResponseForPastDate());
+            ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->shouldBustCache()->convert(100, 'EUR', 'GBP', $mockDate);
@@ -86,6 +88,25 @@ class ConvertTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', 'EUR');
         $this->assertEquals('100', $rate);
+    }
+
+    /** @test */
+    public function converted_values_are_returned_for_today_with_multiple_currencies()
+    {
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP,USD,CAD']])
+            ->once()
+            ->andReturn($this->mockResponseForCurrentDateAndMultipleSymbols());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $rate = $exchangeRate->convert(100, 'EUR', ['GBP', 'USD', 'CAD']);
+        $this->assertEquals(['CAD' => 145.61, 'USD' => 110.34, 'GBP' => 86.158], $rate);
+
+        $this->assertEquals(
+            ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158],
+            Cache::get('laravel_xr_EUR_CAD_GBP_USD_'.now()->format('Y-m-d'))
+        );
     }
 
     /** @test */
@@ -118,7 +139,17 @@ class ConvertTest extends TestCase
         $exchangeRate->convert(100, 'GBP', 'INVALID', now()->subMinute());
     }
 
-    private function mockResponseForCurrentDate()
+    /** @test */
+    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array()
+    {
+        $this->expectException(ExchangeRateException::class);
+        $this->expectExceptionMessage('123 is not a string or array.');
+
+        $exchangeRate = new ExchangeRate();
+        $exchangeRate->convert(10, 'GBP', 123);
+    }
+
+    private function mockResponseForCurrentDateAndOneSymbol()
     {
         return [
             'rates' => [
@@ -160,7 +191,7 @@ class ConvertTest extends TestCase
         ];
     }
 
-    private function mockResponseForPastDate()
+    private function mockResponseForPastDateAndOneSymbol()
     {
         return
             [
@@ -201,5 +232,18 @@ class ConvertTest extends TestCase
                 'base'  => 'EUR',
                 'date'  => '2018-11-09',
             ];
+    }
+
+    private function mockResponseForCurrentDateAndMultipleSymbols(): array
+    {
+        return [
+            'rates' => [
+                'CAD' => 1.4561,
+                'USD' => 1.1034,
+                'GBP' => 0.86158,
+            ],
+            'base'  => 'EUR',
+            'date'  => '2019-11-08',
+        ];
     }
 }

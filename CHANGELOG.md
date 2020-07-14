@@ -1,5 +1,11 @@
 # Changelog
 
+**v3.0.0 (released 2020-07-12):**
+- Added the functionality to get the exchange rates and converted values for more than one currency at a time. [#42](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/42)
+- Added a new ``` ->shouldCache() ``` method that can be used to determine if an exchange rate should be cached after fetching it from the API. [#38](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/38)
+- Dropped support for Laravel 5.8 and made Laravel 6 the minimum supported version. [#41](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/41)
+- Miscellaneous bug fixes. [#39](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/39)
+
 **2.2.0 (released 2020-05-30):**
 - Prevented requests from being made to the API if trying to get the exchange rate between the same currencies. [#32](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/32)
 - Fixed bug that was caused if trying to get the exchange rate for 'EUR' to 'EUR'. [#32](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/32)
