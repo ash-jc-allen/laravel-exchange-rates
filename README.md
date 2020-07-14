@@ -24,9 +24,11 @@
             - [Getting the Rates Between Two Currencies](#getting-the-rates-between-two-currencies)
             - [Getting the Rates Between More Than Two Currencies](#getting-the-rates-between-more-than-two-currencies)
         - [Convert Currencies](#convert-currencies)
-            - [Converting Between Two Currencies](#)
-            - [Converting Between More Than Two Currencies](#)
+            - [Converting Between Two Currencies](#converting-between-two-currencies)
+            - [Converting Between More Than Two Currencies](#converting-between-more-than-two-currencies)
         - [Convert Currencies Between Date Range](#convert-currencies-between-date-range)
+            - [Converting Between Two Currencies in a Date Range](#converting-between-two-currencies-in-a-date-range)
+            - [Converting Between More Than Two Currencies in a Date Range](#converting-between-more-than-two-currencies-in-a-date-range)
     - [Facade](#facade)
     - [Examples](#examples)
     - [Caching](#caching)
@@ -132,7 +134,7 @@ The example below shows how to get the exchange rates from 'GBP' to 'EUR' and 'U
 
 ```php
 $exchangeRates = new ExchangeRate();
-$result = $exchangeRates->exchangeRateBetweenDateRange('GBP', ['EUR', 'USD'], Carbon::now()->subWeek(), Carbon::now());
+$result = $exchangeRates->exchangeRateBetweenDateRange('GBP', ['EUR', 'USD'], Carbon::now()->subDays(3), Carbon::now());
 
 // $result: [
 //     '2020-07-07' => [
@@ -190,9 +192,48 @@ $result = $exchangeRates->convert(100, 'GBP', ['EUR', 'USD'], Carbon::now());
 When passing in the monetary value (first parameter) that is to be converted, it's important that you pass it in the lowest
 denomination of that currency. For example, £1 GBP would be passed in as 100 (as £1 = 100 pence).
 
+##### Converting Between Two Currencies in a Date Range
+Similar to getting the exchange rates between a date range, you can also get convert monetary values from one currency to
+another using the exchange rates. To do this you can use the ``` ->convertBetweenDateRange() ``` method.
+
+The example below shows how to convert £1 'GBP' to 'EUR' using the exchange rates for the past 3 days.
+
 ```php
 $exchangeRates = new ExchangeRate();
-$exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now()->subWeek(), Carbon::now());
+$exchangeRates->convertBetweenDateRange(100, 'GBP', 'EUR', Carbon::now()->subDays(3), Carbon::now());
+
+// $result: [
+//     '2020-07-07' => 110.92623405,
+//     '2020-07-08' => 111.20625424,
+//     '2020-07-09' => 111.53867604,
+// ];
+```
+
+##### Converting Between More Than Two Currencies in a Date Range
+
+You can also use the ``` ->convertBetweenDateRange() ``` method to convert a monetary value from one currency to multiple currencies
+using the exchange rates between a date range. To do this, you can pass an array of currency codes strings as the third parameter.
+
+The example below show how to convert £1 'GBP' to 'EUR' and 'USD' at the past three days' exchange rates.
+
+```php
+$exchangeRates = new ExchangeRate();
+$result = $exchangeRates->exchangeRateBetweenDateRange('GBP', ['EUR', 'USD'], Carbon::now()->subDays(3), Carbon::now());
+
+// $result: [
+//     '2020-07-07' => [
+//         'EUR' => 110.92623405,
+//         'USD' => 125.23571825,
+//      ],
+//     '2020-07-08' => [
+//         'EUR' => 111.20625424,
+//         'USD' => 125.50737853,
+//      ],
+//     '2020-07-09' => [
+//         'EUR' => 111.53867604,
+//         'USD' => 126.50716636,
+//      ],
+// ];
 ```
 
 ### Facade
