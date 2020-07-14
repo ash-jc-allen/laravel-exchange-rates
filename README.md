@@ -18,6 +18,8 @@
     - [Methods](#methods)
         - [Available Currencies](#available-currencies)
         - [Exchange Rate](#exchange-rate)
+            - [Getting the Rate Between Two Currencies](#getting-the-rate-between-two-currencies)
+            - [Getting the Rate Between More Than Two Currencies](#getting-the-rate-between-more-than-two-currencies)
         - [Exchange Rates Between Date Range](#exchange-rates-between-date-range)
         - [Convert Currencies](#convert-currencies)
         - [Convert Currencies Between Date Range](#convert-currencies-between-date-range)
@@ -63,12 +65,41 @@ $exchangeRates->currencies();
 ```
 
 #### Exchange Rate
+##### Getting the Rate Between Two Currencies
+To get the exchange for one currency to another, you can use the ``` ->exchangeRate() ``` method. When doing this, 
+you can pass the currency code as a string as the second parameter. The ``` ->exchangeRates() ``` method will then
+return a string containing the exchange rate.
+
+The example below shows how to get the exchange rate from 'GBP' to 'EUR' for today.
+
 ```php
 $exchangeRates = new ExchangeRate();
-$exchangeRates->exchangeRate('GBP', 'EUR');
+$result = $exchangeRates->exchangeRate('GBP', 'EUR');
+
+// $result: '1.10086'
 ```
+
 Note: If a Carbon date is passed as the third parameter, the exchange rate for that day will be returned (if valid).
 If no date is passed, today's exchange rate will be used.
+
+##### Getting the Rate Between More Than Two Currencies
+It is possible to get the exchange rates for multiple currencies in one call. This can be particularly useful if you are needing
+to get many exchange rates at once and do not want to multiple API calls.
+
+To do this, you can use ``` ->exchangeRate() ``` method and pass an array of currency code strings as the second parameter.
+This will return the an array containing the exchange rates as strings.
+
+The example below shows how to get the exchange rates from 'GBP' to 'EUR' and 'USD' for today.
+
+```php
+$exchangeRates = new ExchangeRate();
+$result = $exchangeRates->exchangeRate('GBP', ['EUR', 'USD']);
+
+// $result: [
+//     'EUR' => '1.10086',
+//     'USD' => '1.25622'
+// ];
+```
 
 #### Exchange Rates Between Date Range
 ```php
