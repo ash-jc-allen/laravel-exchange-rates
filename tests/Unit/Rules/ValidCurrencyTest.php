@@ -12,7 +12,7 @@ class ValidCurrencyTest extends TestCase
     public function validator_returns_true_if_the_currency_is_valid()
     {
         $testData = [
-            'currency' => 'GBP'
+            'currency' => 'GBP',
         ];
 
         $rules = [
@@ -27,7 +27,7 @@ class ValidCurrencyTest extends TestCase
     public function validator_returns_false_if_the_currency_is_invalid()
     {
         $testData = [
-            'currency' => 'INVALID'
+            'currency' => 'INVALID',
         ];
 
         $rules = [
