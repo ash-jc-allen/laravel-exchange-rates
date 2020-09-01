@@ -1,5 +1,8 @@
 # Changelog
 
+**v3.1.0 (released 2020-09-01):**
+- Added a new ``` ValidCurrency``` rule that can be used for validating currencies in requests.
+
 **v3.0.0 (released 2020-07-12):**
 - Added the functionality to get the exchange rates and converted values for more than one currency at a time. [#42](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/42)
 - Added a new ``` ->shouldCache() ``` method that can be used to determine if an exchange rate should be cached after fetching it from the API. [#38](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/38)
