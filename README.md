@@ -30,6 +30,7 @@
             - [Converting Between Two Currencies in a Date Range](#converting-between-two-currencies-in-a-date-range)
             - [Converting Between More Than Two Currencies in a Date Range](#converting-between-more-than-two-currencies-in-a-date-range)
     - [Facade](#facade)
+    - [Validation Rule](#validation-rule)
     - [Examples](#examples)
     - [Caching](#caching)
         - [Busting Cached Exchange Rates](#busting-cached-exchange-rates)
@@ -257,6 +258,39 @@ The example below shows an example of how you could use the facade to get the av
         }
     }
 ```
+
+### Validation Rule
+Laravel Exchange Rates comes with its own ``` ValidCurrency ``` rule for validating currencies. This can be useful for if you need to be sure
+that a currency (maybe one provided by the user) is supported by the library. The example below show how you can use the
+rule for validating the currency.
+
+```php
+<?php
+    
+    namespace App\Http\Controllers;
+    
+    use AshAllenDesign\LaravelExchangeRates\Rules\ValidCurrency;
+    use Illuminate\Support\Facades\Validator;
+
+    class TestController extends Controller
+    {
+        public function index()
+        {
+            $formData = [
+                'currency' => 'GBP',
+            ];
+    
+            $rules = [
+                'currency' => new ValidCurrency,
+            ];
+    
+            $validator = Validator::make($formData, $rules);
+        }
+    }
+```
+
+
+
 ### Examples
 This example shows how to convert 100 pence (£1) from Great British Pounds to Euros. The current exchange rate will be used (unless a cached rate for this date already exists).
 ```php
