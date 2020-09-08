@@ -1,7 +1,11 @@
 # Changelog
 
+**v3.2.0 (released 2020-09-08):**
+- Added support for Laravel 8 and Guzzle 7. [#46](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/46)
+
 **v3.1.0 (released 2020-09-01):**
 - Added a new ``` ValidCurrency``` rule that can be used for validating currencies in requests.
+[#45](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/45)
 
 **v3.0.0 (released 2020-07-12):**
 - Added the functionality to get the exchange rates and converted values for more than one currency at a time. [#42](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/42)
