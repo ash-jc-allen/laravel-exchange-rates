@@ -31,10 +31,9 @@ matrix:
 
 before_install:
   - travis_retry composer self-update
-  - travis_retry composer require --no-update --no-interaction "orchestra/testbench:${TESTBENCH}"
 
 install:
-  - travis_retry composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction --no-suggest
+  - travis_retry composer update --prefer-dist --no-interaction --no-suggest
   - travis_retry composer du -o
 
 script:
