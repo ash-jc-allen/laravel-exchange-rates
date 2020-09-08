@@ -8,33 +8,26 @@ matrix:
   fast_finish: true
   include:
     #     Laravel 6.*
-    #       --> PHP 7.2
     - php: 7.2
-      env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
-    - php: 7.2
-      env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
-    #       --> PHP 7.3
+      env: LARAVEL='6.*'
     - php: 7.3
-      env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
-    - php: 7.3
-      env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
-    #       --> PHP 7.4
+      env: LARAVEL='6.*'
     - php: 7.4
-      env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+      env: LARAVEL='6.*'
     #     Laravel 7.*
-    #       --> PHP 7.2
     - php: 7.2
-      env: LARAVEL='7.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
-    - php: 7.2
-      env: LARAVEL='7.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
-    #       --> PHP 7.3
+      env: LARAVEL='7.*'
     - php: 7.3
-      env: LARAVEL='7.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
-    - php: 7.3
-      env: LARAVEL='7.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
-    #       --> PHP 7.4
+      env: LARAVEL='7.*'
     - php: 7.4
-      env: LARAVEL='7.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+      env: LARAVEL='7.*'
+    #     Laravel 8.*
+    - php: 7.2
+      env: LARAVEL='8.*'
+    - php: 7.3
+      env: LARAVEL='8.*'
+    - php: 7.4
+      env: LARAVEL='8.*'
 
 before_install:
   - travis_retry composer self-update
