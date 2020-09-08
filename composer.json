@@ -19,14 +19,14 @@
   "require": {
     "php": "^7.2",
     "nesbot/carbon": "~2.0",
-    "guzzlehttp/guzzle": "^6.3",
-    "illuminate/container": "^6.0|^7.0",
-    "illuminate/cache": "^6.0|^7.0",
+    "guzzlehttp/guzzle": "^6.3|^7.0",
+    "illuminate/container": "^6.0|^7.0|^8.0",
+    "illuminate/cache": "^6.0|^7.0|^8.0",
     "ext-json": "*"
   },
   "require-dev": {
     "mockery/mockery": "^1.0",
-    "orchestra/testbench": "^3.8 || ^4.0",
+    "orchestra/testbench": "^5.0|^6.0",
     "phpunit/phpunit": "^8.2"
   },
   "autoload": {
