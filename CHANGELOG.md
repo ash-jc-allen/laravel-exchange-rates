@@ -1,5 +1,8 @@
 # Changelog
 
+**v3.2.1 (released 2020-09-16):**
+- Updated the Travis CI config to run the tests on the correct Laravel versions.
+
 **v3.2.0 (released 2020-09-08):**
 - Added support for Laravel 8 and Guzzle 7. [#46](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/46)
 
