@@ -142,6 +142,50 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
+    public function it_converts_floating_point_numbers_between_date_ranges(): void
+    {
+        $fromDate = now()->subWeek();
+        $toDate = now();
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs([
+                '/history',
+                [
+                    'base'     => 'GBP',
+                    'start_at' => $fromDate->format('Y-m-d'),
+                    'end_at'   => $toDate->format('Y-m-d'),
+                    'symbols'  => 'EUR,USD',
+                ],
+            ])
+            ->once()
+            ->andReturn($this->mockResponseForMultipleSymbols());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $currencies = $exchangeRate->convertBetweenDateRange(100.5, 'GBP', ['EUR', 'USD'], $fromDate, $toDate);
+
+        $expectedArray = [
+            '2019-11-08' => ['EUR' => 116.6461617027, 'USD' => 111.66666666555001],
+            '2019-11-06' => ['EUR' => 116.81564051085, 'USD' => 122.83333333110001],
+            '2019-11-07' => ['EUR' => 116.2629277461, 'USD' => 133.99999999665],
+            '2019-11-05' => ['EUR' => 116.70711739485, 'USD' => 145.1666666622],
+            '2019-11-04' => ['EUR' => 116.36254167780001, 'USD' => 156.33333332775],
+        ];
+
+        $this->assertEquals($expectedArray, $currencies);
+
+        $cachedExchangeRates = [
+            '2019-11-08' => ['EUR' => 1.1606583254, 'USD' => 1.1111111111],
+            '2019-11-06' => ['EUR' => 1.1623446817, 'USD' => 1.2222222222],
+            '2019-11-07' => ['EUR' => 1.1568450522, 'USD' => 1.3333333333],
+            '2019-11-05' => ['EUR' => 1.1612648497, 'USD' => 1.4444444444],
+            '2019-11-04' => ['EUR' => 1.1578362356, 'USD' => 1.5555555555],
+        ];
+        $this->assertEquals($cachedExchangeRates,
+            Cache::get('laravel_xr_GBP_EUR_USD_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+    }
+
+    /** @test */
     public function converted_values_can_be_returned_for_multiple_currencies()
     {
         $fromDate = now()->subWeek();

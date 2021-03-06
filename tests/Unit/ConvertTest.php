@@ -28,6 +28,38 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
+    public function converts_floating_point_numbers_for_today(): void
+    {
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->once()
+            ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $rate = $exchangeRate->convert(100.5, 'EUR', 'GBP');
+        $this->assertEquals('86.58879', $rate);
+        $this->assertEquals('0.86158', Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
+    }
+
+    /** @test */
+    public function converts_floating_point_numbers_for_a_date_in_the_past(): void
+    {
+        $mockDate = now();
+
+        $requestBuilderMock = Mockery::mock(RequestBuilder::class);
+        $requestBuilderMock->expects('makeRequest')
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->once()
+            ->andReturn($this->mockResponseForPastDateAndOneSymbol());
+
+        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $rate = $exchangeRate->convert(100.5, 'EUR', 'GBP', $mockDate);
+        $this->assertEquals('87.488265', $rate);
+        $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
+    }
+
+    /** @test */
     public function converted_value_in_the_past_is_returned_if_date_parameter_passed_and_rate_is_not_cached()
     {
         $mockDate = now();

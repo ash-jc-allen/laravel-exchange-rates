@@ -228,7 +228,7 @@ class ExchangeRate
      * parameters. If no $date parameter is passed, we
      * use today's date instead.
      *
-     * @param  int  $value
+     * @param  float  $value
      * @param  string  $from
      * @param  string|array  $to
      * @param  Carbon|null  $date
@@ -239,7 +239,7 @@ class ExchangeRate
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
      */
-    public function convert(int $value, string $from, $to, Carbon $date = null)
+    public function convert(float $value, string $from, $to, Carbon $date = null)
     {
         if (is_string($to)) {
             return (float) $this->exchangeRate($from, $to, $date) * $value;
@@ -258,7 +258,7 @@ class ExchangeRate
      * Return an array of the converted values between the
      * given date range.
      *
-     * @param  int  $value
+     * @param  float  $value
      * @param  string  $from
      * @param  string|array  $to
      * @param  Carbon  $date
@@ -269,7 +269,7 @@ class ExchangeRate
      * @throws Exception
      */
     public function convertBetweenDateRange(
-        int $value,
+        float $value,
         string $from,
         $to,
         Carbon $date,
