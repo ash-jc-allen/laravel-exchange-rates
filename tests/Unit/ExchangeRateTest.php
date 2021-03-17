@@ -181,7 +181,7 @@ class ExchangeRateTest extends TestCase
     public function exception_is_thrown_if_the_from_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->exchangeRate('INVALID', 'GBP', now()->subMinute());
@@ -191,7 +191,7 @@ class ExchangeRateTest extends TestCase
     public function exception_is_thrown_if_the_to_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->exchangeRate('GBP', 'INVALID', now()->subMinute());
@@ -211,7 +211,7 @@ class ExchangeRateTest extends TestCase
     public function exception_is_thrown_if_the_to_parameter_array_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->exchangeRate('GBP', ['INVALID'], now()->subMinute());
