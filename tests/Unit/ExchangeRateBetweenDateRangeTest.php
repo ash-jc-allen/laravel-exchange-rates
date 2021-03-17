@@ -254,7 +254,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     public function exception_is_thrown_if_the_from_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->exchangeRateBetweenDateRange('INVALID', 'GBP', now()->subWeek(), now()->subDay());
@@ -264,7 +264,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     public function exception_is_thrown_if_the_to_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->exchangeRateBetweenDateRange('GBP', 'INVALID', now()->subWeek(), now()->subDay());
@@ -274,7 +274,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     public function exception_is_thrown_if_one_of_the_to_parameter_currencies_are_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->exchangeRateBetweenDateRange('GBP', ['USD', 'INVALID'], now()->subWeek(), now()->subDay());

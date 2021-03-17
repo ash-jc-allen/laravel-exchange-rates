@@ -123,7 +123,7 @@ class ConvertTest extends TestCase
     public function exception_is_thrown_if_the_from_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->convert(100, 'INVALID', 'GBP', now()->subMinute());
@@ -133,7 +133,7 @@ class ConvertTest extends TestCase
     public function exception_is_thrown_if_the_to_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->convert(100, 'GBP', 'INVALID', now()->subMinute());
