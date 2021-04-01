@@ -15,13 +15,15 @@ class RequestBuilder
     private $baseUrl;
 
     /**
-     * The API KEY for the Exchange Rates API.
+     * The API key for the Exchange Rates API.
      *
      * @var string
      */
     private $apiKey;
 
     /**
+     * The Guzzle client used for making the requests.
+     *
      * @var Client
      */
     private $client;
