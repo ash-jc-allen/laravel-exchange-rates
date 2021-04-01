@@ -14,6 +14,7 @@
 
 - [Overview](#overview)
 - [Installation](#installation)
+- [Getting Your API Key](#getting-your-api-key)
 - [Configuration](#configuration)
 - [Usage](#usage)
     - [Methods](#methods)
@@ -63,28 +64,32 @@ The package has been developed and tested to work with the following minimum req
 - PHP 7.2
 - Laravel 6
 
+## Getting Your API Key
+
+As of 1st April 2021, the exchangeratesapi.io now requires an API key to use the service. To get an API key, head over to
+[https://exchangeratesapi.io/pricing](https://exchangeratesapi.io/pricing). You can sign up for free or use the paid tiers.
+
+Please note that at the time of writing this, you will need to be on at least the 'Basic' plan to make request via HTTPS. You
+will also be required to have at least the 'Professional' plan to use the ` convertBetweenDateRange() ` and ` exchangeRateBetweenDateRange() `
+that this package offers.
+
+You will also be required to have at least the 'Basic' paid plan to use ` exchangeRate() ` and ` convert() ` methods offered by
+this package due to the fact that the free plan does not allow setting a base currency when converting.
+
 ## Configuration
 
-In `config/services.php` file add:
-
-``` php
-'exchange_rates' => [
-    'api_key' => env('EXCHANGE_RATES_IO_API_KEY'),
-    'base_url' => env('EXCHANGE_RATES_IO_BASE_URL', 'http://api.exchangeratesapi.io'),
-],
+### Publish the Config and Migrations
+You can publish the package's config file and database migrations (so that you can make changes to them) by using the following command:
+```bash
+php artisan vendor:publish --provider="AshAllenDesign\LaravelExchangeRates\Providers\ExchangeRatesProvider"
 ```
 
 Add the necessary configuration keys in your `.env`:
 
 ``` dotenv
-EXCHANGE_RATES_IO_API_KEY=
-EXCHANGE_RATES_IO_BASE_URL=http://api.exchangeratesapi.io
+EXCHANGE_RATES_API_URL=https://api.exchangeratesapi.io/v1/
+EXCHANGE_RATES_API_KEY={Your-API-Key-Here}
 ```
-
-As of 2021-04-01 seems like that free accounts are allowed to use only the HTTP protocol,
-while the paid ones can use HTTPS.
-
-It also seems that free accounts are limited to use a restricted set of currencies.
 
 ## Usage
 
@@ -453,6 +458,7 @@ pass and write more if needed.
 ## Credits
 
 - [Ash Allen](https://ashallendesign.co.uk)
+- [Zak](https://github.com/thugic)
 - [Jess Pickup](https://jesspickup.co.uk) (Logo)
 - [All Contributors](https://github.com/ash-jc-allen/short-url/graphs/contributors)
 
