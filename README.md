@@ -14,6 +14,7 @@
 
 - [Overview](#overview)
 - [Installation](#installation)
+- [Configuration](#configuration)
 - [Usage](#usage)
     - [Methods](#methods)
         - [Available Currencies](#available-currencies)
@@ -61,6 +62,29 @@ The package has been developed and tested to work with the following minimum req
 
 - PHP 7.2
 - Laravel 6
+
+## Configuration
+
+In `config/services.php` file add:
+
+``` php
+'exchange_rates' => [
+    'api_key' => env('EXCHANGE_RATES_IO_API_KEY'),
+    'base_url' => env('EXCHANGE_RATES_IO_BASE_URL', 'http://api.exchangeratesapi.io'),
+],
+```
+
+Add the necessary configuration keys in your `.env`:
+
+``` dotenv
+EXCHANGE_RATES_IO_API_KEY=
+EXCHANGE_RATES_IO_BASE_URL=http://api.exchangeratesapi.io
+```
+
+As of 2021-04-01 seems like that free accounts are allowed to use only the HTTP protocol,
+while the paid ones can use HTTPS.
+
+It also seems that free accounts are limited to use a restricted set of currencies.
 
 ## Usage
 
