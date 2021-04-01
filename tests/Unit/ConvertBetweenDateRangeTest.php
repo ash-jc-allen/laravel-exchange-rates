@@ -22,7 +22,7 @@ class ConvertBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
             ->withArgs([
-                '/history',
+                '/timeseries',
                 [
                     'base'     => 'GBP',
                     'start_at' => $fromDate->format('Y-m-d'),
@@ -108,7 +108,7 @@ class ConvertBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
             ->withArgs([
-                '/history',
+                '/timeseries',
                 [
                     'base'     => 'GBP',
                     'start_at' => $fromDate->format('Y-m-d'),
@@ -150,7 +150,7 @@ class ConvertBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
             ->withArgs([
-                '/history',
+                '/timeseries',
                 [
                     'base'     => 'GBP',
                     'start_at' => $fromDate->format('Y-m-d'),
@@ -250,7 +250,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     public function exception_is_thrown_if_the_from_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->convertBetweenDateRange(100, 'INVALID', 'GBP', now()->subWeek(), now()->subDay());
@@ -260,7 +260,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     public function exception_is_thrown_if_the_to_parameter_is_invalid()
     {
         $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid country code.');
+        $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
         $exchangeRate->convertBetweenDateRange(100, 'GBP', 'INVALID', now()->subWeek(), now()->subDay());
