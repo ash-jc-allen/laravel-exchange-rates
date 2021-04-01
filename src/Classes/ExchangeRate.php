@@ -211,7 +211,7 @@ class ExchangeRate
     {
         $symbols = is_string($to) ? $to : implode(',', $to);
 
-        $result = $this->requestBuilder->makeRequest('/history', [
+        $result = $this->requestBuilder->makeRequest('/timeseries', [
             'base'     => $from,
             'start_at' => $date->format('Y-m-d'),
             'end_at'   => $endDate->format('Y-m-d'),
