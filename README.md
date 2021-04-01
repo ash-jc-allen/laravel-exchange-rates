@@ -14,6 +14,8 @@
 
 - [Overview](#overview)
 - [Installation](#installation)
+- [Getting Your API Key](#getting-your-api-key)
+- [Configuration](#configuration)
 - [Usage](#usage)
     - [Methods](#methods)
         - [Available Currencies](#available-currencies)
@@ -61,6 +63,33 @@ The package has been developed and tested to work with the following minimum req
 
 - PHP 7.2
 - Laravel 6
+
+## Getting Your API Key
+
+As of 1st April 2021, the exchangeratesapi.io now requires an API key to use the service. To get an API key, head over to
+[https://exchangeratesapi.io/pricing](https://exchangeratesapi.io/pricing). You can sign up for free or use the paid tiers.
+
+Please note that at the time of writing this, you will need to be on at least the 'Basic' plan to make request via HTTPS. You
+will also be required to have at least the 'Professional' plan to use the ` convertBetweenDateRange() ` and ` exchangeRateBetweenDateRange() `
+that this package offers.
+
+You will also be required to have at least the 'Basic' paid plan to use ` exchangeRate() ` and ` convert() ` methods offered by
+this package due to the fact that the free plan does not allow setting a base currency when converting.
+
+## Configuration
+
+### Publish the Config and Migrations
+You can publish the package's config file and database migrations (so that you can make changes to them) by using the following command:
+```bash
+php artisan vendor:publish --provider="AshAllenDesign\LaravelExchangeRates\Providers\ExchangeRatesProvider"
+```
+
+Add the necessary configuration keys in your `.env`:
+
+``` dotenv
+EXCHANGE_RATES_API_URL=https://api.exchangeratesapi.io/v1/
+EXCHANGE_RATES_API_KEY={Your-API-Key-Here}
+```
 
 ## Usage
 
@@ -429,6 +458,7 @@ pass and write more if needed.
 ## Credits
 
 - [Ash Allen](https://ashallendesign.co.uk)
+- [Zak](https://github.com/thugic)
 - [Jess Pickup](https://jesspickup.co.uk) (Logo)
 - [All Contributors](https://github.com/ash-jc-allen/short-url/graphs/contributors)
 

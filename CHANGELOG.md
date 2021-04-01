@@ -1,5 +1,8 @@
 # Changelog
 
+**v4.0.0 (released 2021-04-01):**
+- Added a config file and updated routes to work with the API updates. [#57](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/57)
+
 **v3.3.0 (released 2020-12-06):**
 - Added support for PHP 8. [#50](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/50)
 

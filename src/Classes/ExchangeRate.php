@@ -8,6 +8,7 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class ExchangeRate
 {
@@ -61,6 +62,7 @@ class ExchangeRate
      * @param  array  $currencies
      *
      * @return array
+     * @throws GuzzleException
      */
     public function currencies(array $currencies = []): array
     {
@@ -98,10 +100,11 @@ class ExchangeRate
      * @param  Carbon|null  $date
      *
      * @return string|array
-     * @throws InvalidDateException
      *
+     * @throws InvalidDateException
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
+     * @throws GuzzleException
      */
     public function exchangeRate(string $from, $to, Carbon $date = null)
     {
@@ -154,7 +157,9 @@ class ExchangeRate
      * @param  array  $conversions
      *
      * @return array
+     *
      * @throws Exception
+     * @throws GuzzleException
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -197,13 +202,16 @@ class ExchangeRate
      * @param  string|array  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
+     *
      * @return array
+     *
+     * @throws GuzzleException
      */
     private function makeRequestForExchangeRates(string $from, $to, Carbon $date, Carbon $endDate): array
     {
         $symbols = is_string($to) ? $to : implode(',', $to);
 
-        $result = $this->requestBuilder->makeRequest('/history', [
+        $result = $this->requestBuilder->makeRequest('/timeseries', [
             'base'     => $from,
             'start_at' => $date->format('Y-m-d'),
             'end_at'   => $endDate->format('Y-m-d'),
@@ -234,10 +242,11 @@ class ExchangeRate
      * @param  Carbon|null  $date
      *
      * @return float|array
-     * @throws InvalidDateException
      *
+     * @throws InvalidDateException
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
+     * @throws GuzzleException
      */
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
@@ -266,7 +275,9 @@ class ExchangeRate
      * @param  array  $conversions
      *
      * @return array
+     *
      * @throws Exception
+     * @throws GuzzleException
      */
     public function convertBetweenDateRange(
         int $value,
@@ -304,6 +315,7 @@ class ExchangeRate
      * @param  Carbon  $startDate
      * @param  Carbon  $endDate
      * @param  array  $conversions
+     *
      * @return array
      */
     private function exchangeRateDateRangeResultWithSameCurrency(
@@ -325,6 +337,7 @@ class ExchangeRate
      * cached after it is fetched from the API.
      *
      * @param  bool  $shouldCache
+     *
      * @return $this
      */
     public function shouldCache(bool $shouldCache = true): self
@@ -341,6 +354,7 @@ class ExchangeRate
      * the API.
      *
      * @param  bool  $bustCache
+     *
      * @return $this
      */
     public function shouldBustCache(bool $bustCache = true): self
@@ -357,6 +371,7 @@ class ExchangeRate
      * the cache.
      *
      * @param  string  $cacheKey
+     *
      * @return mixed
      */
     private function attemptToResolveFromCache(string $cacheKey)

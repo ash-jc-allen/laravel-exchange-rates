@@ -1,5 +1,28 @@
 # Upgrade Guide
 
+## Upgrading from 3.* to 4.0.0
+
+### Publish Config and Add Your API Key
+
+As of 1st April 2021, the exchangeratesapi.io now requires an API key to use the service. To get an API key, head over to
+[https://exchangeratesapi.io/pricing](https://exchangeratesapi.io/pricing). You can sign up for free or use the paid tiers.
+
+Please note that at the time of writing this, you will need to be on at least the 'Basic' plan to make request via HTTPS. You
+will also be required to have at least the 'Professional' plan to use the ` convertBetweenDateRange() ` and ` exchangeRateBetweenDateRange() `
+that this package offers.
+
+You will also be required to have at least the 'Basic' paid plan to use ` exchangeRate() ` and ` convert() ` methods offered by
+this package due to the fact that the free plan does not allow setting a base currency when converting.
+
+After you've got your API key, you can add the following fields to your ` .env ` file:
+
+``` dotenv
+EXCHANGE_RATES_API_URL=https://api.exchangeratesapi.io/v1/
+EXCHANGE_RATES_API_KEY={Your-API-Key-Here}
+```
+
+<hr>
+
 ## Upgrading from 2.* to 3.0.0
 
 ### Minimum Required Laravel Version
@@ -33,6 +56,8 @@ convert(int $value, string $from, $to, Carbon $date = null)
 ```
 convertBetweenDateRange(int $value, string $from, $to, Carbon $date, Carbon $endDate, array $conversions = []): array
 ```
+
+<hr>
 
 ## Upgrading from 1.* to 2.0.0
 
