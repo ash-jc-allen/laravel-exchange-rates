@@ -213,8 +213,8 @@ class ExchangeRate
 
         $result = $this->requestBuilder->makeRequest('/timeseries', [
             'base'     => $from,
-            'start_at' => $date->format('Y-m-d'),
-            'end_at'   => $endDate->format('Y-m-d'),
+            'start_date' => $date->format('Y-m-d'),
+            'end_date'   => $endDate->format('Y-m-d'),
             'symbols'  => $symbols,
         ]);
 

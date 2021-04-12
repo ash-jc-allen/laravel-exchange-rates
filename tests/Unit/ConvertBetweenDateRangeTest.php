@@ -25,8 +25,8 @@ class ConvertBetweenDateRangeTest extends TestCase
                 '/timeseries',
                 [
                     'base'     => 'GBP',
-                    'start_at' => $fromDate->format('Y-m-d'),
-                    'end_at'   => $toDate->format('Y-m-d'),
+                    'start_date' => $fromDate->format('Y-m-d'),
+                    'end_date'   => $toDate->format('Y-m-d'),
                     'symbols'  => 'EUR',
                 ],
             ])
@@ -111,8 +111,8 @@ class ConvertBetweenDateRangeTest extends TestCase
                 '/timeseries',
                 [
                     'base'     => 'GBP',
-                    'start_at' => $fromDate->format('Y-m-d'),
-                    'end_at'   => $toDate->format('Y-m-d'),
+                    'start_date' => $fromDate->format('Y-m-d'),
+                    'end_date'   => $toDate->format('Y-m-d'),
                     'symbols'  => 'EUR',
                 ],
             ])
@@ -153,8 +153,8 @@ class ConvertBetweenDateRangeTest extends TestCase
                 '/timeseries',
                 [
                     'base'     => 'GBP',
-                    'start_at' => $fromDate->format('Y-m-d'),
-                    'end_at'   => $toDate->format('Y-m-d'),
+                    'start_date' => $fromDate->format('Y-m-d'),
+                    'end_date'   => $toDate->format('Y-m-d'),
                     'symbols'  => 'EUR,USD',
                 ],
             ])
@@ -296,9 +296,9 @@ class ConvertBetweenDateRangeTest extends TestCase
                     'EUR' => 1.1578362356,
                 ],
             ],
-            'start_at' => '2019-11-03',
+            'start_date' => '2019-11-03',
             'base'     => 'GBP',
-            'end_at'   => '2019-11-10',
+            'end_date'   => '2019-11-10',
         ];
     }
 
@@ -327,9 +327,9 @@ class ConvertBetweenDateRangeTest extends TestCase
                     'USD' => 1.5555555555,
                 ],
             ],
-            'start_at' => '2019-11-03',
+            'start_date' => '2019-11-03',
             'base'     => 'GBP',
-            'end_at'   => '2019-11-10',
+            'end_date'   => '2019-11-10',
         ];
     }
 }
