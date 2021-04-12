@@ -1,5 +1,8 @@
 # Changelog
 
+**v4.0.1 (released 2021-04-12):**
+- Fixed the parameters that are sent to the ` timeseries ` endpoint. [#63](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/63)
+
 **v4.0.0 (released 2021-04-01):**
 - Added a config file and updated routes to work with the API updates. [#57](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/57)
 
