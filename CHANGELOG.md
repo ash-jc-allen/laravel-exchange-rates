@@ -1,5 +1,9 @@
 # Changelog
 
+**v4.1.0 (released 2021-05-03):**
+- Updated the list of allowed currencies. [#66](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/66)
+- Updated Dependabot to GitHub-native version. [#64](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/64)
+
 **v4.0.1 (released 2021-04-12):**
 - Fixed the parameters that are sent to the ` timeseries ` endpoint. [#63](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/63)
 
