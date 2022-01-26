@@ -45,8 +45,8 @@ class RequestBuilder
      *
      * @param  string  $path
      * @param  string[]  $queryParams
-     *
      * @return mixed
+     *
      * @throws GuzzleException
      */
     public function makeRequest(string $path, array $queryParams = [])

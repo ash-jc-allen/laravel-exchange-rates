@@ -60,8 +60,8 @@ class ExchangeRate
      * can be used with this package.
      *
      * @param  array  $currencies
-     *
      * @return array
+     *
      * @throws GuzzleException
      */
     public function currencies(array $currencies = []): array
@@ -98,7 +98,6 @@ class ExchangeRate
      * @param  string  $from
      * @param  string|array  $to
      * @param  Carbon|null  $date
-     *
      * @return string|array
      *
      * @throws InvalidDateException
@@ -155,7 +154,6 @@ class ExchangeRate
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     *
      * @return array
      *
      * @throws Exception
@@ -202,7 +200,6 @@ class ExchangeRate
      * @param  string|array  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
-     *
      * @return array
      *
      * @throws GuzzleException
@@ -240,7 +237,6 @@ class ExchangeRate
      * @param  string  $from
      * @param  string|array  $to
      * @param  Carbon|null  $date
-     *
      * @return float|array
      *
      * @throws InvalidDateException
@@ -273,7 +269,6 @@ class ExchangeRate
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     *
      * @return array
      *
      * @throws Exception
@@ -315,7 +310,6 @@ class ExchangeRate
      * @param  Carbon  $startDate
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     *
      * @return array
      */
     private function exchangeRateDateRangeResultWithSameCurrency(
@@ -337,7 +331,6 @@ class ExchangeRate
      * cached after it is fetched from the API.
      *
      * @param  bool  $shouldCache
-     *
      * @return $this
      */
     public function shouldCache(bool $shouldCache = true): self
@@ -354,7 +347,6 @@ class ExchangeRate
      * the API.
      *
      * @param  bool  $bustCache
-     *
      * @return $this
      */
     public function shouldBustCache(bool $bustCache = true): self
@@ -371,7 +363,6 @@ class ExchangeRate
      * the cache.
      *
      * @param  string  $cacheKey
-     *
      * @return mixed
      */
     private function attemptToResolveFromCache(string $cacheKey)
