@@ -92,7 +92,7 @@ class Validation
             self::$earliestPossibleDate = Carbon::createFromDate(1999, 1, 4)->startOfDay();
         }
 
-        if ($date->isBefore(static::$earliestPossibleDate)) {
+        if ($date->isBefore(self::$earliestPossibleDate)) {
             throw new InvalidDateException('The date cannot be before 4th January 1999.');
         }
     }
@@ -100,11 +100,11 @@ class Validation
     /**
      * Validate that the parameter is a string or array.
      *
-     * @param $paramToValidate
+     * @param mixed $paramToValidate
      *
      * @throws ExchangeRateException
      */
-    public static function validateIsStringOrArray($paramToValidate): void
+    public static function validateIsStringOrArray(mixed $paramToValidate): void
     {
         if (! is_string($paramToValidate) && ! is_array($paramToValidate)) {
             throw new ExchangeRateException($paramToValidate.' is not a string or array.');
