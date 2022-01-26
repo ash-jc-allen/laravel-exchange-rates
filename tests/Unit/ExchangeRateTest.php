@@ -164,7 +164,7 @@ class ExchangeRateTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'EUR');
-        $this->assertEquals('1.0', $rate);
+        $this->assertEquals(1.0, $rate);
     }
 
     /** @test */
