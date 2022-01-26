@@ -1,5 +1,16 @@
 # Changelog
 
+**v5.0.0 (released 2022-01-26):**
+- Added PHPStan workflow for GitHub Actions. [#72](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/72)
+- Migrated tests workflow from Travis CI to GitHub Actions. [#69](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/69)
+- Added support for Laravel 9.*. [#69](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/69)
+- Dropped support for Laravel 6.* and 7.*. [#69](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/69)
+- Dropped support for PHP 7.2, 7.3 and 7.4. [#69](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/69)
+- Dropped support for `guzzlehttp/guzzle` 6.*. [#69](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/69)
+- Dropped support for `orchestra/testbench` 3.* , 4.* , and 5.*. [#69](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/69)
+- Dropped support for `phpunit/phpunit` 8.*. [#69](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/69)
+- Added FUNDING.yml.
+
 **v4.1.0 (released 2021-05-03):**
 - Updated the list of allowed currencies. [#66](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/66)
 - Updated Dependabot to GitHub-native version. [#64](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/64)
