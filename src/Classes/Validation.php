@@ -104,7 +104,7 @@ class Validation
      *
      * @throws ExchangeRateException
      */
-    public static function validateIsStringOrArray(mixed $paramToValidate): void
+    public static function validateIsStringOrArray($paramToValidate): void
     {
         if (! is_string($paramToValidate) && ! is_array($paramToValidate)) {
             throw new ExchangeRateException($paramToValidate.' is not a string or array.');

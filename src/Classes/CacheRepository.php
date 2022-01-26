@@ -53,7 +53,7 @@ class CacheRepository
      * @param  string|array  $value
      * @return bool
      */
-    public function storeInCache(string $key, string|array $value): bool
+    public function storeInCache(string $key, $value): bool
     {
         return $this->cache->forever($this->cachePrefix.$key, $value);
     }
