@@ -22,7 +22,7 @@ class Validation
      * Validate that the currency is supported by the
      * Exchange Rates API.
      *
-     * @param string $currencyCode
+     * @param  string  $currencyCode
      *
      * @throws InvalidCurrencyException
      */
@@ -40,6 +40,7 @@ class Validation
      * the Exchange Rates API.
      *
      * @param  array  $currencyCodes
+     *
      * @throws InvalidCurrencyException
      */
     public static function validateCurrencyCodes(array $currencyCodes): void
@@ -58,8 +59,8 @@ class Validation
      * past. After this, check that the 'from'
      * date is not after the 'to' date.
      *
-     * @param Carbon $from
-     * @param Carbon $to
+     * @param  Carbon  $from
+     * @param  Carbon  $to
      *
      * @throws InvalidDateException
      */
@@ -77,7 +78,7 @@ class Validation
      * Validate the date that has been passed.
      * We check that the date is in the past.
      *
-     * @param Carbon $date
+     * @param  Carbon  $date
      *
      * @throws InvalidDateException
      */
@@ -100,6 +101,7 @@ class Validation
      * Validate that the parameter is a string or array.
      *
      * @param $paramToValidate
+     *
      * @throws ExchangeRateException
      */
     public static function validateIsStringOrArray($paramToValidate): void
