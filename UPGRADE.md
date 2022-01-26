@@ -1,5 +1,20 @@
 # Upgrade Guide
 
+## Upgrading from 4.* to 5.0.0
+
+### Minimum PHP Version
+
+As of v5.0.0, Laravel Exchange Rates no longer supports PHP 7.2, 7.3 or 7.4. So, you will require at least PHP 8.0.
+
+### Dependency Upgrades
+
+As of v5.0.0, Laravel Exchange Rates has dropped support for several package versions:
+
+- Laravel 6 and 7 are no longer supported. You will need to use at least Laravel 8.
+- `guzzlehttp/guzzle` 6.* is no longer supported as a dev dependency. You will need at least 7.0.
+- `orchestra/testbench` 3.* , 4.* and 5.* are no longer supported as a dev dependency. You will need at least 5.0.
+- `phpunit/phpunit` 8.* is no longer supported as a dev dependency. You will need at least 9.0.
+
 ## Upgrading from 3.* to 4.0.0
 
 ### Publish Config and Add Your API Key
