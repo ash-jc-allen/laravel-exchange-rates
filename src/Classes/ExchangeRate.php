@@ -98,7 +98,7 @@ class ExchangeRate
      * @param  string  $from
      * @param  string|array  $to
      * @param  Carbon|null  $date
-     * @return string|array
+     * @return float|string|array
      *
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
@@ -118,7 +118,7 @@ class ExchangeRate
         is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
 
         if ($from === $to) {
-            return '1.0';
+            return 1.0;
         }
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? now());
