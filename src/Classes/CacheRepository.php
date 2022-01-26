@@ -22,6 +22,7 @@ class CacheRepository
 
     /**
      * Cache constructor.
+     *
      * @throws BindingResolutionException
      */
     public function __construct()
@@ -91,6 +92,7 @@ class CacheRepository
      * @param  Carbon  $date
      * @param  Carbon|null  $endDate
      * @return string
+     *
      * @throws ExchangeRateException
      */
     public function buildCacheKey(string $from, $to, Carbon $date, Carbon $endDate = null): string
