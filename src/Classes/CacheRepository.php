@@ -50,7 +50,7 @@ class CacheRepository
      * Store a new item in the cache.
      *
      * @param  string  $key
-     * @param string|array $value
+     * @param  string|array  $value
      * @return bool
      */
     public function storeInCache(string $key, string|array $value): bool

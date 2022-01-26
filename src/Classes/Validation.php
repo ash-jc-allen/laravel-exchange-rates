@@ -100,7 +100,7 @@ class Validation
     /**
      * Validate that the parameter is a string or array.
      *
-     * @param mixed $paramToValidate
+     * @param  mixed  $paramToValidate
      *
      * @throws ExchangeRateException
      */
