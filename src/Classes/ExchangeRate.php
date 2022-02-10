@@ -121,7 +121,7 @@ class ExchangeRate
             return 1.0;
         }
 
-        $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? now());
+        $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? Carbon::now());
 
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
             return $cachedExchangeRate;
