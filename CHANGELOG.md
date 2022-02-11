@@ -1,5 +1,8 @@
 # Changelog
 
+**v5.0.1 (released 2022-02-11):**
+- Used `Carbon::now()` instead of the `now()` helper to provide support for Lumen. [#77](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/77)
+
 **v5.0.0 (released 2022-01-26):**
 - Added PHPStan workflow for GitHub Actions. [#72](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/72)
 - Migrated tests workflow from Travis CI to GitHub Actions. [#69](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/69)
