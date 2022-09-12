@@ -1,5 +1,8 @@
 # Changelog
 
+**v5.1.0 (released 2022-09-12):**
+- Added support for PHP 8.2. [#78](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/78)
+
 **v5.0.1 (released 2022-02-11):**
 - Used `Carbon::now()` instead of the `now()` helper to provide support for Lumen. [#77](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/77)
 
