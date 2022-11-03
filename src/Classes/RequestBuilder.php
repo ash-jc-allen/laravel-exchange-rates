@@ -23,8 +23,6 @@ class RequestBuilder
 
     /**
      * RequestBuilder constructor.
-     *
-     *
      */
     public function __construct()
     {
