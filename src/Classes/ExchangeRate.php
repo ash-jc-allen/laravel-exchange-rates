@@ -7,7 +7,6 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
 use Exception;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
 class ExchangeRate
@@ -51,7 +50,7 @@ class ExchangeRate
      */
     public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
     {
-        $this->requestBuilder = $requestBuilder ?? new RequestBuilder(new Client());
+        $this->requestBuilder = $requestBuilder ?? new RequestBuilder();
         $this->cacheRepository = $cacheRepository ?? new CacheRepository();
     }
 

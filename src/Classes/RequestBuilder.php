@@ -2,8 +2,8 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Http;
 
 class RequestBuilder
 {
@@ -22,20 +22,12 @@ class RequestBuilder
     private $apiKey;
 
     /**
-     * The Guzzle client used for making the requests.
-     *
-     * @var Client
-     */
-    private $client;
-
-    /**
      * RequestBuilder constructor.
      *
-     * @param  Client|null  $client
+     *
      */
-    public function __construct(Client $client = null)
+    public function __construct()
     {
-        $this->client = $client ?? new Client();
         $this->baseUrl = config('laravel-exchange-rates.api_url');
         $this->apiKey = config('laravel-exchange-rates.api_key');
     }
@@ -51,12 +43,8 @@ class RequestBuilder
      */
     public function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->baseUrl.$path.'?access_key='.$this->apiKey;
-
-        foreach ($queryParams as $param => $value) {
-            $url .= '&'.urlencode($param).'='.urlencode($value);
-        }
-
-        return json_decode($this->client->get($url)->getBody()->getContents(), true);
+        return Http::withHeaders([
+            'apiKey' => $this->apiKey,
+        ])->get($this->baseUrl . $path, $queryParams);
     }
 }
