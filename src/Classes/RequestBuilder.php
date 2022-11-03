@@ -43,6 +43,6 @@ class RequestBuilder
     {
         return Http::withHeaders([
             'apiKey' => $this->apiKey,
-        ])->get($this->baseUrl . $path, $queryParams);
+        ])->get($this->baseUrl.$path, $queryParams);
     }
 }
