@@ -23,8 +23,8 @@ class ConvertTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', 'GBP');
-        $this->assertEquals('86.158', $rate);
         $this->assertEquals('0.86158', Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
+        $this->assertEquals('86.16', $rate);
     }
 
     /** @test */
@@ -40,8 +40,8 @@ class ConvertTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', 'GBP', $mockDate);
-        $this->assertEquals('87.053', $rate);
         $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
+        $this->assertEquals('87.05', $rate);
     }
 
     /** @test */
@@ -56,8 +56,8 @@ class ConvertTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', 'GBP', $mockDate);
-        $this->assertEquals('12.3456', $rate);
         $this->assertEquals('0.123456', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
+        $this->assertEquals('12.35', $rate);
     }
 
     /** @test */
@@ -75,8 +75,8 @@ class ConvertTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->shouldBustCache()->convert(100, 'EUR', 'GBP', $mockDate);
-        $this->assertEquals('87.053', $rate);
         $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
+        $this->assertEquals('87.05', $rate);
     }
 
     /** @test */
@@ -101,7 +101,7 @@ class ConvertTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', ['GBP', 'USD', 'CAD']);
-        $this->assertEquals(['CAD' => 145.61, 'USD' => 110.34, 'GBP' => 86.158], $rate);
+        $this->assertEquals(['CAD' => 145.61, 'USD' => 110.34, 'GBP' => 86.16], $rate);
 
         $this->assertEquals(
             ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158],

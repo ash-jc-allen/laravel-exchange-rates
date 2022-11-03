@@ -247,13 +247,13 @@ class ExchangeRate
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
         if (is_string($to)) {
-            return (float) $this->exchangeRate($from, $to, $date) * $value;
+            return round((float) $this->exchangeRate($from, $to, $date) * $value, 2);
         }
 
         $exchangeRates = $this->exchangeRate($from, $to, $date);
 
         foreach ($exchangeRates as $currency => $exchangeRate) {
-            $exchangeRates[$currency] = (float) $exchangeRate * $value;
+            $exchangeRates[$currency] = round((float) $exchangeRate * $value, 2);
         }
 
         return $exchangeRates;
@@ -287,7 +287,7 @@ class ExchangeRate
         if (is_array($to)) {
             foreach ($exchangeRates as $date => $exchangeRate) {
                 foreach ($exchangeRate as $currency => $rate) {
-                    $conversions[$date][$currency] = (float) $rate * $value;
+                    $conversions[$date][$currency] = round((float) $rate * $value, 8);
                 }
             }
 
@@ -295,7 +295,7 @@ class ExchangeRate
         }
 
         foreach ($exchangeRates as $date => $exchangeRate) {
-            $conversions[$date] = (float) $exchangeRate * $value;
+            $conversions[$date] = round((float) $exchangeRate * $value, 8);
         }
 
         return $conversions;
