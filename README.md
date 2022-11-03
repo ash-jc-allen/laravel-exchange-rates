@@ -67,7 +67,7 @@ The package has been developed and tested to work with the following minimum req
 ## Getting Your API Key
 
 As of 1st April 2021, the exchangeratesapi.io now requires an API key to use the service. To get an API key, head over to
-[https://exchangeratesapi.io/pricing](https://exchangeratesapi.io/pricing). You can sign up for free or use the paid tiers.
+[https://apilayer.com/marketplace/exchangerates_data-api#pricing](https://apilayer.com/marketplace/exchangerates_data-api#pricing). You can sign up for free or use the paid tiers.
 
 Please note that at the time of writing this, you will need to be on at least the 'Basic' plan to make request via HTTPS. You
 will also be required to have at least the 'Professional' plan to use the ` convertBetweenDateRange() ` and ` exchangeRateBetweenDateRange() `
@@ -87,7 +87,7 @@ php artisan vendor:publish --provider="AshAllenDesign\LaravelExchangeRates\Provi
 Add the necessary configuration keys in your `.env`:
 
 ``` dotenv
-EXCHANGE_RATES_API_URL=https://api.exchangeratesapi.io/v1/
+EXCHANGE_RATES_API_URL=https://apilayer.com/marketplace/exchangerates_data-api
 EXCHANGE_RATES_API_KEY={Your-API-Key-Here}
 ```
 
