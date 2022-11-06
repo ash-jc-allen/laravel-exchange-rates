@@ -36,13 +36,13 @@ class ConvertBetweenDateRangeTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
-        $this->assertEquals([
+        $this->assertEqualsWithDelta([
             '2019-11-08' => 116.06583254,
             '2019-11-06' => 116.23446817,
             '2019-11-07' => 115.68450522,
             '2019-11-05' => 116.12648497,
             '2019-11-04' => 115.78362356,
-        ], $currencies);
+        ], $currencies, self::FLOAT_DELTA);
 
         $cachedExchangeRates = [
             '2019-11-08' => 1.1606583254,
@@ -77,13 +77,13 @@ class ConvertBetweenDateRangeTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
-        $this->assertEquals([
+        $this->assertEqualsWithDelta([
             '2019-11-08' => 11.1,
             '2019-11-06' => 22.2,
             '2019-11-07' => 33.3,
             '2019-11-05' => 44.4,
             '2019-11-04' => 55.5,
-        ], $currencies);
+        ], $currencies, self::FLOAT_DELTA);
 
         $this->assertEquals($expectedArray,
             Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
@@ -122,13 +122,13 @@ class ConvertBetweenDateRangeTest extends TestCase
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $currencies = $exchangeRate->shouldBustCache()->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
-        $this->assertEquals([
+        $this->assertEqualsWithDelta([
             '2019-11-08' => 116.06583254,
             '2019-11-06' => 116.23446817,
             '2019-11-07' => 115.68450522,
             '2019-11-05' => 116.12648497,
             '2019-11-04' => 115.78362356,
-        ], $currencies);
+        ], $currencies, self::FLOAT_DELTA);
 
         $cachedExchangeRates = [
             '2019-11-08' => 1.1606583254,
@@ -172,7 +172,7 @@ class ConvertBetweenDateRangeTest extends TestCase
             '2019-11-04' => ['EUR' => 115.78362356, 'USD' => 155.55555555],
         ];
 
-        $this->assertEquals($expectedArray, $currencies);
+        $this->assertEqualsWithDelta($expectedArray, $currencies, self::FLOAT_DELTA);
 
         $cachedExchangeRates = [
             '2019-11-08' => ['EUR' => 1.1606583254, 'USD' => 1.1111111111],

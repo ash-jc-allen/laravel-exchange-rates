@@ -101,7 +101,8 @@ class ConvertTest extends TestCase
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
         $rate = $exchangeRate->convert(100, 'EUR', ['GBP', 'USD', 'CAD']);
-        $this->assertEquals(['CAD' => 145.61, 'USD' => 110.34, 'GBP' => 86.158], $rate);
+
+        $this->assertEqualsWithDelta(['CAD' => 145.61, 'USD' => 110.34, 'GBP' => 86.158], $rate, self::FLOAT_DELTA);
 
         $this->assertEquals(
             ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158],
