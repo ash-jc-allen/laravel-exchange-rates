@@ -10,6 +10,11 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 abstract class TestCase extends OrchestraTestCase
 {
     /**
+     * Allowed numerical distance between two values to consider them equal.
+     */
+    protected const FLOAT_DELTA = 0.0000000000001;
+
+    /**
      * Load package service provider.
      *
      * @param $app
