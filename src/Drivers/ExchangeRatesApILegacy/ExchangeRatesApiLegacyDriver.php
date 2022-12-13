@@ -54,7 +54,7 @@ class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
      */
     public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
     {
-        $this->requestBuilder = $requestBuilder ?? new RequestBuilder(new Client());
+        $this->requestBuilder = $requestBuilder ?? new RequestBuilder();
         $this->cacheRepository = $cacheRepository ?? new CacheRepository();
     }
 
@@ -64,8 +64,6 @@ class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
      *
      * @param  array  $currencies
      * @return array
-     *
-     * @throws GuzzleException
      */
     public function currencies(array $currencies = []): array
     {
@@ -106,7 +104,6 @@ class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
-     * @throws GuzzleException
      */
     public function exchangeRate(string $from, $to, Carbon $date = null)
     {
@@ -160,7 +157,6 @@ class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
      * @return array
      *
      * @throws Exception
-     * @throws GuzzleException
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -204,8 +200,6 @@ class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @return array
-     *
-     * @throws GuzzleException
      */
     private function makeRequestForExchangeRates(string $from, $to, Carbon $date, Carbon $endDate): array
     {
@@ -245,7 +239,6 @@ class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
-     * @throws GuzzleException
      */
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
@@ -275,7 +268,6 @@ class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
      * @return array
      *
      * @throws Exception
-     * @throws GuzzleException
      */
     public function convertBetweenDateRange(
         int $value,

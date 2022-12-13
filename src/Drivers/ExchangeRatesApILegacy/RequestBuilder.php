@@ -2,35 +2,16 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Http;
 
 class RequestBuilder
 {
     private const BASE_URL = 'https://api.exchangeratesapi.io/v1/';
 
-    /**
-     * The API key for the Exchange Rates API.
-     *
-     * @var string
-     */
-    private $apiKey;
+    private string $apiKey;
 
-    /**
-     * The Guzzle client used for making the requests.
-     *
-     * @var Client
-     */
-    private $client;
-
-    /**
-     * RequestBuilder constructor.
-     *
-     * @param  Client|null  $client
-     */
-    public function __construct(Client $client = null)
+    public function __construct()
     {
-        $this->client = $client ?? new Client();
         $this->apiKey = config('laravel-exchange-rates.api_key');
     }
 
@@ -41,16 +22,15 @@ class RequestBuilder
      * @param  string[]  $queryParams
      * @return mixed
      *
-     * @throws GuzzleException
      */
-    public function makeRequest(string $path, array $queryParams = [])
+    public function makeRequest(string $path, array $queryParams = []): mixed
     {
-        $url = self::BASE_URL.$path.'?access_key='.$this->apiKey;
-
-        foreach ($queryParams as $param => $value) {
-            $url .= '&'.urlencode($param).'='.urlencode($value);
-        }
-
-        return json_decode($this->client->get($url)->getBody()->getContents(), true);
+        return Http::baseUrl(self::BASE_URL)
+            ->throw()
+            ->get($path, [
+                'access_key' => $this->apiKey,
+                ...$queryParams,
+            ])
+            ->json();
     }
 }

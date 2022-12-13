@@ -16,8 +16,6 @@ interface ExchangeRateDriver
      *
      * @param array $currencies
      * @return array
-     *
-     * @throws GuzzleException
      */
     public function currencies(array $currencies = []): array;
 
@@ -35,7 +33,6 @@ interface ExchangeRateDriver
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
-     * @throws GuzzleException
      */
     public function exchangeRate(string $from, $to, Carbon $date = null);
 
@@ -51,7 +48,6 @@ interface ExchangeRateDriver
      * @return array
      *
      * @throws Exception
-     * @throws GuzzleException
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -74,7 +70,6 @@ interface ExchangeRateDriver
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
-     * @throws GuzzleException
      */
     public function convert(int $value, string $from, $to, Carbon $date = null);
 
@@ -90,7 +85,6 @@ interface ExchangeRateDriver
      * @return array
      *
      * @throws Exception
-     * @throws GuzzleException
      */
     public function convertBetweenDateRange(
         int    $value,
