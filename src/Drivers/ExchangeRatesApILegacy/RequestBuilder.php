@@ -7,12 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class RequestBuilder
 {
-    /**
-     * The base URL for the Exchange Rates API.
-     *
-     * @var string
-     */
-    private $baseUrl;
+    private const BASE_URL = 'https://api.exchangeratesapi.io/v1/';
 
     /**
      * The API key for the Exchange Rates API.
@@ -36,7 +31,6 @@ class RequestBuilder
     public function __construct(Client $client = null)
     {
         $this->client = $client ?? new Client();
-        $this->baseUrl = config('laravel-exchange-rates.api_url');
         $this->apiKey = config('laravel-exchange-rates.api_key');
     }
 
@@ -51,7 +45,7 @@ class RequestBuilder
      */
     public function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->baseUrl.$path.'?access_key='.$this->apiKey;
+        $url = self::BASE_URL.$path.'?access_key='.$this->apiKey;
 
         foreach ($queryParams as $param => $value) {
             $url .= '&'.urlencode($param).'='.urlencode($value);
