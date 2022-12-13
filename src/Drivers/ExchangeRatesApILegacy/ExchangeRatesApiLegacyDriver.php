@@ -1,6 +1,6 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo;
+namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
 use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
@@ -13,7 +13,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class ExchangeRatesApiIoDriver implements ExchangeRateDriver
+class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
 {
     /**
      * The object used for making requests to the currency

@@ -1,6 +1,6 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo;
+namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
