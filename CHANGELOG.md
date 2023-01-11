@@ -2,6 +2,7 @@
 
 **v5.2.0 (released 2023-01-11):**
 - Added support for Laravel 10. [#81](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/81)
+- Updated the PHPUnit config to use the newer format. [#80](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/80)
 
 **v5.1.0 (released 2022-09-12):**
 - Added support for PHP 8.2. [#78](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/78)
