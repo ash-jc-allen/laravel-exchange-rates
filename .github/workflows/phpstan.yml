@@ -16,6 +16,11 @@ jobs:
             testbench: 6.*
           - laravel: 9.*
             testbench: 7.*
+        exclude:
+          - laravel: 10.*
+            php: 8.0
+          - laravel: 10.*
+            php: 8.1
 
     name: PHP${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
