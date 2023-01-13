@@ -51,7 +51,7 @@ class RequestBuilder
      */
     public function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->baseUrl.$path.'?access_key='.$this->apiKey;
+        $url = $this->baseUrl.$path.'?apikey='.$this->apiKey;
 
         foreach ($queryParams as $param => $value) {
             $url .= '&'.urlencode($param).'='.urlencode($value);
