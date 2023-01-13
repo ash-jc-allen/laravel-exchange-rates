@@ -13,7 +13,19 @@ return [
     | begins with 'http://'.
     |
     */
-    'api_url' => env('EXCHANGE_RATES_API_URL', 'http://api.exchangeratesapi.io/v1/'),
+    'api_url' => env('EXCHANGE_RATES_API_URL', 'https://api.apilayer.com/exchangerates_data'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Parameter
+    |--------------------------------------------------------------------------
+    |
+    | Define your the API key parameter here.
+    | api.exchangeratesapi.io requires the key to be access_key
+    | api.apilayer.com requires the key to be apikey
+    |
+    */
+    'api_param' => env('EXCHANGE_RATES_API_PARAM', 'apikey'),
 
     /*
     |--------------------------------------------------------------------------

@@ -87,7 +87,8 @@ php artisan vendor:publish --provider="AshAllenDesign\LaravelExchangeRates\Provi
 Add the necessary configuration keys in your `.env`:
 
 ``` dotenv
-EXCHANGE_RATES_API_URL=https://api.exchangeratesapi.io/v1/
+EXCHANGE_RATES_API_URL=https://api.apilayer.com/exchangerates_data
+EXCHANGE_RATES_API_PARAM=apikey
 EXCHANGE_RATES_API_KEY={Your-API-Key-Here}
 ```
 

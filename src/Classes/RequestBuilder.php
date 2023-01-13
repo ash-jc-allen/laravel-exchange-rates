@@ -37,6 +37,7 @@ class RequestBuilder
     {
         $this->client = $client ?? new Client();
         $this->baseUrl = config('laravel-exchange-rates.api_url');
+        $this->apiParam = config('laravel-exchange-rates.api_param');
         $this->apiKey = config('laravel-exchange-rates.api_key');
     }
 
@@ -51,7 +52,7 @@ class RequestBuilder
      */
     public function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->baseUrl.$path.'?access_key='.$this->apiKey;
+        $url = $this->baseUrl.$path.'?'.$this->apiParam.'='.$this->apiKey;
 
         foreach ($queryParams as $param => $value) {
             $url .= '&'.urlencode($param).'='.urlencode($value);
