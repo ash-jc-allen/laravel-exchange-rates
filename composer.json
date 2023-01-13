@@ -1,5 +1,5 @@
 {
-  "name": "ashallendesign/laravel-exchange-rates",
+  "name": "olimortimer/laravel-exchange-rates",
   "description": "A wrapper package for interacting with the exchangeratesapi.io API.",
   "type": "library",
   "homepage": "https://github.com/ash-jc-allen/laravel-exchange-rates",
