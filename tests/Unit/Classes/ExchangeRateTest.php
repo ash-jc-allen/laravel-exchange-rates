@@ -10,13 +10,6 @@ use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 
 final class ExchangeRateTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        config(['laravel-exchange-rates.api_key' => 'test-api-key']);
-    }
-
     /** @test */
     public function correct_default_driver_is_returned(): void
     {
