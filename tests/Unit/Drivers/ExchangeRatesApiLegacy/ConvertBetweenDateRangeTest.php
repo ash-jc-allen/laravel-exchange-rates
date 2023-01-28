@@ -1,20 +1,21 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
+use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
-class ExchangeRateBetweenDateRangeTest extends TestCase
+class ConvertBetweenDateRangeTest extends TestCase
 {
     /** @test */
-    public function exchange_rates_between_date_range_are_returned_if_exchange_rates_are_not_cached()
+    public function converted_values_between_date_range_are_returned_and_exchange_rates_are_not_cached()
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -34,34 +35,40 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
             ->andReturn($this->mockResponseForOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
-        $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
+        $currencies = $exchangeRate->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
-        $expectedArray = [
+        $this->assertEqualsWithDelta([
+            '2019-11-08' => 116.06583254,
+            '2019-11-06' => 116.23446817,
+            '2019-11-07' => 115.68450522,
+            '2019-11-05' => 116.12648497,
+            '2019-11-04' => 115.78362356,
+        ], $currencies, self::FLOAT_DELTA);
+
+        $cachedExchangeRates = [
             '2019-11-08' => 1.1606583254,
             '2019-11-06' => 1.1623446817,
             '2019-11-07' => 1.1568450522,
             '2019-11-05' => 1.1612648497,
             '2019-11-04' => 1.1578362356,
         ];
-
-        $this->assertEquals($expectedArray, $currencies);
-        $this->assertEquals($expectedArray,
+        $this->assertEquals($cachedExchangeRates,
             Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
-    public function cached_exchange_rates_are_returned_if_they_exist()
+    public function cached_exchange_rates_are_used_if_they_exist()
     {
         $fromDate = now()->subWeek();
         $toDate = now();
 
         $cacheKey = 'laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
         $cachedValues = $expectedArray = [
-            '2019-11-08' => 1,
-            '2019-11-06' => 2,
-            '2019-11-07' => 3,
-            '2019-11-05' => 4,
-            '2019-11-04' => 5,
+            '2019-11-08' => 0.111,
+            '2019-11-06' => 0.222,
+            '2019-11-07' => 0.333,
+            '2019-11-05' => 0.444,
+            '2019-11-04' => 0.555,
         ];
         Cache::forever($cacheKey, $cachedValues);
 
@@ -69,26 +76,33 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $requestBuilderMock->expects('makeRequest')->never();
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
-        $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
+        $currencies = $exchangeRate->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
-        $this->assertEquals($expectedArray, $currencies);
+        $this->assertEqualsWithDelta([
+            '2019-11-08' => 11.1,
+            '2019-11-06' => 22.2,
+            '2019-11-07' => 33.3,
+            '2019-11-05' => 44.4,
+            '2019-11-04' => 55.5,
+        ], $currencies, self::FLOAT_DELTA);
+
         $this->assertEquals($expectedArray,
             Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
-    public function cached_exchange_rates_are_ignored_if_should_bust_cache_method_is_called()
+    public function cached_exchange_rate_is_ignored_if_should_bust_cache_method_is_used()
     {
         $fromDate = now()->subWeek();
         $toDate = now();
 
-        $cacheKey = 'GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
-        $cachedValues = [
-            '2019-11-08' => 1,
-            '2019-11-06' => 2,
-            '2019-11-07' => 3,
-            '2019-11-05' => 4,
-            '2019-11-04' => 5,
+        $cacheKey = 'laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
+        $cachedValues = $expectedArray = [
+            '2019-11-08' => 0.111,
+            '2019-11-06' => 0.222,
+            '2019-11-07' => 0.333,
+            '2019-11-05' => 0.444,
+            '2019-11-04' => 0.555,
         ];
         Cache::forever($cacheKey, $cachedValues);
 
@@ -107,58 +121,29 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
             ->andReturn($this->mockResponseForOneSymbol());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
-        $currencies = $exchangeRate->shouldBustCache()->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
+        $currencies = $exchangeRate->shouldBustCache()->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
-        $expectedArray = [
+        $this->assertEqualsWithDelta([
+            '2019-11-08' => 116.06583254,
+            '2019-11-06' => 116.23446817,
+            '2019-11-07' => 115.68450522,
+            '2019-11-05' => 116.12648497,
+            '2019-11-04' => 115.78362356,
+        ], $currencies, self::FLOAT_DELTA);
+
+        $cachedExchangeRates = [
             '2019-11-08' => 1.1606583254,
             '2019-11-06' => 1.1623446817,
             '2019-11-07' => 1.1568450522,
             '2019-11-05' => 1.1612648497,
             '2019-11-04' => 1.1578362356,
         ];
-
-        $this->assertEquals($expectedArray, $currencies);
-        $this->assertEquals($expectedArray,
+        $this->assertEquals($cachedExchangeRates,
             Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
-    public function exchange_rates_are_not_cached_if_the_shouldCache_option_is_false()
-    {
-        $fromDate = now()->subWeek();
-        $toDate = now();
-
-        $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
-        $requestBuilderMock->expects('makeRequest')
-            ->withArgs([
-                '/timeseries',
-                [
-                    'base'     => 'GBP',
-                    'start_date' => $fromDate->format('Y-m-d'),
-                    'end_date'   => $toDate->format('Y-m-d'),
-                    'symbols'  => 'EUR',
-                ],
-            ])
-            ->once()
-            ->andReturn($this->mockResponseForOneSymbol());
-
-        $exchangeRate = new ExchangeRate($requestBuilderMock);
-        $currencies = $exchangeRate->shouldCache(false)->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
-
-        $expectedArray = [
-            '2019-11-08' => 1.1606583254,
-            '2019-11-06' => 1.1623446817,
-            '2019-11-07' => 1.1568450522,
-            '2019-11-05' => 1.1612648497,
-            '2019-11-04' => 1.1578362356,
-        ];
-
-        $this->assertEquals($expectedArray, $currencies);
-        $this->assertNull(Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
-    }
-
-    /** @test */
-    public function multiple_exchange_rates_between_date_range_are_returned_if_exchange_rates_are_not_cached()
+    public function converted_values_can_be_returned_for_multiple_currencies()
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -178,20 +163,27 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
             ->andReturn($this->mockResponseForMultipleSymbols());
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
-        $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', ['EUR', 'USD'], $fromDate, $toDate);
+        $currencies = $exchangeRate->convertBetweenDateRange(100, 'GBP', ['EUR', 'USD'], $fromDate, $toDate);
 
         $expectedArray = [
+            '2019-11-08' => ['EUR' => 116.06583254, 'USD' => 111.11111111],
+            '2019-11-06' => ['EUR' => 116.23446817, 'USD' => 122.22222222],
+            '2019-11-07' => ['EUR' => 115.68450522, 'USD' => 133.33333333],
+            '2019-11-05' => ['EUR' => 116.12648497, 'USD' => 144.44444444],
+            '2019-11-04' => ['EUR' => 115.78362356, 'USD' => 155.55555555],
+        ];
+
+        $this->assertEqualsWithDelta($expectedArray, $currencies, self::FLOAT_DELTA);
+
+        $cachedExchangeRates = [
             '2019-11-08' => ['EUR' => 1.1606583254, 'USD' => 1.1111111111],
             '2019-11-06' => ['EUR' => 1.1623446817, 'USD' => 1.2222222222],
             '2019-11-07' => ['EUR' => 1.1568450522, 'USD' => 1.3333333333],
             '2019-11-05' => ['EUR' => 1.1612648497, 'USD' => 1.4444444444],
             '2019-11-04' => ['EUR' => 1.1578362356, 'USD' => 1.5555555555],
         ];
-
-        $this->assertEquals($expectedArray, $currencies);
-        $this->assertEquals($expectedArray,
-            Cache::get('laravel_xr_GBP_EUR_USD_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d'))
-        );
+        $this->assertEquals($cachedExchangeRates,
+            Cache::get('laravel_xr_GBP_EUR_USD_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -204,19 +196,24 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $requestBuilderMock->expects('makeRequest')->withAnyArgs()->never();
 
         $exchangeRate = new ExchangeRate($requestBuilderMock);
-        $currencies = $exchangeRate->exchangeRateBetweenDateRange('EUR', 'EUR', $fromDate, $toDate);
+        $currencies = $exchangeRate->convertBetweenDateRange(100, 'EUR', 'EUR', $fromDate, $toDate);
 
-        $expectedArray = [
+        $this->assertEquals([
+            '2019-11-08' => 100.0,
+            '2019-11-06' => 100.0,
+            '2019-11-07' => 100.0,
+            '2019-11-05' => 100.0,
+            '2019-11-04' => 100.0,
+        ], $currencies);
+
+        $cachedExchangeRates = [
             '2019-11-08' => 1.0,
             '2019-11-06' => 1.0,
             '2019-11-07' => 1.0,
             '2019-11-05' => 1.0,
             '2019-11-04' => 1.0,
         ];
-
-        $this->assertEquals($expectedArray, $currencies);
-
-        $this->assertEquals($expectedArray,
+        $this->assertEquals($cachedExchangeRates,
             Cache::get('laravel_xr_EUR_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
@@ -227,7 +224,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectExceptionMessage('The date must be in the past.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('EUR', 'GBP', now()->addMinute(), now()->subDay());
+        $exchangeRate->convertBetweenDateRange(100, 'EUR', 'GBP', now()->addMinute(), now()->subDay());
     }
 
     /** @test */
@@ -237,7 +234,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectExceptionMessage('The date must be in the past.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('EUR', 'GBP', now()->subDay(), now()->addMinute());
+        $exchangeRate->convertBetweenDateRange(100, 'EUR', 'GBP', now()->subDay(), now()->addMinute());
     }
 
     /** @test */
@@ -247,7 +244,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectExceptionMessage("The 'from' date must be before the 'to' date.");
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('EUR', 'GBP', now()->subDay(), now()->subWeek());
+        $exchangeRate->convertBetweenDateRange(100, 'EUR', 'GBP', now()->subDay(), now()->subWeek());
     }
 
     /** @test */
@@ -257,7 +254,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('INVALID', 'GBP', now()->subWeek(), now()->subDay());
+        $exchangeRate->convertBetweenDateRange(100, 'INVALID', 'GBP', now()->subWeek(), now()->subDay());
     }
 
     /** @test */
@@ -267,17 +264,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('GBP', 'INVALID', now()->subWeek(), now()->subDay());
-    }
-
-    /** @test */
-    public function exception_is_thrown_if_one_of_the_to_parameter_currencies_are_invalid()
-    {
-        $this->expectException(InvalidCurrencyException::class);
-        $this->expectExceptionMessage('INVALID is not a valid currency code.');
-
-        $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('GBP', ['USD', 'INVALID'], now()->subWeek(), now()->subDay());
+        $exchangeRate->convertBetweenDateRange(100, 'GBP', 'INVALID', now()->subWeek(), now()->subDay());
     }
 
     /** @test */
@@ -287,7 +274,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectExceptionMessage('123 is not a string or array.');
 
         $exchangeRate = new ExchangeRate();
-        $exchangeRate->exchangeRateBetweenDateRange('GBP', 123, now()->subWeek(), now()->subDay());
+        $exchangeRate->convertBetweenDateRange(100, 'GBP', 123, now()->subWeek(), now()->subDay());
     }
 
     private function mockResponseForOneSymbol()

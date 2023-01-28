@@ -1,12 +1,13 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
+use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;

@@ -1,9 +1,10 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
