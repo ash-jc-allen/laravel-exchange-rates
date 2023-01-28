@@ -4,8 +4,8 @@ namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use Carbon\Carbon;
-use Illuminate\Cache\Repository;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class CacheRepository
