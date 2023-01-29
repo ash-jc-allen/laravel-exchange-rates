@@ -2,10 +2,11 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo;
 
+use AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
-class RequestBuilder
+class RequestBuilder implements RequestSender
 {
     private const BASE_URL = 'https://api.exchangeratesapi.io/v1/';
 
