@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
 
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
@@ -11,10 +13,10 @@ use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
-class ConvertTest extends TestCase
+final class ConvertTest extends TestCase
 {
     /** @test */
-    public function converted_value_for_today_is_returned_if_no_date_parameter_passed_and_rate_is_not_cached()
+    public function converted_value_for_today_is_returned_if_no_date_parameter_passed_and_rate_is_not_cached(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
@@ -29,7 +31,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function converted_value_in_the_past_is_returned_if_date_parameter_passed_and_rate_is_not_cached()
+    public function converted_value_in_the_past_is_returned_if_date_parameter_passed_and_rate_is_not_cached(): void
     {
         $mockDate = now();
 
@@ -46,7 +48,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function cached_exchange_rate_is_used_if_it_exists()
+    public function cached_exchange_rate_is_used_if_it_exists(): void
     {
         $mockDate = now();
 
@@ -62,7 +64,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function cached_exchange_rate_is_not_used_if_should_bust_cache_method_is_called()
+    public function cached_exchange_rate_is_not_used_if_should_bust_cache_method_is_called(): void
     {
         $mockDate = now();
 
@@ -81,7 +83,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function request_is_not_made_if_the_currencies_are_the_same()
+    public function request_is_not_made_if_the_currencies_are_the_same(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->withAnyArgs()->never();
@@ -92,7 +94,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function converted_values_are_returned_for_today_with_multiple_currencies()
+    public function converted_values_are_returned_for_today_with_multiple_currencies(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
@@ -112,7 +114,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future()
+    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
@@ -122,7 +124,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_from_parameter_is_invalid()
+    public function exception_is_thrown_if_the_from_parameter_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -132,7 +134,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_invalid()
+    public function exception_is_thrown_if_the_to_parameter_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -142,7 +144,7 @@ class ConvertTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array()
+    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array(): void
     {
         $this->expectException(ExchangeRateException::class);
         $this->expectExceptionMessage('123 is not a string or array.');
@@ -151,7 +153,7 @@ class ConvertTest extends TestCase
         $exchangeRate->convert(10, 'GBP', 123);
     }
 
-    private function mockResponseForCurrentDateAndOneSymbol()
+    private function mockResponseForCurrentDateAndOneSymbol(): array
     {
         return [
             'rates' => [
@@ -193,7 +195,7 @@ class ConvertTest extends TestCase
         ];
     }
 
-    private function mockResponseForPastDateAndOneSymbol()
+    private function mockResponseForPastDateAndOneSymbol(): array
     {
         return
             [

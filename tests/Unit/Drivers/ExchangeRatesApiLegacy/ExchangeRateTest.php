@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
 
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
@@ -12,10 +14,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
-class ExchangeRateTest extends TestCase
+final class ExchangeRateTest extends TestCase
 {
     /** @test */
-    public function exchange_rate_for_today_is_returned_if_no_date_parameter_passed_and_rate_is_not_cached()
+    public function exchange_rate_for_today_is_returned_if_no_date_parameter_passed_and_rate_is_not_cached(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
@@ -30,7 +32,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exchange_rate_in_the_past_is_returned_if_date_parameter_passed_and_rate_is_not_cached()
+    public function exchange_rate_in_the_past_is_returned_if_date_parameter_passed_and_rate_is_not_cached(): void
     {
         $mockDate = now();
 
@@ -47,7 +49,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function cached_exchange_rate_is_returned_if_it_exists()
+    public function cached_exchange_rate_is_returned_if_it_exists(): void
     {
         $mockDate = now();
 
@@ -63,7 +65,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function multiple_exchange_rates_can_be_returned_if_no_date_parameter_passed_and_rate_is_not_cached()
+    public function multiple_exchange_rates_can_be_returned_if_no_date_parameter_passed_and_rate_is_not_cached(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
@@ -81,7 +83,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function multiple_exchange_rates_can_be_returned_if_date_parameter_passed_and_rate_is_not_cached()
+    public function multiple_exchange_rates_can_be_returned_if_date_parameter_passed_and_rate_is_not_cached(): void
     {
         $mockDate = now();
 
@@ -101,7 +103,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function multiple_cached_exchange_rates_are_returned_if_they_exist()
+    public function multiple_cached_exchange_rates_are_returned_if_they_exist(): void
     {
         $mockDate = now();
 
@@ -124,7 +126,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function cached_exchange_rate_is_not_used_if_should_bust_cache_method_is_called()
+    public function cached_exchange_rate_is_not_used_if_should_bust_cache_method_is_called(): void
     {
         $mockDate = now();
 
@@ -143,7 +145,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exchange_rate_is_not_cached_if_the_shouldCache_option_is_false()
+    public function exchange_rate_is_not_cached_if_the_shouldCache_option_is_false(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
@@ -158,7 +160,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function request_is_not_made_if_the_currencies_are_the_same()
+    public function request_is_not_made_if_the_currencies_are_the_same(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->withAnyArgs()->never();
@@ -169,7 +171,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future()
+    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
@@ -179,7 +181,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_from_parameter_is_invalid()
+    public function exception_is_thrown_if_the_from_parameter_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -189,7 +191,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_invalid()
+    public function exception_is_thrown_if_the_to_parameter_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -199,7 +201,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_date_is_before_the_earliest_possible_date()
+    public function exception_is_thrown_if_the_date_is_before_the_earliest_possible_date(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date cannot be before 4th January 1999.');
@@ -209,7 +211,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_array_is_invalid()
+    public function exception_is_thrown_if_the_to_parameter_array_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -219,7 +221,7 @@ class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_not_an_array_or_string()
+    public function exception_is_thrown_if_the_to_parameter_is_not_an_array_or_string(): void
     {
         $this->expectException(ExchangeRateException::class);
         $this->expectExceptionMessage('123 is not a string or array.');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
 
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
@@ -12,10 +14,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
-class ExchangeRateBetweenDateRangeTest extends TestCase
+final class ExchangeRateBetweenDateRangeTest extends TestCase
 {
     /** @test */
-    public function exchange_rates_between_date_range_are_returned_if_exchange_rates_are_not_cached()
+    public function exchange_rates_between_date_range_are_returned_if_exchange_rates_are_not_cached(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -51,7 +53,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function cached_exchange_rates_are_returned_if_they_exist()
+    public function cached_exchange_rates_are_returned_if_they_exist(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -78,7 +80,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function cached_exchange_rates_are_ignored_if_should_bust_cache_method_is_called()
+    public function cached_exchange_rates_are_ignored_if_should_bust_cache_method_is_called(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -124,7 +126,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exchange_rates_are_not_cached_if_the_shouldCache_option_is_false()
+    public function exchange_rates_are_not_cached_if_the_shouldCache_option_is_false(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -159,7 +161,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function multiple_exchange_rates_between_date_range_are_returned_if_exchange_rates_are_not_cached()
+    public function multiple_exchange_rates_between_date_range_are_returned_if_exchange_rates_are_not_cached(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -196,7 +198,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function request_is_not_made_if_the_currencies_are_the_same()
+    public function request_is_not_made_if_the_currencies_are_the_same(): void
     {
         $fromDate = Carbon::createFromDate(2019, 11, 4);
         $toDate = Carbon::createFromDate(2019, 11, 10);
@@ -222,7 +224,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future()
+    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
@@ -232,7 +234,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_end_date_parameter_passed_is_in_the_future()
+    public function exception_is_thrown_if_the_end_date_parameter_passed_is_in_the_future(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
@@ -242,7 +244,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_end_date_is_before_the_start_date()
+    public function exception_is_thrown_if_the_end_date_is_before_the_start_date(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage("The 'from' date must be before the 'to' date.");
@@ -252,7 +254,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_from_parameter_is_invalid()
+    public function exception_is_thrown_if_the_from_parameter_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -262,7 +264,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_invalid()
+    public function exception_is_thrown_if_the_to_parameter_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -272,7 +274,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_one_of_the_to_parameter_currencies_are_invalid()
+    public function exception_is_thrown_if_one_of_the_to_parameter_currencies_are_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -282,7 +284,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array()
+    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array(): void
     {
         $this->expectException(ExchangeRateException::class);
         $this->expectExceptionMessage('123 is not a string or array.');
@@ -291,7 +293,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         $exchangeRate->exchangeRateBetweenDateRange('GBP', 123, now()->subWeek(), now()->subDay());
     }
 
-    private function mockResponseForOneSymbol()
+    private function mockResponseForOneSymbol(): array
     {
         return [
             'rates'    => [
@@ -317,7 +319,7 @@ class ExchangeRateBetweenDateRangeTest extends TestCase
         ];
     }
 
-    private function mockResponseForMultipleSymbols()
+    private function mockResponseForMultipleSymbols(): array
     {
         return [
             'rates'    => [
