@@ -11,6 +11,7 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender;
 use Carbon\Carbon;
+use Illuminate\Http\Client\RequestException;
 
 /**
  * Several exchange rates APIs are built to follow a similar structure
@@ -93,14 +94,15 @@ class SharedDriverLogicHandler
      * string. If $to is an array, the rates
      * will be returned within an array.
      *
-     * @param  string  $from
-     * @param  string|array  $to
-     * @param  Carbon|null  $date
+     * @param string $from
+     * @param string|array $to
+     * @param Carbon|null $date
      * @return float|string|array
      *
-     * @throws InvalidDateException
-     * @throws InvalidCurrencyException
      * @throws ExchangeRateException
+     * @throws InvalidCurrencyException
+     * @throws InvalidDateException
+     * @throws RequestException
      */
     public function exchangeRate(string $from, $to, Carbon $date = null)
     {
@@ -153,7 +155,9 @@ class SharedDriverLogicHandler
      * @param  array  $conversions
      * @return array
      *
-     * @throws Exception
+     * @throws InvalidDateException
+     * @throws InvalidCurrencyException
+     * @throws ExchangeRateException
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -264,7 +268,9 @@ class SharedDriverLogicHandler
      * @param  array  $conversions
      * @return array
      *
-     * @throws Exception
+     * @throws InvalidDateException
+     * @throws InvalidCurrencyException
+     * @throws ExchangeRateException
      */
     public function convertBetweenDateRange(
         int $value,
