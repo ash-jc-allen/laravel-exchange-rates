@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Classes;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 
 final class ExchangeRateTest extends TestCase
