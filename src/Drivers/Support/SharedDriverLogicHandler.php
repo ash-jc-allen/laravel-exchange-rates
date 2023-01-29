@@ -17,15 +17,14 @@ use Carbon\Carbon;
  * Several exchange rates APIs are built to follow a similar structure
  * to each other. So we can use the same logic for a large majority
  * of the drivers to reduce duplication of code.
+ *
+ * @interal
  */
 class SharedDriverLogicHandler
 {
     /**
-     * The object used for making requests to the currency
-     * conversion API.
+     * The object used for making requests to the currency conversion API.
      *
-     * @var RequestBuilder
-     */
     private RequestSender $requestBuilder;
 
     /**
