@@ -37,4 +37,11 @@ abstract class TestCase extends OrchestraTestCase
             'exchange-rates' => ExchangeRate::class,
         ];
     }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['laravel-exchange-rates.api_key' => 'test-api-key']);
+    }
 }
