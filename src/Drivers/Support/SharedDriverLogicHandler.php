@@ -24,7 +24,7 @@ class SharedDriverLogicHandler
 {
     /**
      * The object used for making requests to the currency conversion API.
-     *
+     */
     private RequestSender $requestBuilder;
 
     /**
