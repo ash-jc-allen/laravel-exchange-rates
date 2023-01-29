@@ -62,6 +62,8 @@ class SharedDriverLogicHandler
      *
      * @param  array  $currencies
      * @return array
+     *
+     * @throws RequestException
      */
     public function currencies(array $currencies = []): array
     {
@@ -155,9 +157,10 @@ class SharedDriverLogicHandler
      * @param  array  $conversions
      * @return array
      *
-     * @throws InvalidDateException
-     * @throws InvalidCurrencyException
      * @throws ExchangeRateException
+     * @throws InvalidCurrencyException
+     * @throws InvalidDateException
+     * @throws RequestException
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -201,6 +204,8 @@ class SharedDriverLogicHandler
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @return array
+     *
+     * @throws RequestException
      */
     private function makeRequestForExchangeRates(string $from, $to, Carbon $date, Carbon $endDate): array
     {
@@ -240,6 +245,7 @@ class SharedDriverLogicHandler
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
+     * @throws RequestException
      */
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
@@ -268,9 +274,10 @@ class SharedDriverLogicHandler
      * @param  array  $conversions
      * @return array
      *
-     * @throws InvalidDateException
-     * @throws InvalidCurrencyException
      * @throws ExchangeRateException
+     * @throws InvalidCurrencyException
+     * @throws InvalidDateException
+     * @throws RequestException
      */
     public function convertBetweenDateRange(
         int $value,

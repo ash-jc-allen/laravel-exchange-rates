@@ -4,12 +4,8 @@ namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
 use AshAllenDesign\LaravelExchangeRates\Drivers\Support\SharedDriverLogicHandler;
-use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
-use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
-use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
 use Carbon\Carbon;
-use Exception;
 
 /**
  * @see https://exchangeratesapi.io/
@@ -18,12 +14,6 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
 {
     private SharedDriverLogicHandler $sharedDriverLogicHandler;
 
-    /**
-     * ExchangeRate constructor.
-     *
-     * @param  RequestBuilder|null  $requestBuilder
-     * @param  CacheRepository|null  $cacheRepository
-     */
     public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
     {
         $requestBuilder = $requestBuilder ?? new RequestBuilder();
@@ -36,11 +26,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
     }
 
     /**
-     * Return an array of available currencies that
-     * can be used with this package.
-     *
-     * @param  array  $currencies
-     * @return array
+     * @inheritDoc
      */
     public function currencies(array $currencies = []): array
     {
@@ -48,21 +34,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
     }
 
     /**
-     * Return the exchange rate between the $from and $to
-     * parameters. If no $date parameter is passed, we
-     * use today's date instead. If $to is a string,
-     * the exchange rate will be returned as a
-     * string. If $to is an array, the rates
-     * will be returned within an array.
-     *
-     * @param  string  $from
-     * @param  string|array  $to
-     * @param  Carbon|null  $date
-     * @return float|string|array
-     *
-     * @throws InvalidDateException
-     * @throws InvalidCurrencyException
-     * @throws ExchangeRateException
+     * @inheritDoc
      */
     public function exchangeRate(string $from, $to, Carbon $date = null)
     {
@@ -70,17 +42,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
     }
 
     /**
-     * Return the exchange rates between the given
-     * date range.
-     *
-     * @param  string  $from
-     * @param  string|array  $to
-     * @param  Carbon  $date
-     * @param  Carbon  $endDate
-     * @param  array  $conversions
-     * @return array
-     *
-     * @throws Exception
+     * @inheritDoc
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -93,19 +55,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
     }
 
     /**
-     * Return the converted values between the $from and $to
-     * parameters. If no $date parameter is passed, we
-     * use today's date instead.
-     *
-     * @param  int  $value
-     * @param  string  $from
-     * @param  string|array  $to
-     * @param  Carbon|null  $date
-     * @return float|array
-     *
-     * @throws InvalidDateException
-     * @throws InvalidCurrencyException
-     * @throws ExchangeRateException
+     * @inheritDoc
      */
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
@@ -113,18 +63,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
     }
 
     /**
-     * Return an array of the converted values between the
-     * given date range.
-     *
-     * @param  int  $value
-     * @param  string  $from
-     * @param  string|array  $to
-     * @param  Carbon  $date
-     * @param  Carbon  $endDate
-     * @param  array  $conversions
-     * @return array
-     *
-     * @throws Exception
+     * @inheritDoc
      */
     public function convertBetweenDateRange(
         int $value,
@@ -137,6 +76,9 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
         return $this->sharedDriverLogicHandler->convertBetweenDateRange($value, $from, $to, $date, $endDate, $conversions);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function shouldCache(bool $shouldCache = true): ExchangeRateDriver
     {
         $this->sharedDriverLogicHandler->shouldCache($shouldCache);
@@ -144,6 +86,9 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function shouldBustCache(bool $bustCache = true): ExchangeRateDriver
     {
         $this->sharedDriverLogicHandler->shouldBustCache($bustCache);
