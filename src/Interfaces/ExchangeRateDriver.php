@@ -7,14 +7,13 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
 
 interface ExchangeRateDriver
 {
     /**
      * Return an array of available currencies that can be used with this package.
      *
-     * @param array $currencies
+     * @param  array  $currencies
      * @return array
      */
     public function currencies(array $currencies = []): array;
@@ -25,9 +24,9 @@ interface ExchangeRateDriver
      * the exchange rate will be returned as a string. If $to is an array,
      * the rates will be returned within an array.
      *
-     * @param string $from
-     * @param string|array $to
-     * @param Carbon|null $date
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon|null  $date
      * @return float|string|array
      *
      * @throws InvalidDateException
@@ -40,11 +39,11 @@ interface ExchangeRateDriver
      * Return the exchange rates between the given
      * date range.
      *
-     * @param string $from
-     * @param string|array $to
-     * @param Carbon $date
-     * @param Carbon $endDate
-     * @param array $conversions
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon  $date
+     * @param  Carbon  $endDate
+     * @param  array  $conversions
      * @return array
      *
      * @throws Exception
@@ -54,17 +53,17 @@ interface ExchangeRateDriver
                $to,
         Carbon $date,
         Carbon $endDate,
-        array  $conversions = []
+        array $conversions = []
     ): array;
 
     /**
      * Return the converted values between the $from and $to parameters. If no $date
      * parameter is passed, we use today's date instead.
      *
-     * @param int $value
-     * @param string $from
-     * @param string|array $to
-     * @param Carbon|null $date
+     * @param  int  $value
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon|null  $date
      * @return float|array
      *
      * @throws InvalidDateException
@@ -76,30 +75,30 @@ interface ExchangeRateDriver
     /**
      * Return an array of the converted values between the given date range.
      *
-     * @param int $value
-     * @param string $from
-     * @param string|array $to
-     * @param Carbon $date
-     * @param Carbon $endDate
-     * @param array $conversions
+     * @param  int  $value
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon  $date
+     * @param  Carbon  $endDate
+     * @param  array  $conversions
      * @return array
      *
      * @throws Exception
      */
     public function convertBetweenDateRange(
-        int    $value,
+        int $value,
         string $from,
                $to,
         Carbon $date,
         Carbon $endDate,
-        array  $conversions = []
+        array $conversions = []
     ): array;
 
     /**
      * Determine whether if the exchange rate should be cached after it is fetched
      * from the API.
      *
-     * @param bool $shouldCache
+     * @param  bool  $shouldCache
      * @return $this
      */
     public function shouldCache(bool $shouldCache = true): self;
@@ -108,7 +107,7 @@ interface ExchangeRateDriver
      * Determine whether if the cached result (if it exists) should be deleted. This
      * will force a new exchange rate to be fetched from the API.
      *
-     * @param bool $bustCache
+     * @param  bool  $bustCache
      * @return $this
      */
     public function shouldBustCache(bool $bustCache = true): self;
