@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
@@ -10,17 +12,7 @@ use Carbon\Carbon;
 class Validation
 {
     /**
-     * A Carbon object for the earliest possible date that
-     * an exchange rate can be fetched for. The date is:
-     * 4th January 2020.
-     *
-     * @var Carbon|null
-     */
-    private static $earliestPossibleDate;
-
-    /**
-     * Validate that the currency is supported by the
-     * Exchange Rates API.
+     * Validate that the currency is supported by the exchange rates API.
      *
      * @param  string  $currencyCode
      *
@@ -36,8 +28,7 @@ class Validation
     }
 
     /**
-     * Validate that the currencies are all supported by
-     * the Exchange Rates API.
+     * Validate that the currencies are all supported by the exchange rates API.
      *
      * @param  array  $currencyCodes
      *
@@ -55,9 +46,8 @@ class Validation
     }
 
     /**
-     * Validate that both of the dates are in the
-     * past. After this, check that the 'from'
-     * date is not after the 'to' date.
+     * Validate that both of the dates are in the past. After this, check that
+     * the 'from' date is not after the 'to' date.
      *
      * @param  Carbon  $from
      * @param  Carbon  $to
@@ -75,8 +65,9 @@ class Validation
     }
 
     /**
-     * Validate the date that has been passed.
-     * We check that the date is in the past.
+     * Validate the date that has been passed. We check that the date is in the past but
+     * that it's not before the earliest possible date that the exchange rates support
+     * (4th January 1999).
      *
      * @param  Carbon  $date
      *
@@ -88,11 +79,9 @@ class Validation
             throw new InvalidDateException('The date must be in the past.');
         }
 
-        if (! self::$earliestPossibleDate) {
-            self::$earliestPossibleDate = Carbon::createFromDate(1999, 1, 4)->startOfDay();
-        }
+        $earliestPossibleDate = Carbon::createFromDate(1999, 1, 4)->startOfDay();
 
-        if ($date->isBefore(self::$earliestPossibleDate)) {
+        if ($date->isBefore($earliestPossibleDate)) {
             throw new InvalidDateException('The date cannot be before 4th January 1999.');
         }
     }
@@ -104,6 +93,7 @@ class Validation
      *
      * @throws ExchangeRateException
      */
+    // TODO We can remove this if the type hinting is changed to string|array.
     public static function validateIsStringOrArray($paramToValidate): void
     {
         if (! is_string($paramToValidate) && ! is_array($paramToValidate)) {
