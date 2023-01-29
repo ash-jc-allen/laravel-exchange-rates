@@ -22,12 +22,11 @@ final class RequestBuilderTest extends TestCase
     /** @test */
     public function request_can_be_made_successfully(): void
     {
-        Http::preventStrayRequests();
-
         $url = 'https://api.exchangeratesapi.io/v1/latest?access_key=API-KEY&base=USD';
 
         Http::fake([
             $url => Http::response(['RESPONSE']),
+            '*' => Http::response('SHOULD NOT HIT THIS!', 500),
         ]);
 
         $requestBuilder = new RequestBuilder();
@@ -44,12 +43,11 @@ final class RequestBuilderTest extends TestCase
     {
         $this->expectException(RequestException::class);
 
-        Http::preventStrayRequests();
-
         $url = 'https://api.exchangeratesapi.io/v1/latest?access_key=API-KEY&base=USD';
 
         Http::fake([
             $url => Http::response(['RESPONSE'], 401),
+            '*' => Http::response('SHOULD NOT HIT THIS!', 500),
         ]);
 
         $requestBuilder = new RequestBuilder();
