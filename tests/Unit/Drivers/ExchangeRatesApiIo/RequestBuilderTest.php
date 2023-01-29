@@ -27,7 +27,7 @@ final class RequestBuilderTest extends TestCase
         $url = 'https://api.exchangeratesapi.io/v1/latest?access_key=API-KEY&base=USD';
 
         Http::fake([
-            $url => Http::response(['RESPONSE'])
+            $url => Http::response(['RESPONSE']),
         ]);
 
         $requestBuilder = new RequestBuilder();
@@ -49,7 +49,7 @@ final class RequestBuilderTest extends TestCase
         $url = 'https://api.exchangeratesapi.io/v1/latest?access_key=API-KEY&base=USD';
 
         Http::fake([
-            $url => Http::response(['RESPONSE'], 401)
+            $url => Http::response(['RESPONSE'], 401),
         ]);
 
         $requestBuilder = new RequestBuilder();
