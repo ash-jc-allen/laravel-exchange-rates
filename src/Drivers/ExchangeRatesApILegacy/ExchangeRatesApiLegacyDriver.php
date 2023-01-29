@@ -12,6 +12,9 @@ use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
 use Carbon\Carbon;
 use Exception;
 
+/**
+ * @see https://exchangeratesapi.io/
+ */
 class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
 {
     use InteractsWithCache;
