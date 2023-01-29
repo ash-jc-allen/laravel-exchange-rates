@@ -94,9 +94,9 @@ class SharedDriverLogicHandler
      * string. If $to is an array, the rates
      * will be returned within an array.
      *
-     * @param string $from
-     * @param string|array $to
-     * @param Carbon|null $date
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon|null  $date
      * @return float|string|array
      *
      * @throws ExchangeRateException
