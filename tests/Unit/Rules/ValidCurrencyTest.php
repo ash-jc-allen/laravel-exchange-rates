@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Rules;
 
 use AshAllenDesign\LaravelExchangeRates\Rules\ValidCurrency;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Illuminate\Support\Facades\Validator;
 
-class ValidCurrencyTest extends TestCase
+final class ValidCurrencyTest extends TestCase
 {
     /** @test */
-    public function validator_returns_true_if_the_currency_is_valid()
+    public function validator_returns_true_if_the_currency_is_valid(): void
     {
         $testData = [
             'currency' => 'GBP',
@@ -24,7 +26,7 @@ class ValidCurrencyTest extends TestCase
     }
 
     /** @test */
-    public function validator_returns_false_if_the_currency_is_invalid()
+    public function validator_returns_false_if_the_currency_is_invalid(): void
     {
         $testData = [
             'currency' => 'INVALID',

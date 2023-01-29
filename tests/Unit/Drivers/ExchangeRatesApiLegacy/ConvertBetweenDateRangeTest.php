@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
 
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
@@ -12,10 +14,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
-class ConvertBetweenDateRangeTest extends TestCase
+final class ConvertBetweenDateRangeTest extends TestCase
 {
     /** @test */
-    public function converted_values_between_date_range_are_returned_and_exchange_rates_are_not_cached()
+    public function converted_values_between_date_range_are_returned_and_exchange_rates_are_not_cached(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -57,7 +59,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function cached_exchange_rates_are_used_if_they_exist()
+    public function cached_exchange_rates_are_used_if_they_exist(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -91,7 +93,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function cached_exchange_rate_is_ignored_if_should_bust_cache_method_is_used()
+    public function cached_exchange_rate_is_ignored_if_should_bust_cache_method_is_used(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -143,7 +145,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function converted_values_can_be_returned_for_multiple_currencies()
+    public function converted_values_can_be_returned_for_multiple_currencies(): void
     {
         $fromDate = now()->subWeek();
         $toDate = now();
@@ -187,7 +189,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function request_is_not_made_if_the_currencies_are_the_same()
+    public function request_is_not_made_if_the_currencies_are_the_same(): void
     {
         $fromDate = Carbon::createFromDate(2019, 11, 4);
         $toDate = Carbon::createFromDate(2019, 11, 10);
@@ -218,7 +220,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future()
+    public function exception_is_thrown_if_the_date_parameter_passed_is_in_the_future(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
@@ -228,7 +230,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_end_date_parameter_passed_is_in_the_future()
+    public function exception_is_thrown_if_the_end_date_parameter_passed_is_in_the_future(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
@@ -238,7 +240,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_end_date_is_before_the_start_date()
+    public function exception_is_thrown_if_the_end_date_is_before_the_start_date(): void
     {
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage("The 'from' date must be before the 'to' date.");
@@ -248,7 +250,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_from_parameter_is_invalid()
+    public function exception_is_thrown_if_the_from_parameter_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -258,7 +260,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_invalid()
+    public function exception_is_thrown_if_the_to_parameter_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
@@ -268,7 +270,7 @@ class ConvertBetweenDateRangeTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array()
+    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array(): void
     {
         $this->expectException(ExchangeRateException::class);
         $this->expectExceptionMessage('123 is not a string or array.');
@@ -277,7 +279,7 @@ class ConvertBetweenDateRangeTest extends TestCase
         $exchangeRate->convertBetweenDateRange(100, 'GBP', 123, now()->subWeek(), now()->subDay());
     }
 
-    private function mockResponseForOneSymbol()
+    private function mockResponseForOneSymbol(): array
     {
         return [
             'rates'    => [
@@ -303,7 +305,7 @@ class ConvertBetweenDateRangeTest extends TestCase
         ];
     }
 
-    private function mockResponseForMultipleSymbols()
+    private function mockResponseForMultipleSymbols(): array
     {
         return [
             'rates'    => [
