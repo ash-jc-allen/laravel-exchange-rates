@@ -3,8 +3,7 @@
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
-use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
-use AshAllenDesign\LaravelExchangeRates\Concerns\InteractsWithCache;
+use AshAllenDesign\LaravelExchangeRates\Drivers\Support\SharedDriverLogicHandler;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
@@ -17,38 +16,7 @@ use Exception;
  */
 class ExchangeRatesApiIoDriver implements ExchangeRateDriver
 {
-    use InteractsWithCache;
-
-    /**
-     * The object used for making requests to the currency
-     * conversion API.
-     *
-     * @var RequestBuilder
-     */
-    private $requestBuilder;
-
-    /**
-     * The repository used for accessing the cache.
-     *
-     * @var CacheRepository
-     */
-    private $cacheRepository;
-
-    /**
-     * Whether of not the exchange rate should be cached
-     * after being fetched from the API.
-     *
-     * @var bool
-     */
-    private $shouldCache = true;
-
-    /**
-     * Whether or not the cache should be busted and a new
-     * value should be fetched from the API.
-     *
-     * @var bool
-     */
-    private $shouldBustCache = false;
+    private SharedDriverLogicHandler $sharedDriverLogicHandler;
 
     /**
      * ExchangeRate constructor.
@@ -58,8 +26,13 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
      */
     public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
     {
-        $this->requestBuilder = $requestBuilder ?? new RequestBuilder();
-        $this->cacheRepository = $cacheRepository ?? new CacheRepository();
+        $requestBuilder = $requestBuilder ?? new RequestBuilder();
+        $cacheRepository = $cacheRepository ?? new CacheRepository();
+
+        $this->sharedDriverLogicHandler = new SharedDriverLogicHandler(
+            $requestBuilder,
+            $cacheRepository
+        );
     }
 
     /**
@@ -71,25 +44,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
      */
     public function currencies(array $currencies = []): array
     {
-        $cacheKey = 'currencies';
-
-        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
-            return $cachedExchangeRate;
-        }
-
-        $response = $this->requestBuilder->makeRequest('/latest', []);
-
-        $currencies[] = $response['base'];
-
-        foreach ($response['rates'] as $currency => $rate) {
-            $currencies[] = $currency;
-        }
-
-        if ($this->shouldCache) {
-            $this->cacheRepository->storeInCache($cacheKey, $currencies);
-        }
-
-        return $currencies;
+        return $this->sharedDriverLogicHandler->currencies($currencies);
     }
 
     /**
@@ -111,42 +66,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
      */
     public function exchangeRate(string $from, $to, Carbon $date = null)
     {
-        Validation::validateIsStringOrArray($to);
-
-        if ($date) {
-            Validation::validateDate($date);
-        }
-
-        Validation::validateCurrencyCode($from);
-
-        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
-
-        if ($from === $to) {
-            return 1.0;
-        }
-
-        $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? Carbon::now());
-
-        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
-            return $cachedExchangeRate;
-        }
-
-        $symbols = is_string($to) ? $to : implode(',', $to);
-        $queryParams = ['base' => $from, 'symbols' => $symbols];
-
-        $url = $date
-            ? '/'.$date->format('Y-m-d')
-            : '/latest';
-
-        $response = $this->requestBuilder->makeRequest($url, $queryParams)['rates'];
-
-        $exchangeRate = is_string($to) ? $response[$to] : $response;
-
-        if ($this->shouldCache) {
-            $this->cacheRepository->storeInCache($cacheKey, $exchangeRate);
-        }
-
-        return $exchangeRate;
+        return $this->sharedDriverLogicHandler->exchangeRate($from, $to, $date);
     }
 
     /**
@@ -164,69 +84,12 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
      */
     public function exchangeRateBetweenDateRange(
         string $from,
-        $to,
+               $to,
         Carbon $date,
         Carbon $endDate,
         array $conversions = []
     ): array {
-        Validation::validateCurrencyCode($from);
-        Validation::validateStartAndEndDates($date, $endDate);
-        Validation::validateIsStringOrArray($to);
-
-        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
-
-        $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
-
-        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
-            return $cachedExchangeRate;
-        }
-
-        $conversions = $from === $to
-            ? $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions)
-            : $conversions = $this->makeRequestForExchangeRates($from, $to, $date, $endDate);
-
-        if ($this->shouldCache) {
-            $this->cacheRepository->storeInCache($cacheKey, $conversions);
-        }
-
-        return $conversions;
-    }
-
-    /**
-     * Make a request to the Exchange Rates API to get the
-     * exchange rates between a date range. If only one
-     * currency is being used, we flatten the array
-     * to remove currency symbol before returning
-     * it.
-     *
-     * @param  string  $from
-     * @param  string|array  $to
-     * @param  Carbon  $date
-     * @param  Carbon  $endDate
-     * @return array
-     */
-    private function makeRequestForExchangeRates(string $from, $to, Carbon $date, Carbon $endDate): array
-    {
-        $symbols = is_string($to) ? $to : implode(',', $to);
-
-        $result = $this->requestBuilder->makeRequest('/timeseries', [
-            'base'     => $from,
-            'start_date' => $date->format('Y-m-d'),
-            'end_date'   => $endDate->format('Y-m-d'),
-            'symbols'  => $symbols,
-        ]);
-
-        $conversions = $result['rates'];
-
-        if (is_string($to)) {
-            foreach ($conversions as $date => $rate) {
-                $conversions[$date] = $rate[$to];
-            }
-        }
-
-        ksort($conversions);
-
-        return $conversions;
+        return $this->sharedDriverLogicHandler->exchangeRateBetweenDateRange($from, $to, $date, $endDate, $conversions);
     }
 
     /**
@@ -246,17 +109,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
      */
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
-        if (is_string($to)) {
-            return (float) $this->exchangeRate($from, $to, $date) * $value;
-        }
-
-        $exchangeRates = $this->exchangeRate($from, $to, $date);
-
-        foreach ($exchangeRates as $currency => $exchangeRate) {
-            $exchangeRates[$currency] = (float) $exchangeRate * $value;
-        }
-
-        return $exchangeRates;
+        return $this->sharedDriverLogicHandler->convert($value, $from, $to, $date);
     }
 
     /**
@@ -281,47 +134,20 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
         Carbon $endDate,
         array $conversions = []
     ): array {
-        $exchangeRates = $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
-
-        if (is_array($to)) {
-            foreach ($exchangeRates as $date => $exchangeRate) {
-                foreach ($exchangeRate as $currency => $rate) {
-                    $conversions[$date][$currency] = (float) $rate * $value;
-                }
-            }
-
-            return $conversions;
-        }
-
-        foreach ($exchangeRates as $date => $exchangeRate) {
-            $conversions[$date] = (float) $exchangeRate * $value;
-        }
-
-        return $conversions;
+        return $this->sharedDriverLogicHandler->convertBetweenDateRange($value, $from, $to, $date, $endDate, $conversions);
     }
 
-    /**
-     * If the 'from' and 'to' currencies are the same, we
-     * don't need to make a request to the API. Instead,
-     * we can build the response ourselves to improve
-     * the performance.
-     *
-     * @param  Carbon  $startDate
-     * @param  Carbon  $endDate
-     * @param  array  $conversions
-     * @return array
-     */
-    private function exchangeRateDateRangeResultWithSameCurrency(
-        Carbon $startDate,
-        Carbon $endDate,
-        array $conversions = []
-    ): array {
-        for ($date = clone $startDate; $date->lte($endDate); $date->addDay()) {
-            if ($date->isWeekday()) {
-                $conversions[$date->format('Y-m-d')] = 1.0;
-            }
-        }
+    public function shouldCache(bool $shouldCache = true): ExchangeRateDriver
+    {
+        $this->sharedDriverLogicHandler->shouldCache($shouldCache);
 
-        return $conversions;
+        return $this;
+    }
+
+    public function shouldBustCache(bool $bustCache = true): ExchangeRateDriver
+    {
+        $this->sharedDriverLogicHandler->shouldBustCache($bustCache);
+
+        return $this;
     }
 }
