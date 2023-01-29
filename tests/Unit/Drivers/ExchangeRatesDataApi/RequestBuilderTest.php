@@ -27,7 +27,7 @@ final class RequestBuilderTest extends TestCase
         $url = 'https://api.apilayer.com/exchangerates_data/latest?base=USD';
 
         Http::fake([
-            $url => Http::response(['RESPONSE'])
+            $url => Http::response(['RESPONSE']),
         ]);
 
         $requestBuilder = new RequestBuilder();
@@ -50,7 +50,7 @@ final class RequestBuilderTest extends TestCase
         $url = 'https://api.apilayer.com/exchangerates_data/latest?base=USD';
 
         Http::fake([
-            $url => Http::response(['RESPONSE'], 401)
+            $url => Http::response(['RESPONSE'], 401),
         ]);
 
         $requestBuilder = new RequestBuilder();
