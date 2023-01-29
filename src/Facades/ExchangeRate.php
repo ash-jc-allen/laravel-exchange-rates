@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static array convertBetweenDateRange(int $value, string $from, $to, Carbon $date, Carbon $endDate, array $conversions = [])
  * @method static ExchangeRateDriver shouldBustCache(bool $bustCache = true)
  * @method static ExchangeRateDriver shouldCache(bool $shouldCache = true)
- *
  * @method static ExchangeRateDriver driver($driver = null)
  * @method static ExchangeRateDriver extend($driver, Closure $callback)
  *
