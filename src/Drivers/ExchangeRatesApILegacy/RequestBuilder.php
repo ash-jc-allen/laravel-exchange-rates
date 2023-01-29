@@ -19,8 +19,8 @@ class RequestBuilder
     /**
      * Make an API request to the ExchangeRatesAPI.
      *
-     * @param string $path
-     * @param string[] $queryParams
+     * @param  string  $path
+     * @param  string[]  $queryParams
      * @return mixed
      *
      * @throws RequestException

@@ -11,8 +11,6 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
 use Carbon\Carbon;
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 
 class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
 {
