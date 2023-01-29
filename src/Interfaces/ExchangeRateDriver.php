@@ -16,6 +16,7 @@ interface ExchangeRateDriver
      *
      * @param  array  $currencies
      * @return array
+     *
      * @throws RequestException
      */
     public function currencies(array $currencies = []): array;
