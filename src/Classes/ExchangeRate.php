@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
 use Illuminate\Support\Manager;
@@ -16,9 +16,9 @@ class ExchangeRate extends Manager
         return new ExchangeRatesDataApiDriver();
     }
 
-    public function createExchangeRatesApiLegacyDriver(): ExchangeRateDriver
+    public function createExchangeRatesApiIoDriver(): ExchangeRateDriver
     {
-        return new ExchangeRatesApiLegacyDriver();
+        return new ExchangeRatesApiIoDriver();
     }
 
     public function getDefaultDriver()

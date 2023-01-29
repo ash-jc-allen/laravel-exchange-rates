@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiIo;
 
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
@@ -21,7 +21,7 @@ final class CurrenciesTest extends TestCase
             ->once()
             ->andReturn($this->mockResponse());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
@@ -37,7 +37,7 @@ final class CurrenciesTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')->never();
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->currencies();
 
         $this->assertEquals(['CUR1', 'CUR2', 'CUR3'], $currencies);
@@ -54,7 +54,7 @@ final class CurrenciesTest extends TestCase
             ->once()
             ->andReturn($this->mockResponse());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->shouldBustCache()->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
@@ -69,7 +69,7 @@ final class CurrenciesTest extends TestCase
             ->once()
             ->andReturn($this->mockResponse());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->shouldCache(false)->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
