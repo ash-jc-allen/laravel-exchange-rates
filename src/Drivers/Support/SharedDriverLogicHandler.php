@@ -29,26 +29,18 @@ class SharedDriverLogicHandler
 
     /**
      * The repository used for accessing the cache.
-     *
-     * @var CacheRepository
      */
-    private $cacheRepository;
+    private CacheRepository $cacheRepository;
 
     /**
-     * Whether of not the exchange rate should be cached
-     * after being fetched from the API.
-     *
-     * @var bool
+     * Whether the exchange rate should be cached after being fetched from the API.
      */
-    private $shouldCache = true;
+    private bool $shouldCache = true;
 
     /**
-     * Whether or not the cache should be busted and a new
-     * value should be fetched from the API.
-     *
-     * @var bool
+     * Whether the cache should be busted and a new value should be fetched from the API.
      */
-    private $shouldBustCache = false;
+    private bool $shouldBustCache = false;
 
     public function __construct(RequestSender $requestBuilder, CacheRepository $cacheRepository)
     {
@@ -57,8 +49,7 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Return an array of available currencies that
-     * can be used with this package.
+     * Return an array of available currencies that can be used with this package.
      *
      * @param  array  $currencies
      * @return array
@@ -89,12 +80,10 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Return the exchange rate between the $from and $to
-     * parameters. If no $date parameter is passed, we
-     * use today's date instead. If $to is a string,
-     * the exchange rate will be returned as a
-     * string. If $to is an array, the rates
-     * will be returned within an array.
+     * Return the exchange rate between the $from and $to parameters. If no $date
+     * parameter is passed, we use today's date instead. If $to is a string,
+     * the exchange rate will be returned as a string. If $to is an array,
+     * the rates will be returned within an array.
      *
      * @param  string  $from
      * @param  string|array  $to
@@ -147,8 +136,7 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Return the exchange rates between the given
-     * date range.
+     * Return the exchange rates between the given date range.
      *
      * @param  string  $from
      * @param  string|array  $to
@@ -193,11 +181,9 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Make a request to the Exchange Rates API to get the
-     * exchange rates between a date range. If only one
-     * currency is being used, we flatten the array
-     * to remove currency symbol before returning
-     * it.
+     * Make a request to the Exchange Rates API to get the exchange rates between a
+     * date range. If only one currency is being used, we flatten the array to
+     * remove currency symbol before returning it.
      *
      * @param  string  $from
      * @param  string|array  $to
@@ -232,9 +218,8 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Return the converted values between the $from and $to
-     * parameters. If no $date parameter is passed, we
-     * use today's date instead.
+     * Return the converted values between the $from and $to parameters. If no $date
+     * parameter is passed, we use today's date instead.
      *
      * @param  int  $value
      * @param  string  $from
@@ -263,8 +248,7 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Return an array of the converted values between the
-     * given date range.
+     * Return an array of the converted values between the given date range.
      *
      * @param  int  $value
      * @param  string  $from
@@ -307,10 +291,8 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * If the 'from' and 'to' currencies are the same, we
-     * don't need to make a request to the API. Instead,
-     * we can build the response ourselves to improve
-     * the performance.
+     * If the 'from' and 'to' currencies are the same, we don't need to make a request to
+     * the API. Instead, we can build the response ourselves to improve the performance.
      *
      * @param  Carbon  $startDate
      * @param  Carbon  $endDate
@@ -332,8 +314,8 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Determine whether if the exchange rate should be
-     * cached after it is fetched from the API.
+     * Determine whether if the exchange rate should be cached after it is fetched
+     * from the API.
      *
      * @param  bool  $shouldCache
      * @return $this
@@ -346,10 +328,8 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Determine whether if the cached result (if it
-     * exists) should be deleted. This will force
-     * a new exchange rate to be fetched from
-     * the API.
+     * Determine whether if the cached result (if it exists) should be deleted. This
+     * will force a new exchange rate to be fetched from the API.
      *
      * @param  bool  $bustCache
      * @return $this
@@ -362,10 +342,8 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Attempt to fetch an item (more than likely an
-     * exchange rate) from the cache. If it exists,
-     * return it. If it has been specified, bust
-     * the cache.
+     * Attempt to fetch an item (more than likely an exchange rate) from the cache.
+     * If it exists, return it. If it has been specified, bust the cache.
      *
      * @param  string  $cacheKey
      * @return mixed
