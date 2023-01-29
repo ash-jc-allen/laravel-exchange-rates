@@ -10,8 +10,14 @@ use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilde
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
+use AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender;
 use Carbon\Carbon;
 
+/**
+ * Several exchange rates APIs are built to follow a similar structure
+ * to each other. So we can use the same logic for a large majority
+ * of the drivers to reduce duplication of code.
+ */
 class SharedDriverLogicHandler
 {
     /**
@@ -20,7 +26,7 @@ class SharedDriverLogicHandler
      *
      * @var RequestBuilder
      */
-    private $requestBuilder;
+    private RequestSender $requestBuilder;
 
     /**
      * The repository used for accessing the cache.
@@ -45,17 +51,10 @@ class SharedDriverLogicHandler
      */
     private $shouldBustCache = false;
 
-    /**
-     * ExchangeRate constructor.
-     *
-     * @param  RequestBuilder|null  $requestBuilder
-     * @param  CacheRepository|null  $cacheRepository
-     */
-    // TODO Add type hinting for the request builder.
-    public function __construct($requestBuilder = null, CacheRepository $cacheRepository = null)
+    public function __construct(RequestSender $requestBuilder, CacheRepository $cacheRepository)
     {
-        $this->requestBuilder = $requestBuilder ?? new RequestBuilder();
-        $this->cacheRepository = $cacheRepository ?? new CacheRepository();
+        $this->requestBuilder = $requestBuilder;
+        $this->cacheRepository = $cacheRepository;
     }
 
     /**
