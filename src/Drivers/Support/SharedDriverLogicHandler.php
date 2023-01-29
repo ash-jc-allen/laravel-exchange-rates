@@ -60,8 +60,9 @@ class SharedDriverLogicHandler
      * Return an array of available currencies that
      * can be used with this package.
      *
-     * @param array $currencies
+     * @param  array  $currencies
      * @return array
+     *
      * @throws RequestException
      */
     public function currencies(array $currencies = []): array
@@ -149,11 +150,11 @@ class SharedDriverLogicHandler
      * Return the exchange rates between the given
      * date range.
      *
-     * @param string $from
-     * @param string|array $to
-     * @param Carbon $date
-     * @param Carbon $endDate
-     * @param array $conversions
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon  $date
+     * @param  Carbon  $endDate
+     * @param  array  $conversions
      * @return array
      *
      * @throws ExchangeRateException
@@ -198,11 +199,12 @@ class SharedDriverLogicHandler
      * to remove currency symbol before returning
      * it.
      *
-     * @param string $from
-     * @param string|array $to
-     * @param Carbon $date
-     * @param Carbon $endDate
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon  $date
+     * @param  Carbon  $endDate
      * @return array
+     *
      * @throws RequestException
      */
     private function makeRequestForExchangeRates(string $from, $to, Carbon $date, Carbon $endDate): array
@@ -264,12 +266,12 @@ class SharedDriverLogicHandler
      * Return an array of the converted values between the
      * given date range.
      *
-     * @param int $value
-     * @param string $from
-     * @param string|array $to
-     * @param Carbon $date
-     * @param Carbon $endDate
-     * @param array $conversions
+     * @param  int  $value
+     * @param  string  $from
+     * @param  string|array  $to
+     * @param  Carbon  $date
+     * @param  Carbon  $endDate
+     * @param  array  $conversions
      * @return array
      *
      * @throws ExchangeRateException
