@@ -23,7 +23,7 @@ class RequestBuilder implements RequestSender
      * Make an API request to the Exchange Rates Data API.
      *
      * @param  string  $path
-     * @param  string[]  $queryParams
+     * @param  array<string, string>  $queryParams
      * @return mixed
      *
      * @throws RequestException

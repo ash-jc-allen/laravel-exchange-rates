@@ -21,7 +21,7 @@ class RequestBuilder implements RequestSender
      * Make an API request to the ExchangeRatesAPI.
      *
      * @param  string  $path
-     * @param  string[]  $queryParams
+     * @param  array<string, string>  $queryParams
      * @return mixed
      *
      * @throws RequestException
@@ -29,10 +29,10 @@ class RequestBuilder implements RequestSender
     public function makeRequest(string $path, array $queryParams = []): mixed
     {
         return Http::baseUrl(self::BASE_URL)
-            ->get($path, [
-                'access_key' => $this->apiKey,
-                ...$queryParams,
-            ])
+            ->get(
+                $path,
+                array_merge(['access_key' => $this->apiKey], $queryParams)
+            )
             ->throw()
             ->json();
     }
