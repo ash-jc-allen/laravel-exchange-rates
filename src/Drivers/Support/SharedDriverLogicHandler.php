@@ -6,7 +6,6 @@ namespace AshAllenDesign\LaravelExchangeRates\Drivers\Support;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
 use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
@@ -25,9 +24,9 @@ class SharedDriverLogicHandler
     /**
      * The object used for making requests to the currency conversion API.
      *
-    private RequestSender $requestBuilder;
-
-    /**
+     * private RequestSender $requestBuilder;
+     *
+     * /**
      * The repository used for accessing the cache.
      *
      * @var CacheRepository
