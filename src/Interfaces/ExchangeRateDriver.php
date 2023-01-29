@@ -39,8 +39,7 @@ interface ExchangeRateDriver
     public function exchangeRate(string $from, $to, Carbon $date = null);
 
     /**
-     * Return the exchange rates between the given
-     * date range.
+     * Return the exchange rates between the given date range.
      *
      * @param  string  $from
      * @param  string|array  $to
