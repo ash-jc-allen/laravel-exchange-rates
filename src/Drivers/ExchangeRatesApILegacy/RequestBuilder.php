@@ -2,6 +2,7 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy;
 
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
 class RequestBuilder
@@ -18,19 +19,20 @@ class RequestBuilder
     /**
      * Make an API request to the ExchangeRatesAPI.
      *
-     * @param  string  $path
-     * @param  string[]  $queryParams
+     * @param string $path
+     * @param string[] $queryParams
      * @return mixed
      *
+     * @throws RequestException
      */
     public function makeRequest(string $path, array $queryParams = []): mixed
     {
         return Http::baseUrl(self::BASE_URL)
-            ->throw()
             ->get($path, [
                 'access_key' => $this->apiKey,
                 ...$queryParams,
             ])
+            ->throw()
             ->json();
     }
 }
