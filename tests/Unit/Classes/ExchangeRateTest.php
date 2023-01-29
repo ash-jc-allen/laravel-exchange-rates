@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Classes;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 
@@ -14,11 +14,11 @@ final class ExchangeRateTest extends TestCase
     /** @test */
     public function correct_default_driver_is_returned(): void
     {
-        config(['laravel-exchange-rates.driver' => 'exchangeratesapi-legacy']);
+        config(['laravel-exchange-rates.driver' => 'exchange-rates-api-io']);
 
         $driver = app(ExchangeRate::class)->driver();
 
-        $this->assertSame(ExchangeRatesApiLegacyDriver::class, $driver::class);
+        $this->assertSame(ExchangeRatesApiIoDriver::class, $driver::class);
     }
 
     /**
@@ -44,7 +44,7 @@ final class ExchangeRateTest extends TestCase
     public function validDriversProvider(): array
     {
         return [
-            ['exchangeratesapi-legacy', ExchangeRatesApiLegacyDriver::class],
+            ['exchange-rates-api-io', ExchangeRatesApiIoDriver::class],
             ['exchange-rates-data-api', ExchangeRatesDataApiDriver::class],
         ];
     }

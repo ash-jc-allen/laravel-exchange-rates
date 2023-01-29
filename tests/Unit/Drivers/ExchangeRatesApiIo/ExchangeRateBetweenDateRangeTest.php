@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiIo;
 
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
@@ -36,7 +36,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
 
         $expectedArray = [
@@ -71,7 +71,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')->never();
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
 
         $this->assertEquals($expectedArray, $currencies);
@@ -109,7 +109,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->shouldBustCache()->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
 
         $expectedArray = [
@@ -145,7 +145,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->shouldCache(false)->exchangeRateBetweenDateRange('GBP', 'EUR', $fromDate, $toDate);
 
         $expectedArray = [
@@ -180,7 +180,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForMultipleSymbols());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->exchangeRateBetweenDateRange('GBP', ['EUR', 'USD'], $fromDate, $toDate);
 
         $expectedArray = [
@@ -206,7 +206,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')->withAnyArgs()->never();
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->exchangeRateBetweenDateRange('EUR', 'EUR', $fromDate, $toDate);
 
         $expectedArray = [
@@ -229,7 +229,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRateBetweenDateRange('EUR', 'GBP', now()->addMinute(), now()->subDay());
     }
 
@@ -239,7 +239,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRateBetweenDateRange('EUR', 'GBP', now()->subDay(), now()->addMinute());
     }
 
@@ -249,7 +249,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage("The 'from' date must be before the 'to' date.");
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRateBetweenDateRange('EUR', 'GBP', now()->subDay(), now()->subWeek());
     }
 
@@ -259,7 +259,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRateBetweenDateRange('INVALID', 'GBP', now()->subWeek(), now()->subDay());
     }
 
@@ -269,7 +269,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRateBetweenDateRange('GBP', 'INVALID', now()->subWeek(), now()->subDay());
     }
 
@@ -279,7 +279,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRateBetweenDateRange('GBP', ['USD', 'INVALID'], now()->subWeek(), now()->subDay());
     }
 
@@ -289,7 +289,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->expectException(ExchangeRateException::class);
         $this->expectExceptionMessage('123 is not a string or array.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRateBetweenDateRange('GBP', 123, now()->subWeek(), now()->subDay());
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy;
+namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo;
 
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;

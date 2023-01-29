@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiIo;
 
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
@@ -25,7 +25,7 @@ final class ExchangeRateTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP');
         $this->assertEquals('0.86158', $rate);
         $this->assertEquals('0.86158', Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
@@ -42,7 +42,7 @@ final class ExchangeRateTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP', $mockDate);
         $this->assertEquals('0.87053', $rate);
         $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
@@ -58,7 +58,7 @@ final class ExchangeRateTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->never();
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP', $mockDate);
         $this->assertEquals('0.123456', $rate);
         $this->assertEquals('0.123456', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
@@ -73,7 +73,7 @@ final class ExchangeRateTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForCurrentDateAndMultipleSymbols());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $response = $exchangeRate->exchangeRate('EUR', ['GBP', 'USD', 'CAD']);
         $this->assertEquals(['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158], $response);
         $this->assertEquals(
@@ -93,7 +93,7 @@ final class ExchangeRateTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForPastDateAndMultipleSymbols());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $response = $exchangeRate->exchangeRate('EUR', ['GBP', 'CAD', 'USD'], $mockDate);
         $this->assertEquals(['CAD' => 1.4969, 'USD' => 1.1346, 'GBP' => 0.87053], $response);
         $this->assertEquals(
@@ -116,7 +116,7 @@ final class ExchangeRateTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->never();
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', ['GBP', 'USD', 'CAD'], $mockDate);
         $this->assertEquals(['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158], $rate);
         $this->assertEquals(
@@ -138,7 +138,7 @@ final class ExchangeRateTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $rate = $exchangeRate->shouldBustCache()->exchangeRate('EUR', 'GBP', $mockDate);
         $this->assertEquals('0.87053', $rate);
         $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
@@ -153,7 +153,7 @@ final class ExchangeRateTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $rate = $exchangeRate->shouldCache(false)->exchangeRate('EUR', 'GBP');
         $this->assertEquals('0.86158', $rate);
         $this->assertNull(Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
@@ -165,7 +165,7 @@ final class ExchangeRateTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->withAnyArgs()->never();
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'EUR');
         $this->assertEquals(1.0, $rate);
     }
@@ -176,7 +176,7 @@ final class ExchangeRateTest extends TestCase
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRate('EUR', 'GBP', now()->addMinute());
     }
 
@@ -186,7 +186,7 @@ final class ExchangeRateTest extends TestCase
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRate('INVALID', 'GBP', now()->subMinute());
     }
 
@@ -196,7 +196,7 @@ final class ExchangeRateTest extends TestCase
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRate('GBP', 'INVALID', now()->subMinute());
     }
 
@@ -206,7 +206,7 @@ final class ExchangeRateTest extends TestCase
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date cannot be before 4th January 1999.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRate('GBP', 'USD', Carbon::createFromDate(1999, 1, 3));
     }
 
@@ -216,7 +216,7 @@ final class ExchangeRateTest extends TestCase
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRate('GBP', ['INVALID'], now()->subMinute());
     }
 
@@ -226,7 +226,7 @@ final class ExchangeRateTest extends TestCase
         $this->expectException(ExchangeRateException::class);
         $this->expectExceptionMessage('123 is not a string or array.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRate('GBP', 123, now()->subMinute());
     }
 

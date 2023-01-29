@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiLegacy;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesApiIo;
 
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
@@ -36,7 +36,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
         $this->assertEqualsWithDelta([
@@ -77,7 +77,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')->never();
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
         $this->assertEqualsWithDelta([
@@ -122,7 +122,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForOneSymbol());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->shouldBustCache()->convertBetweenDateRange(100, 'GBP', 'EUR', $fromDate, $toDate);
 
         $this->assertEqualsWithDelta([
@@ -164,7 +164,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
             ->once()
             ->andReturn($this->mockResponseForMultipleSymbols());
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->convertBetweenDateRange(100, 'GBP', ['EUR', 'USD'], $fromDate, $toDate);
 
         $expectedArray = [
@@ -197,7 +197,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')->withAnyArgs()->never();
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesApiIoDriver($requestBuilderMock);
         $currencies = $exchangeRate->convertBetweenDateRange(100, 'EUR', 'EUR', $fromDate, $toDate);
 
         $this->assertEquals([
@@ -225,7 +225,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->convertBetweenDateRange(100, 'EUR', 'GBP', now()->addMinute(), now()->subDay());
     }
 
@@ -235,7 +235,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage('The date must be in the past.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->convertBetweenDateRange(100, 'EUR', 'GBP', now()->subDay(), now()->addMinute());
     }
 
@@ -245,7 +245,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidDateException::class);
         $this->expectExceptionMessage("The 'from' date must be before the 'to' date.");
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->convertBetweenDateRange(100, 'EUR', 'GBP', now()->subDay(), now()->subWeek());
     }
 
@@ -255,7 +255,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->convertBetweenDateRange(100, 'INVALID', 'GBP', now()->subWeek(), now()->subDay());
     }
 
@@ -265,7 +265,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $this->expectException(InvalidCurrencyException::class);
         $this->expectExceptionMessage('INVALID is not a valid currency code.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->convertBetweenDateRange(100, 'GBP', 'INVALID', now()->subWeek(), now()->subDay());
     }
 
@@ -275,7 +275,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $this->expectException(ExchangeRateException::class);
         $this->expectExceptionMessage('123 is not a string or array.');
 
-        $exchangeRate = new ExchangeRatesApiLegacyDriver();
+        $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->convertBetweenDateRange(100, 'GBP', 123, now()->subWeek(), now()->subDay());
     }
 
