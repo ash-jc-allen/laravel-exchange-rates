@@ -1,6 +1,6 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy;
+namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
 use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
@@ -13,9 +13,9 @@ use Carbon\Carbon;
 use Exception;
 
 /**
- * @see https://exchangeratesapi.io/
+ * @see https://apilayer.com/marketplace/exchangerates_data-api
  */
-class ExchangeRatesApiLegacyDriver implements ExchangeRateDriver
+class ExchangeRatesDataApiDriver implements ExchangeRateDriver
 {
     use InteractsWithCache;
 

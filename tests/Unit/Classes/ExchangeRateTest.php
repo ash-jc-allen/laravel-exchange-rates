@@ -6,6 +6,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Classes;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApILegacy\ExchangeRatesApiLegacyDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 
 final class ExchangeRateTest extends TestCase
@@ -44,6 +45,7 @@ final class ExchangeRateTest extends TestCase
     {
         return [
             ['exchangeratesapi-legacy', ExchangeRatesApiLegacyDriver::class],
+            ['exchange-rates-data-api', ExchangeRatesDataApiDriver::class],
         ];
     }
 }
