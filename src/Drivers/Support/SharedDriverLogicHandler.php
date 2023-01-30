@@ -348,7 +348,7 @@ class SharedDriverLogicHandler
      * @param  string  $cacheKey
      * @return mixed
      */
-    private function attemptToResolveFromCache(string $cacheKey)
+    private function attemptToResolveFromCache(string $cacheKey): mixed
     {
         if ($this->shouldBustCache) {
             $this->cacheRepository->forget($cacheKey);
@@ -356,5 +356,7 @@ class SharedDriverLogicHandler
         } elseif ($cachedValue = $this->cacheRepository->getFromCache($cacheKey)) {
             return $cachedValue;
         }
+
+        return null;
     }
 }
