@@ -12,6 +12,7 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Several exchange rates APIs are built to follow a similar structure
@@ -51,9 +52,10 @@ class SharedDriverLogicHandler
     /**
      * Return an array of available currencies that can be used with this package.
      *
-     * @param  string[]  $currencies
+     * @param string[] $currencies
      * @return string[]
      *
+     * @throws InvalidArgumentException
      * @throws RequestException
      */
     public function currencies(array $currencies = []): array
@@ -85,15 +87,16 @@ class SharedDriverLogicHandler
      * the exchange rate will be returned as a string. If $to is an array,
      * the rates will be returned within an array.
      *
-     * @param  string  $from
-     * @param  string|string[]  $to
-     * @param  Carbon|null  $date
+     * @param string $from
+     * @param string|string[] $to
+     * @param Carbon|null $date
      * @return float|array<string, float>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException
+     * @throws InvalidArgumentException
      */
     public function exchangeRate(string $from, $to, Carbon $date = null)
     {
@@ -149,6 +152,7 @@ class SharedDriverLogicHandler
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException
+     * @throws InvalidArgumentException
      */
     public function exchangeRateBetweenDateRange(
         string $from,
@@ -231,6 +235,7 @@ class SharedDriverLogicHandler
      * @throws InvalidCurrencyException
      * @throws ExchangeRateException
      * @throws RequestException
+     * @throws InvalidArgumentException
      */
     public function convert(int $value, string $from, $to, Carbon $date = null)
     {
@@ -262,6 +267,7 @@ class SharedDriverLogicHandler
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException
+     * @throws InvalidArgumentException
      */
     public function convertBetweenDateRange(
         int $value,
@@ -346,7 +352,8 @@ class SharedDriverLogicHandler
      * If it exists, return it. If it has been specified, bust the cache.
      *
      * @param  string  $cacheKey
-     * @return mixed
+     * @return mixed|null
+     * @throws InvalidArgumentException
      */
     private function attemptToResolveFromCache(string $cacheKey): mixed
     {
