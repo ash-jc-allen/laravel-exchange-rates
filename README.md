@@ -106,7 +106,7 @@ $exchangeRates->currencies();
 
 ##### Getting the Rate Between Two Currencies
 
-To get the exchange rate for one currency to another, you can use the `exchangeRate` method. When doing this, you can pass the currency code as a string as the second parameter. The `exchangeRate` method will then return a string containing the exchange rate.
+To get the exchange rate for one currency to another, you can use the `exchangeRate` method. When doing this, you can pass the currency code as a string as the second parameter. The `exchangeRate` method will then return a float containing the exchange rate.
 
 The example below shows how to get the exchange rate from 'GBP' to 'EUR' for today.
 
@@ -117,7 +117,7 @@ $exchangeRates = new ExchangeRate();
 
 $result = $exchangeRates->exchangeRate('GBP', 'EUR');
 
-// $result: '1.10086'
+// $result: 1.10086
 ```
 
 Note: If a Carbon date is passed as the third parameter, the exchange rate for that day will be returned (if valid). If no date is passed, today's exchange rate will be used.
@@ -126,7 +126,7 @@ Note: If a Carbon date is passed as the third parameter, the exchange rate for t
 
 It's possible to get the exchange rates for multiple currencies in one call. This can be particularly useful if you are needing to get many exchange rates at once and don't want to make multiple API calls.
 
-To do this, you can use `exchangeRate` method and pass an array of currency code strings as the second parameter. This will return an array containing the exchange rates as strings.
+To do this, you can use `exchangeRate` method and pass an array of currency code strings as the second parameter. This will return an array containing the exchange rates as floats.
 
 The example below shows how to get the exchange rates from 'GBP' to 'EUR' and 'USD' for today:
 
@@ -138,8 +138,8 @@ $exchangeRates = new ExchangeRate();
 $result = $exchangeRates->exchangeRate('GBP', ['EUR', 'USD']);
 
 // $result: [
-//     'EUR' => '1.10086',
-//     'USD' => '1.25622'
+//     'EUR' => 1.10086,
+//     'USD' => 1.25622,
 // ];
 ```
 
