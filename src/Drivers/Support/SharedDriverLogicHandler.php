@@ -52,7 +52,7 @@ class SharedDriverLogicHandler
     /**
      * Return an array of available currencies that can be used with this package.
      *
-     * @param string[] $currencies
+     * @param  string[]  $currencies
      * @return string[]
      *
      * @throws InvalidArgumentException
@@ -87,9 +87,9 @@ class SharedDriverLogicHandler
      * the exchange rate will be returned as a string. If $to is an array,
      * the rates will be returned within an array.
      *
-     * @param string $from
-     * @param string|string[] $to
-     * @param Carbon|null $date
+     * @param  string  $from
+     * @param  string|string[]  $to
+     * @param  Carbon|null  $date
      * @return float|array<string, float>
      *
      * @throws ExchangeRateException
@@ -350,6 +350,7 @@ class SharedDriverLogicHandler
      *
      * @param  string  $cacheKey
      * @return mixed|null
+     *
      * @throws InvalidArgumentException
      */
     private function attemptToResolveFromCache(string $cacheKey): mixed
