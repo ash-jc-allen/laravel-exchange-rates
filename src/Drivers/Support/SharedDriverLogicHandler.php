@@ -6,7 +6,6 @@ namespace AshAllenDesign\LaravelExchangeRates\Drivers\Support;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
 use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
-use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender;
@@ -91,7 +90,6 @@ class SharedDriverLogicHandler
      * @param  Carbon|null  $date
      * @return float|array<string, float>
      *
-     * @throws ExchangeRateException
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException
@@ -144,7 +142,6 @@ class SharedDriverLogicHandler
      * @param  Carbon  $endDate
      * @return array<string, float>|array<string, array<string, float>>
      *
-     * @throws ExchangeRateException
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException
@@ -227,7 +224,6 @@ class SharedDriverLogicHandler
      *
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
-     * @throws ExchangeRateException
      * @throws RequestException
      * @throws InvalidArgumentException
      */
@@ -256,7 +252,6 @@ class SharedDriverLogicHandler
      * @param  Carbon  $endDate
      * @return array<string, float>|array<string, array<string, float>>
      *
-     * @throws ExchangeRateException
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AshAllenDesign\LaravelExchangeRates\Interfaces;
 
-use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
@@ -34,7 +33,6 @@ interface ExchangeRateDriver
      * @param  Carbon|null  $date
      * @return float|array<string, float>
      *
-     * @throws ExchangeRateException
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException
@@ -51,7 +49,6 @@ interface ExchangeRateDriver
      * @param  Carbon  $endDate
      * @return array<string, float>|array<string, array<string, float>>
      *
-     * @throws ExchangeRateException
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException
@@ -76,7 +73,6 @@ interface ExchangeRateDriver
      *
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
-     * @throws ExchangeRateException
      * @throws RequestException
      * @throws InvalidArgumentException
      */
@@ -92,7 +88,6 @@ interface ExchangeRateDriver
      * @param  Carbon  $endDate
      * @return array<string, float>|array<string, array<string, float>>
      *
-     * @throws ExchangeRateException
      * @throws InvalidCurrencyException
      * @throws InvalidDateException
      * @throws RequestException
