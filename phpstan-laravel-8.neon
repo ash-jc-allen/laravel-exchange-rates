@@ -9,7 +9,7 @@ parameters:
     level: 6
 
     ignoreErrors:
-        message: '#PHPDoc tag @throws with type [a-zA-Z0-9\\_|]Psr\SimpleCache\InvalidArgumentException is not subtype of Throwable#'
-        path: some/dir/SomeFile.php
+        -
+            message: '#PHPDoc tag @throws with type [a-zA-Z0-9\\_|]Psr\\SimpleCache\\InvalidArgumentException is not subtype of Throwable#'
 
     checkMissingIterableValueType: false
