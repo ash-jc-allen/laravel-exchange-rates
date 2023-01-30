@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
-use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
