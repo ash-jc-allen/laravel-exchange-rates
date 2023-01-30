@@ -1,5 +1,21 @@
 # Changelog
 
+**v6.0.0 (released 2023-01-30):**
+
+- Added concept of "drivers" so the package can support multiple APIs. [#84](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/84)
+- Added support for API Layer's "Exchange Rates Data API". [#89](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/89)
+- Added a new `driver` config option. [#84](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/84)
+- Added type hints and return types. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/106)
+- Added `declare(strict_types=1);` to all files. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/106)
+- Added specific Larastan configuration for Laravel 8. [#113](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/113)
+- Added more tests. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/101)
+- Refactored method signatures to remove unneeded arrays. [#113](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/113)
+- Updated documentation. [#103](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/103)
+- Run CI workflows for PHP 8.1 and Laravel 10. [#90](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/90)
+- Removed the `api_url` config option. [#84](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/84)
+- Removed `existsInCache` method from the `src/Classes/CacheRepository.php` file. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/106)
+- Removed `validateIsStringOrArray` method from the `src/Classes/Validation` file. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/106)
+
 **v5.2.0 (released 2023-01-11):**
 - Added support for Laravel 10. [#81](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/81)
 - Updated the PHPUnit config to use the newer format. [#80](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/80)
