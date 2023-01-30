@@ -52,13 +52,12 @@ class SharedDriverLogicHandler
     /**
      * Return an array of available currencies that can be used with this package.
      *
-     * @param string[] $currencies
      * @return string[]
      *
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function currencies(array $currencies = []): array
+    public function currencies(): array
     {
         $cacheKey = 'currencies';
 
@@ -68,7 +67,7 @@ class SharedDriverLogicHandler
 
         $response = $this->requestBuilder->makeRequest('/latest', []);
 
-        $currencies[] = $response['base'];
+        $currencies = [$response['base']];
 
         foreach ($response['rates'] as $currency => $rate) {
             $currencies[] = $currency;
@@ -87,9 +86,9 @@ class SharedDriverLogicHandler
      * the exchange rate will be returned as a string. If $to is an array,
      * the rates will be returned within an array.
      *
-     * @param string $from
-     * @param string|string[] $to
-     * @param Carbon|null $date
+     * @param  string  $from
+     * @param  string|string[]  $to
+     * @param  Carbon|null  $date
      * @return float|array<string, float>
      *
      * @throws ExchangeRateException
@@ -143,7 +142,6 @@ class SharedDriverLogicHandler
      * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
-     * @param  array  $conversions
      * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws ExchangeRateException
@@ -157,7 +155,6 @@ class SharedDriverLogicHandler
         string|array $to,
         Carbon $date,
         Carbon $endDate,
-        array $conversions = []
     ): array {
         Validation::validateCurrencyCode($from);
         Validation::validateStartAndEndDates($date, $endDate);
@@ -171,7 +168,7 @@ class SharedDriverLogicHandler
         }
 
         $conversions = $from === $to
-            ? $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions)
+            ? $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate)
             : $this->makeRequestForExchangeRates($from, $to, $date, $endDate);
 
         if ($this->shouldCache) {
@@ -257,7 +254,6 @@ class SharedDriverLogicHandler
      * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
-     * @param  array  $conversions
      * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws ExchangeRateException
@@ -272,9 +268,10 @@ class SharedDriverLogicHandler
         string|array $to,
         Carbon $date,
         Carbon $endDate,
-        array $conversions = []
     ): array {
         $exchangeRates = $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
+
+        $conversions = [];
 
         if (is_array($to)) {
             foreach ($exchangeRates as $date => $exchangeRate) {
@@ -299,14 +296,14 @@ class SharedDriverLogicHandler
      *
      * @param  Carbon  $startDate
      * @param  Carbon  $endDate
-     * @param  array  $conversions
      * @return array<string, float>
      */
     private function exchangeRateDateRangeResultWithSameCurrency(
         Carbon $startDate,
         Carbon $endDate,
-        array $conversions = []
     ): array {
+        $conversions = [];
+
         for ($date = clone $startDate; $date->lte($endDate); $date->addDay()) {
             if ($date->isWeekday()) {
                 $conversions[$date->format('Y-m-d')] = 1.0;
@@ -350,6 +347,7 @@ class SharedDriverLogicHandler
      *
      * @param  string  $cacheKey
      * @return mixed|null
+     *
      * @throws InvalidArgumentException
      */
     private function attemptToResolveFromCache(string $cacheKey): mixed

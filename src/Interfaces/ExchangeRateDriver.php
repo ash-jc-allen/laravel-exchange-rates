@@ -8,7 +8,6 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Client\RequestException;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -17,13 +16,12 @@ interface ExchangeRateDriver
     /**
      * Return an array of available currencies that can be used with this package.
      *
-     * @param  array  $currencies
-     * @return array
+     * @return string[]
      *
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function currencies(array $currencies = []): array;
+    public function currencies(): array;
 
     /**
      * Return the exchange rate between the $from and $to parameters. If no $date
@@ -32,7 +30,7 @@ interface ExchangeRateDriver
      * the rates will be returned within an array.
      *
      * @param  string  $from
-     * @param string|string[] $to
+     * @param  string|string[]  $to
      * @param  Carbon|null  $date
      * @return float|array<string, float>
      *
@@ -41,7 +39,7 @@ interface ExchangeRateDriver
      * @throws InvalidDateException
      * @throws RequestException
      * @throws InvalidArgumentException
- */
+     */
     public function exchangeRate(string $from, array|string $to, Carbon $date = null): float|array;
 
     /**
@@ -51,7 +49,6 @@ interface ExchangeRateDriver
      * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
-     * @param  array  $conversions
      * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws ExchangeRateException
@@ -61,11 +58,10 @@ interface ExchangeRateDriver
      * @throws InvalidArgumentException
      */
     public function exchangeRateBetweenDateRange(
-        string       $from,
+        string $from,
         array|string $to,
-        Carbon       $date,
-        Carbon       $endDate,
-        array        $conversions = []
+        Carbon $date,
+        Carbon $endDate
     ): array;
 
     /**
@@ -94,7 +90,6 @@ interface ExchangeRateDriver
      * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
-     * @param  array  $conversions
      * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws ExchangeRateException
@@ -104,12 +99,11 @@ interface ExchangeRateDriver
      * @throws InvalidArgumentException
      */
     public function convertBetweenDateRange(
-        int          $value,
-        string       $from,
+        int $value,
+        string $from,
         array|string $to,
-        Carbon       $date,
-        Carbon       $endDate,
-        array        $conversions = []
+        Carbon $date,
+        Carbon $endDate
     ): array;
 
     /**
