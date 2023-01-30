@@ -30,9 +30,9 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
     /**
      * @inheritDoc
      */
-    public function currencies(array $currencies = []): array
+    public function currencies(): array
     {
-        return $this->sharedDriverLogicHandler->currencies($currencies);
+        return $this->sharedDriverLogicHandler->currencies();
     }
 
     /**
@@ -50,10 +50,9 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
         string       $from,
         array|string $to,
         Carbon       $date,
-        Carbon       $endDate,
-        array        $conversions = []
+        Carbon       $endDate
     ): array {
-        return $this->sharedDriverLogicHandler->exchangeRateBetweenDateRange($from, $to, $date, $endDate, $conversions);
+        return $this->sharedDriverLogicHandler->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
     }
 
     /**
@@ -72,10 +71,9 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
         string       $from,
         array|string $to,
         Carbon       $date,
-        Carbon       $endDate,
-        array        $conversions = []
+        Carbon       $endDate
     ): array {
-        return $this->sharedDriverLogicHandler->convertBetweenDateRange($value, $from, $to, $date, $endDate, $conversions);
+        return $this->sharedDriverLogicHandler->convertBetweenDateRange($value, $from, $to, $date, $endDate);
     }
 
     /**
