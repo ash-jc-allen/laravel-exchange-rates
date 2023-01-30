@@ -100,8 +100,6 @@ class SharedDriverLogicHandler
      */
     public function exchangeRate(string $from, string|array $to, Carbon $date = null)
     {
-        Validation::validateIsStringOrArray($to);
-
         if ($date) {
             Validation::validateDate($date);
         }
@@ -163,7 +161,6 @@ class SharedDriverLogicHandler
     ): array {
         Validation::validateCurrencyCode($from);
         Validation::validateStartAndEndDates($date, $endDate);
-        Validation::validateIsStringOrArray($to);
 
         // TODO CHECK THIS DOCBLOCK IS CORRECT IF AN ARRAY IS PASSED FOR "TO"
 

@@ -85,19 +85,4 @@ class Validation
             throw new InvalidDateException('The date cannot be before 4th January 1999.');
         }
     }
-
-    /**
-     * Validate that the parameter is a string or array.
-     *
-     * @param  mixed  $paramToValidate
-     *
-     * @throws ExchangeRateException
-     */
-    // TODO We can remove this if the type hinting is changed to string|array.
-    public static function validateIsStringOrArray($paramToValidate): void
-    {
-        if (! is_string($paramToValidate) && ! is_array($paramToValidate)) {
-            throw new ExchangeRateException($paramToValidate.' is not a string or array.');
-        }
-    }
 }

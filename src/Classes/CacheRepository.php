@@ -84,8 +84,6 @@ class CacheRepository
      */
     public function buildCacheKey(string $from, string|array $to, Carbon $date, Carbon $endDate = null): string
     {
-        Validation::validateIsStringOrArray($to);
-
         if (is_array($to)) {
             asort($to);
             $to = implode('_', $to);
