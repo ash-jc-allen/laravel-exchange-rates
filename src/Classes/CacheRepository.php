@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
-use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use Carbon\Carbon;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Cache\Repository;
@@ -80,8 +79,6 @@ class CacheRepository
      * @param  Carbon  $date
      * @param  Carbon|null  $endDate
      * @return string
-     *
-     * @throws ExchangeRateException
      */
     public function buildCacheKey(string $from, string|array $to, Carbon $date, Carbon $endDate = null): string
     {
