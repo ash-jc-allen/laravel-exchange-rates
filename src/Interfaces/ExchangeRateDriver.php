@@ -8,7 +8,6 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Client\RequestException;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -31,7 +30,7 @@ interface ExchangeRateDriver
      * the rates will be returned within an array.
      *
      * @param  string  $from
-     * @param string|string[] $to
+     * @param  string|string[]  $to
      * @param  Carbon|null  $date
      * @return float|array<string, float>
      *
@@ -40,7 +39,7 @@ interface ExchangeRateDriver
      * @throws InvalidDateException
      * @throws RequestException
      * @throws InvalidArgumentException
- */
+     */
     public function exchangeRate(string $from, array|string $to, Carbon $date = null): float|array;
 
     /**
@@ -59,10 +58,10 @@ interface ExchangeRateDriver
      * @throws InvalidArgumentException
      */
     public function exchangeRateBetweenDateRange(
-        string       $from,
+        string $from,
         array|string $to,
-        Carbon       $date,
-        Carbon       $endDate
+        Carbon $date,
+        Carbon $endDate
     ): array;
 
     /**
@@ -100,11 +99,11 @@ interface ExchangeRateDriver
      * @throws InvalidArgumentException
      */
     public function convertBetweenDateRange(
-        int          $value,
-        string       $from,
+        int $value,
+        string $from,
         array|string $to,
-        Carbon       $date,
-        Carbon       $endDate
+        Carbon $date,
+        Carbon $endDate
     ): array;
 
     /**

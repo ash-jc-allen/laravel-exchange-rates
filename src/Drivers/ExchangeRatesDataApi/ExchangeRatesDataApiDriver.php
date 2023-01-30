@@ -47,10 +47,10 @@ class ExchangeRatesDataApiDriver implements ExchangeRateDriver
      * @inheritDoc
      */
     public function exchangeRateBetweenDateRange(
-        string       $from,
+        string $from,
         array|string $to,
-        Carbon       $date,
-        Carbon       $endDate,
+        Carbon $date,
+        Carbon $endDate,
     ): array {
         return $this->sharedDriverLogicHandler->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
     }
@@ -67,11 +67,11 @@ class ExchangeRatesDataApiDriver implements ExchangeRateDriver
      * @inheritDoc
      */
     public function convertBetweenDateRange(
-        int          $value,
-        string       $from,
+        int $value,
+        string $from,
         array|string $to,
-        Carbon       $date,
-        Carbon       $endDate,
+        Carbon $date,
+        Carbon $endDate,
     ): array {
         return $this->sharedDriverLogicHandler->convertBetweenDateRange($value, $from, $to, $date, $endDate);
     }
