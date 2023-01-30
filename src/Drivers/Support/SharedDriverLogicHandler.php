@@ -98,7 +98,7 @@ class SharedDriverLogicHandler
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function exchangeRate(string $from, $to, Carbon $date = null)
+    public function exchangeRate(string $from, string|array $to, Carbon $date = null)
     {
         Validation::validateIsStringOrArray($to);
 
@@ -156,7 +156,7 @@ class SharedDriverLogicHandler
      */
     public function exchangeRateBetweenDateRange(
         string $from,
-               $to,
+        string|array $to,
         Carbon $date,
         Carbon $endDate,
         array $conversions = []
@@ -164,6 +164,8 @@ class SharedDriverLogicHandler
         Validation::validateCurrencyCode($from);
         Validation::validateStartAndEndDates($date, $endDate);
         Validation::validateIsStringOrArray($to);
+
+        // TODO CHECK THIS DOCBLOCK IS CORRECT IF AN ARRAY IS PASSED FOR "TO"
 
         is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
 
@@ -197,7 +199,7 @@ class SharedDriverLogicHandler
      *
      * @throws RequestException
      */
-    private function makeRequestForExchangeRates(string $from, $to, Carbon $date, Carbon $endDate): array
+    private function makeRequestForExchangeRates(string $from, string|array $to, Carbon $date, Carbon $endDate): array
     {
         $symbols = is_string($to) ? $to : implode(',', $to);
 
@@ -237,7 +239,7 @@ class SharedDriverLogicHandler
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function convert(int $value, string $from, $to, Carbon $date = null)
+    public function convert(int $value, string $from, string|array $to, Carbon $date = null)
     {
         if (is_string($to)) {
             return (float) $this->exchangeRate($from, $to, $date) * $value;
@@ -272,7 +274,7 @@ class SharedDriverLogicHandler
     public function convertBetweenDateRange(
         int $value,
         string $from,
-        $to,
+        string|array $to,
         Carbon $date,
         Carbon $endDate,
         array $conversions = []

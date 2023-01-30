@@ -143,16 +143,6 @@ final class ConvertTest extends TestCase
         $exchangeRate->convert(100, 'GBP', 'INVALID', now()->subMinute());
     }
 
-    /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array(): void
-    {
-        $this->expectException(ExchangeRateException::class);
-        $this->expectExceptionMessage('123 is not a string or array.');
-
-        $exchangeRate = new ExchangeRatesApiIoDriver();
-        $exchangeRate->convert(10, 'GBP', 123);
-    }
-
     private function mockResponseForCurrentDateAndOneSymbol(): array
     {
         return [
