@@ -269,16 +269,6 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $exchangeRate->convertBetweenDateRange(100, 'GBP', 'INVALID', now()->subWeek(), now()->subDay());
     }
 
-    /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_not_a_string_or_array(): void
-    {
-        $this->expectException(ExchangeRateException::class);
-        $this->expectExceptionMessage('123 is not a string or array.');
-
-        $exchangeRate = new ExchangeRatesApiIoDriver();
-        $exchangeRate->convertBetweenDateRange(100, 'GBP', 123, now()->subWeek(), now()->subDay());
-    }
-
     private function mockResponseForOneSymbol(): array
     {
         return [

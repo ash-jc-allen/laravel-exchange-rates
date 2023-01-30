@@ -53,7 +53,7 @@ final class ExchangeRateTest extends TestCase
     {
         $mockDate = now();
 
-        Cache::forever('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
+        Cache::forever('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d'), 0.123456);
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->never();
@@ -218,16 +218,6 @@ final class ExchangeRateTest extends TestCase
 
         $exchangeRate = new ExchangeRatesApiIoDriver();
         $exchangeRate->exchangeRate('GBP', ['INVALID'], now()->subMinute());
-    }
-
-    /** @test */
-    public function exception_is_thrown_if_the_to_parameter_is_not_an_array_or_string(): void
-    {
-        $this->expectException(ExchangeRateException::class);
-        $this->expectExceptionMessage('123 is not a string or array.');
-
-        $exchangeRate = new ExchangeRatesApiIoDriver();
-        $exchangeRate->exchangeRate('GBP', 123, now()->subMinute());
     }
 
     private function mockResponseForCurrentDateAndOneSymbol(): array

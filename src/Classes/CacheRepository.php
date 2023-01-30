@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
 use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
@@ -7,18 +9,13 @@ use Carbon\Carbon;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheRepository
 {
-    /**
-     * @var Repository
-     */
-    protected $cache;
+    protected Repository $cache;
 
-    /**
-     * @var string
-     */
-    protected $cachePrefix = 'laravel_xr_';
+    protected string $cachePrefix = 'laravel_xr_';
 
     /**
      * Cache constructor.
@@ -61,23 +58,13 @@ class CacheRepository
     /**
      * Get an item from the cache if it exists.
      *
-     * @param  string  $key
+     * @param string $key
      * @return mixed
+     * @throws InvalidArgumentException
      */
     public function getFromCache(string $key)
     {
         return $this->cache->get($this->cachePrefix.$key);
-    }
-
-    /**
-     * Determine whether if an item exists in the cache.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function existsInCache(string $key): bool
-    {
-        return $this->cache->has($this->cachePrefix.$key);
     }
 
     /**
@@ -88,17 +75,15 @@ class CacheRepository
      * range.
      *
      * @param  string  $from
-     * @param  string|array  $to
+     * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon|null  $endDate
      * @return string
      *
      * @throws ExchangeRateException
      */
-    public function buildCacheKey(string $from, $to, Carbon $date, Carbon $endDate = null): string
+    public function buildCacheKey(string $from, string|array $to, Carbon $date, Carbon $endDate = null): string
     {
-        Validation::validateIsStringOrArray($to);
-
         if (is_array($to)) {
             asort($to);
             $to = implode('_', $to);
