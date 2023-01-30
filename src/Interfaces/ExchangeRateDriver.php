@@ -32,9 +32,9 @@ interface ExchangeRateDriver
      * the rates will be returned within an array.
      *
      * @param  string  $from
-     * @param  array|string $to
+     * @param string|string[] $to
      * @param  Carbon|null  $date
-     * @return float|string|array
+     * @return float|array<string, float>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException
@@ -48,11 +48,11 @@ interface ExchangeRateDriver
      * Return the exchange rates between the given date range.
      *
      * @param  string  $from
-     * @param array|string $to
+     * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     * @return array
+     * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException
@@ -74,9 +74,9 @@ interface ExchangeRateDriver
      *
      * @param  int  $value
      * @param  string  $from
-     * @param array|string $to
+     * @param  string|string[]  $to
      * @param  Carbon|null  $date
-     * @return float|array
+     * @return float|array<string, float>
      *
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
@@ -91,11 +91,11 @@ interface ExchangeRateDriver
      *
      * @param  int  $value
      * @param  string  $from
-     * @param array|string $to
+     * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     * @return array
+     * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException

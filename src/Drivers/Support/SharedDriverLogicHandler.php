@@ -144,7 +144,7 @@ class SharedDriverLogicHandler
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     * @return array<string, float>
+     * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException
@@ -161,8 +161,6 @@ class SharedDriverLogicHandler
     ): array {
         Validation::validateCurrencyCode($from);
         Validation::validateStartAndEndDates($date, $endDate);
-
-        // TODO CHECK THIS DOCBLOCK IS CORRECT IF AN ARRAY IS PASSED FOR "TO"
 
         is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
 
@@ -192,7 +190,7 @@ class SharedDriverLogicHandler
      * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
-     * @return array<string, float>
+     * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws RequestException
      */
@@ -260,7 +258,7 @@ class SharedDriverLogicHandler
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     * @return array<string, float>
+     * @return array<string, float>|array<string, array<string, float>>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException
