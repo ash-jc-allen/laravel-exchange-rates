@@ -51,8 +51,8 @@ class SharedDriverLogicHandler
     /**
      * Return an array of available currencies that can be used with this package.
      *
-     * @param  array  $currencies
-     * @return array
+     * @param  string[]  $currencies
+     * @return string[]
      *
      * @throws RequestException
      */
@@ -86,9 +86,9 @@ class SharedDriverLogicHandler
      * the rates will be returned within an array.
      *
      * @param  string  $from
-     * @param  string|array  $to
+     * @param  string|string[]  $to
      * @param  Carbon|null  $date
-     * @return float|string|array
+     * @return float|array<string, float>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException
@@ -139,11 +139,11 @@ class SharedDriverLogicHandler
      * Return the exchange rates between the given date range.
      *
      * @param  string  $from
-     * @param  string|array  $to
+     * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     * @return array
+     * @return array<string, float>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException
@@ -181,15 +181,15 @@ class SharedDriverLogicHandler
     }
 
     /**
-     * Make a request to the Exchange Rates API to get the exchange rates between a
+     * Make a request to the exchange rates API to get the exchange rates between a
      * date range. If only one currency is being used, we flatten the array to
      * remove currency symbol before returning it.
      *
      * @param  string  $from
-     * @param  string|array  $to
+     * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
-     * @return array
+     * @return array<string, float>
      *
      * @throws RequestException
      */
@@ -223,9 +223,9 @@ class SharedDriverLogicHandler
      *
      * @param  int  $value
      * @param  string  $from
-     * @param  string|array  $to
+     * @param  string|string[]  $to
      * @param  Carbon|null  $date
-     * @return float|array
+     * @return float|array<string, float>
      *
      * @throws InvalidDateException
      * @throws InvalidCurrencyException
@@ -252,11 +252,11 @@ class SharedDriverLogicHandler
      *
      * @param  int  $value
      * @param  string  $from
-     * @param  string|array  $to
+     * @param  string|string[]  $to
      * @param  Carbon  $date
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     * @return array
+     * @return array<string, float>
      *
      * @throws ExchangeRateException
      * @throws InvalidCurrencyException
@@ -297,7 +297,7 @@ class SharedDriverLogicHandler
      * @param  Carbon  $startDate
      * @param  Carbon  $endDate
      * @param  array  $conversions
-     * @return array
+     * @return array<string, float>
      */
     private function exchangeRateDateRangeResultWithSameCurrency(
         Carbon $startDate,
