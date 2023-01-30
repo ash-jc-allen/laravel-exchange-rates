@@ -52,7 +52,7 @@ final class ConvertTest extends TestCase
     {
         $mockDate = now();
 
-        Cache::forever('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
+        Cache::forever('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d'), 0.123456);
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->never();

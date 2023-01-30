@@ -38,7 +38,7 @@ class ExchangeRatesDataApiDriver implements ExchangeRateDriver
     /**
      * @inheritDoc
      */
-    public function exchangeRate(string $from, array|string $to, Carbon $date = null)
+    public function exchangeRate(string $from, array|string $to, Carbon $date = null): float|array
     {
         return $this->sharedDriverLogicHandler->exchangeRate($from, $to, $date);
     }
@@ -59,7 +59,7 @@ class ExchangeRatesDataApiDriver implements ExchangeRateDriver
     /**
      * @inheritDoc
      */
-    public function convert(int $value, string $from, array|string $to, Carbon $date = null)
+    public function convert(int $value, string $from, array|string $to, Carbon $date = null): float|array
     {
         return $this->sharedDriverLogicHandler->convert($value, $from, $to, $date);
     }
