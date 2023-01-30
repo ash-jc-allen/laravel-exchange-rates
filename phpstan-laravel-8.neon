@@ -10,6 +10,6 @@ parameters:
 
     ignoreErrors:
         -
-            message: '#PHPDoc tag @throws with type [a-zA-Z0-9\\_|]Psr\\SimpleCache\\InvalidArgumentException is not subtype of Throwable#'
+            message: '#PHPDoc tag @throws with type [a-zA-Z0-9\\_|]*Psr\\SimpleCache\\InvalidArgumentException is not subtype of Throwable#'
 
     checkMissingIterableValueType: false
