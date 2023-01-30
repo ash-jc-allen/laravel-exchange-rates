@@ -8,7 +8,6 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\ExchangeRateException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Client\RequestException;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -41,7 +40,6 @@ interface ExchangeRateDriver
      * @throws InvalidDateException
      * @throws RequestException
      * @throws InvalidArgumentException
-
      */
     public function exchangeRate(string $from, $to, Carbon $date = null);
 

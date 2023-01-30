@@ -58,8 +58,9 @@ class CacheRepository
     /**
      * Get an item from the cache if it exists.
      *
-     * @param string $key
+     * @param  string  $key
      * @return mixed
+     *
      * @throws InvalidArgumentException
      */
     public function getFromCache(string $key)
