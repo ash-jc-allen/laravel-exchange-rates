@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
