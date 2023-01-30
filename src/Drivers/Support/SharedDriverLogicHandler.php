@@ -171,7 +171,7 @@ class SharedDriverLogicHandler
 
         $conversions = $from === $to
             ? $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate, $conversions)
-            : $conversions = $this->makeRequestForExchangeRates($from, $to, $date, $endDate);
+            : $this->makeRequestForExchangeRates($from, $to, $date, $endDate);
 
         if ($this->shouldCache) {
             $this->cacheRepository->storeInCache($cacheKey, $conversions);
