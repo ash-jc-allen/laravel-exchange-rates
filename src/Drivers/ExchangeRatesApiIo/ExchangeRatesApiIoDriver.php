@@ -38,7 +38,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
     /**
      * @inheritDoc
      */
-    public function exchangeRate(string $from, $to, Carbon $date = null)
+    public function exchangeRate(string $from, array|string $to, Carbon $date = null)
     {
         return $this->sharedDriverLogicHandler->exchangeRate($from, $to, $date);
     }
@@ -47,11 +47,11 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
      * @inheritDoc
      */
     public function exchangeRateBetweenDateRange(
-        string $from,
-               $to,
-        Carbon $date,
-        Carbon $endDate,
-        array $conversions = []
+        string       $from,
+        array|string $to,
+        Carbon       $date,
+        Carbon       $endDate,
+        array        $conversions = []
     ): array {
         return $this->sharedDriverLogicHandler->exchangeRateBetweenDateRange($from, $to, $date, $endDate, $conversions);
     }
@@ -59,7 +59,7 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
     /**
      * @inheritDoc
      */
-    public function convert(int $value, string $from, $to, Carbon $date = null)
+    public function convert(int $value, string $from, array|string $to, Carbon $date = null)
     {
         return $this->sharedDriverLogicHandler->convert($value, $from, $to, $date);
     }
@@ -68,12 +68,12 @@ class ExchangeRatesApiIoDriver implements ExchangeRateDriver
      * @inheritDoc
      */
     public function convertBetweenDateRange(
-        int $value,
-        string $from,
-        $to,
-        Carbon $date,
-        Carbon $endDate,
-        array $conversions = []
+        int          $value,
+        string       $from,
+        array|string $to,
+        Carbon       $date,
+        Carbon       $endDate,
+        array        $conversions = []
     ): array {
         return $this->sharedDriverLogicHandler->convertBetweenDateRange($value, $from, $to, $date, $endDate, $conversions);
     }
