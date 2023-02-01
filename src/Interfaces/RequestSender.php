@@ -9,7 +9,7 @@ use Illuminate\Http\Client\RequestException;
 interface RequestSender
 {
     /**
-     * Make an API request to the ExchangeRatesAPI.
+     * Make an API request to the specified driver's API.
      *
      * @param  string  $path
      * @param  string[]  $queryParams
