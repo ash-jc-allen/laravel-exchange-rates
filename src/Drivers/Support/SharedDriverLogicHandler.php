@@ -66,9 +66,9 @@ class SharedDriverLogicHandler
 
         $response = $this->requestBuilder->makeRequest('/latest', []);
 
-        $currencies = [$response['base']];
+        $currencies = [$response->get('base')];
 
-        foreach ($response['rates'] as $currency => $rate) {
+        foreach ($response->rates() as $currency => $rate) {
             $currencies[] = $currency;
         }
 
@@ -122,7 +122,7 @@ class SharedDriverLogicHandler
             ? '/'.$date->format('Y-m-d')
             : '/latest';
 
-        $response = $this->requestBuilder->makeRequest($url, $queryParams)['rates'];
+        $response = $this->requestBuilder->makeRequest($url, $queryParams)->rates();
 
         $exchangeRate = is_string($to) ? $response[$to] : $response;
 
@@ -199,7 +199,7 @@ class SharedDriverLogicHandler
             'symbols'  => $symbols,
         ]);
 
-        $conversions = $result['rates'];
+        $conversions = $result->rates();
 
         if (is_string($to)) {
             foreach ($conversions as $date => $rate) {
