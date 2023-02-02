@@ -6,6 +6,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesAp
 
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\Response;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
@@ -219,20 +220,20 @@ final class ExchangeRateTest extends TestCase
         $exchangeRate->exchangeRate('GBP', ['INVALID'], now()->subMinute());
     }
 
-    private function mockResponseForCurrentDateAndOneSymbol(): array
+    private function mockResponseForCurrentDateAndOneSymbol(): Response
     {
-        return [
+        return new Response([
             'rates' => [
                 'GBP' => 0.86158,
             ],
             'base'  => 'EUR',
             'date'  => '2019-11-08',
-        ];
+        ]);
     }
 
-    private function mockResponseForCurrentDateAndMultipleSymbols(): array
+    private function mockResponseForCurrentDateAndMultipleSymbols(): Response
     {
-        return [
+        return new Response([
             'rates' => [
                 'CAD' => 1.4561,
                 'USD' => 1.1034,
@@ -240,25 +241,23 @@ final class ExchangeRateTest extends TestCase
             ],
             'base'  => 'EUR',
             'date'  => '2019-11-08',
-        ];
+        ]);
     }
 
-    private function mockResponseForPastDateAndOneSymbol(): array
+    private function mockResponseForPastDateAndOneSymbol(): Response
     {
-        return
-            [
+        return new Response([
                 'rates' => [
                     'GBP' => 0.87053,
                 ],
                 'base'  => 'EUR',
                 'date'  => '2018-11-09',
-            ];
+            ]);
     }
 
-    private function mockResponseForPastDateAndMultipleSymbols(): array
+    private function mockResponseForPastDateAndMultipleSymbols(): Response
     {
-        return
-            [
+        return new Response([
                 'rates' => [
                     'CAD' => 1.4969,
                     'USD' => 1.1346,
@@ -266,6 +265,6 @@ final class ExchangeRateTest extends TestCase
                 ],
                 'base'  => 'EUR',
                 'date'  => '2018-11-09',
-            ];
+            ]);
     }
 }
