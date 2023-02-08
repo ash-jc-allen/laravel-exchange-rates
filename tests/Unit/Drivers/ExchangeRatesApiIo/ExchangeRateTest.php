@@ -9,7 +9,6 @@ use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilde
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
