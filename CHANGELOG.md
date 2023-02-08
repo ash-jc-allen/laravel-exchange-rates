@@ -15,6 +15,7 @@
 - Removed the `api_url` config option. [#84](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/84)
 - Removed `existsInCache` method from the `src/Classes/CacheRepository.php` file. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/106)
 - Removed `validateIsStringOrArray` method from the `src/Classes/Validation` file. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/106)
+- Removed the validation that ensured a date wasn't before the 4th January 1999. [#117](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/117)
 
 **v5.2.0 (released 2023-01-11):**
 - Added support for Laravel 10. [#81](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/81)

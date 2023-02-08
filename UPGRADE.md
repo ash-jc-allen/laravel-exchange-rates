@@ -88,6 +88,12 @@ For example, the `exchange-rates-api-io` driver has a `src/Drivers/ExchangeRates
 
 If you're using or extending the `src/Classes/RequestBuilder` class, you'll need to update your code to use the correct driver's request builder instead.
 
+### Removed the "earliest date" validation
+
+Previously, Laravel Exchange Rates only worked with the `exchangeratesapi.io` API. This API only allowed you to retrieve exchange rates for dates after the 4th January 1999. So, the package used to prevent any dates before this from being used and would throw an `AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException` exception if you tried to use a date before this.
+
+As of v6.0.0, Laravel Exchange Rates now supports multiple APIs. Some of these APIs allow you to retrieve exchange rates for dates before the 4th January 1999. So, the package no longer prevents you from using dates before this. Instead, it will let the API handle the validation. If you'd still like to prevent dates before this from being used, you can add your own validation to your application's code.
+
 ## Upgrading from 4.* to 5.0.0
 
 ### Minimum PHP Version
