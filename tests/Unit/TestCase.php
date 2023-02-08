@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
 
 use AshAllenDesign\LaravelExchangeRates\Facades\ExchangeRate;
@@ -36,5 +38,12 @@ abstract class TestCase extends OrchestraTestCase
         return [
             'exchange-rates' => ExchangeRate::class,
         ];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['laravel-exchange-rates.api_key' => 'test-api-key']);
     }
 }

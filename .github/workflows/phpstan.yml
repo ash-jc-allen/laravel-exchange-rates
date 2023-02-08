@@ -21,8 +21,6 @@ jobs:
         exclude:
           - laravel: 10.*
             php: 8.0
-          - laravel: 10.*
-            php: 8.1
 
     name: PHP${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
@@ -43,9 +41,15 @@ jobs:
         run: |
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-suggest
+
+      - name: Copy Laravel 8 Specific Files
+        if: matrix.laravel == '8.*'
+        run: cp phpstan-laravel-8.neon phpstan.neon
+
       - name: Run Larastan
         run: vendor/bin/phpstan analyse

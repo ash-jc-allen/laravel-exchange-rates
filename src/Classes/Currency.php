@@ -1,15 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
 class Currency
 {
-    /**
-     * Currencies supported by the API.
-     *
-     * @var array
-     */
-    public $allowableCurrencies = [
+    public array $allowableCurrencies = [
         'AED',
         'AFN',
         'ALL',
@@ -180,14 +177,13 @@ class Currency
     ];
 
     /**
-     * Determine if a currency that is being used is
-     * allowable and supported by the API.
+     * Determine if a currency that is being used is allowable and supported by the API.
      *
      * @param  string  $currency
      * @return bool
      */
     public function isAllowableCurrency(string $currency): bool
     {
-        return in_array($currency, $this->allowableCurrencies);
+        return in_array($currency, $this->allowableCurrencies, true);
     }
 }

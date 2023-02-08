@@ -1,16 +1,19 @@
 <?php
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit;
+declare(strict_types=1);
 
-use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
-use AshAllenDesign\LaravelExchangeRates\Classes\RequestBuilder;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesDataApi;
+
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
-class CurrenciesTest extends TestCase
+final class CurrenciesTest extends TestCase
 {
     /** @test */
-    public function currencies_are_returned_as_an_array_if_no_currencies_are_cached()
+    public function currencies_are_returned_as_an_array_if_no_currencies_are_cached(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
@@ -18,7 +21,7 @@ class CurrenciesTest extends TestCase
             ->once()
             ->andReturn($this->mockResponse());
 
-        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesDataApiDriver($requestBuilderMock);
         $currencies = $exchangeRate->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
@@ -27,21 +30,21 @@ class CurrenciesTest extends TestCase
     }
 
     /** @test */
-    public function cached_currencies_are_returned_if_they_are_in_the_cache()
+    public function cached_currencies_are_returned_if_they_are_in_the_cache(): void
     {
         Cache::forever('laravel_xr_currencies', ['CUR1', 'CUR2', 'CUR3']);
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')->never();
 
-        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesDataApiDriver($requestBuilderMock);
         $currencies = $exchangeRate->currencies();
 
         $this->assertEquals(['CUR1', 'CUR2', 'CUR3'], $currencies);
     }
 
     /** @test */
-    public function currencies_are_fetched_if_the_currencies_are_cached_but_the_should_bust_cache_method_called()
+    public function currencies_are_fetched_if_the_currencies_are_cached_but_the_should_bust_cache_method_called(): void
     {
         Cache::forever('currencies', ['CUR1', 'CUR2', 'CUR3']);
 
@@ -51,14 +54,14 @@ class CurrenciesTest extends TestCase
             ->once()
             ->andReturn($this->mockResponse());
 
-        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesDataApiDriver($requestBuilderMock);
         $currencies = $exchangeRate->shouldBustCache()->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
     }
 
     /** @test */
-    public function currencies_are_not_cached_if_the_shouldCache_option_is_false()
+    public function currencies_are_not_cached_if_the_shouldCache_option_is_false(): void
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
@@ -66,7 +69,7 @@ class CurrenciesTest extends TestCase
             ->once()
             ->andReturn($this->mockResponse());
 
-        $exchangeRate = new ExchangeRate($requestBuilderMock);
+        $exchangeRate = new ExchangeRatesDataApiDriver($requestBuilderMock);
         $currencies = $exchangeRate->shouldCache(false)->currencies();
 
         $this->assertEquals($this->expectedResponse(), $currencies);
@@ -74,7 +77,7 @@ class CurrenciesTest extends TestCase
         $this->assertNull(Cache::get('laravel_xr_currencies'));
     }
 
-    private function mockResponse()
+    private function mockResponse(): array
     {
         return [
             'rates' => [
@@ -116,7 +119,7 @@ class CurrenciesTest extends TestCase
         ];
     }
 
-    private function expectedResponse()
+    private function expectedResponse(): array
     {
         return [
             'EUR',
