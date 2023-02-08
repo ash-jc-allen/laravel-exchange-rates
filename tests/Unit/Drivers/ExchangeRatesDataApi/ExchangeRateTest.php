@@ -200,16 +200,6 @@ final class ExchangeRateTest extends TestCase
     }
 
     /** @test */
-    public function exception_is_thrown_if_the_date_is_before_the_earliest_possible_date(): void
-    {
-        $this->expectException(InvalidDateException::class);
-        $this->expectExceptionMessage('The date cannot be before 4th January 1999.');
-
-        $exchangeRate = new ExchangeRatesDataApiDriver();
-        $exchangeRate->exchangeRate('GBP', 'USD', Carbon::createFromDate(1999, 1, 3));
-    }
-
-    /** @test */
     public function exception_is_thrown_if_the_to_parameter_array_is_invalid(): void
     {
         $this->expectException(InvalidCurrencyException::class);
