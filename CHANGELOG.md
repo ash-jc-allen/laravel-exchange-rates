@@ -1,6 +1,6 @@
 # Changelog
 
-**v6.0.0 (released 2023-01-30):**
+**v6.0.0 (released 2023-02-08):**
 
 - Added concept of "drivers" so the package can support multiple APIs. [#84](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/84)
 - Added support for API Layer's "Exchange Rates Data API". [#89](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/89)
