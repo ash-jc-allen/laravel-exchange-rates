@@ -19,7 +19,7 @@ return [
     | API Key
     |--------------------------------------------------------------------------
     |
-    | Define your exchangeratesapi.io API key here.
+    | Define your API key here.
     |
     */
     'api_key' => env('EXCHANGE_RATES_API_KEY'),
