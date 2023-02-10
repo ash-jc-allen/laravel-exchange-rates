@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Classes;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost\ExchangeRateHostDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
@@ -46,6 +47,7 @@ final class ExchangeRateTest extends TestCase
         return [
             ['exchange-rates-api-io', ExchangeRatesApiIoDriver::class],
             ['exchange-rates-data-api', ExchangeRatesDataApiDriver::class],
+            ['exchange-rate-host', ExchangeRateHostDriver::class],
         ];
     }
 }
