@@ -1,5 +1,9 @@
 # Changelog
 
+**v6.1.0 (released 2023-02-10):**
+
+- Added support for the "exchangerate.host" API. [#118](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/118)
+
 **v6.0.0 (released 2023-02-08):**
 
 - Added concept of "drivers" so the package can support multiple APIs. [#84](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/84)
