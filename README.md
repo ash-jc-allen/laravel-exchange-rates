@@ -70,6 +70,7 @@ Laravel Exchange Rates currently supports the following APIs:
 
 - [Exchange Rates API](https://exchangeratesapi.io/)
 - [Exchange Rates Data API](https://apilayer.com/marketplace/exchangerates_data-api)
+- [Exchange Rate Host](https://exchangerate.host/)
 
 ## Configuration
 
@@ -371,6 +372,7 @@ The following drivers are available with the package:
 |-------------------------|---------------------------|---------------------------------------------------------|
 | Exchange Rates API IO   | `exchange-rates-api-io`   | https://exchangeratesapi.io/                            |
 | Exchange Rates Data API | `exchange-rates-data-api` | https://apilayer.com/marketplace/exchangerates_data-api |
+| Exchange Rate Host      | `exchange-rate-host`      | https://exchangerate.host                               |
 
 ### Validation Rule
 
