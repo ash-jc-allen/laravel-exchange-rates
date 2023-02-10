@@ -10,7 +10,7 @@ use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
 use Carbon\Carbon;
 
 /**
- * @see https://exchangeratesapi.io/
+ * @see https://exchangerate.host
  */
 class ExchangeRateHostDriver implements ExchangeRateDriver
 {
