@@ -13,7 +13,7 @@ So from v6.0.0 onwards, this class should be resolved from the container rather 
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRate = app(ExchangeRate::class)->exchangeRate(...);
+$exchangeRate = (new ExchangeRate())->exchangeRate(...);
 ```
 
 Instead you should now use the `app` helper to resolve the class from the container like so:
