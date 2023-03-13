@@ -24,6 +24,7 @@ final class ExchangeRateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider validDriversProvider
      */
     public function correct_driver_is_returned(string $driverName, string $driverClass): void
