@@ -8,6 +8,22 @@ As of Laravel Exchange Rates v6.0.0, the codebase is no longer tightly coupled t
 
 This means that the `src/Classes/ExchangeRate` class doesn't run any of the exchange rate or currency conversion logic itself anymore. Instead, it forwards your method calls to the driver classes you're using.
 
+So from v6.0.0 onwards, this class should be resolved from the container rather than just using `new ExchangeRate()`. This is how you may have previously interacted with the package:
+
+```php
+use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
+
+$exchangeRate = app(ExchangeRate::class)->exchangeRate(...);
+```
+
+Instead you should now use the `app` helper to resolve the class from the container like so:
+
+```php
+use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
+
+$exchangeRate = app(ExchangeRate::class)->exchangeRate(...);
+```
+
 If you've been using `http://api.exchangeratesapi.io/v1/` as your `api_url` config field, you shouldn't need to change anything in your config file or code.
 
 However, if you've been using a different API, you won't be able to communicate with it anymore. You'll need to update your `driver` config field (we'll discuss this further down) to use of the supported APIs. If you wish to use an API service that doesn't have a supported driver, please feel free to make a PR to add it.
