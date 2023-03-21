@@ -70,6 +70,7 @@ Laravel Exchange Rates currently supports the following APIs:
 
 - [Exchange Rates API](https://exchangeratesapi.io/)
 - [Exchange Rates Data API](https://apilayer.com/marketplace/exchangerates_data-api)
+- [Exchange Rate Host](https://exchangerate.host/)
 
 ## Configuration
 
@@ -97,7 +98,7 @@ To get the available currencies supported by the API, you can use the `currencie
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $exchangeRates->currencies();
 ```
@@ -113,7 +114,7 @@ The example below shows how to get the exchange rate from 'GBP' to 'EUR' for tod
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $result = $exchangeRates->exchangeRate('GBP', 'EUR');
 
@@ -133,7 +134,7 @@ The example below shows how to get the exchange rates from 'GBP' to 'EUR' and 'U
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $result = $exchangeRates->exchangeRate('GBP', ['EUR', 'USD']);
 
@@ -154,7 +155,7 @@ The example below shows how to get the exchange rates from 'GBP' to 'EUR' for th
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $result = $exchangeRates->exchangeRateBetweenDateRange(
     'GBP',
@@ -179,7 +180,7 @@ The example below shows how to get the exchange rates from 'GBP' to 'EUR' and 'U
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $result = $exchangeRates->exchangeRateBetweenDateRange(
     'GBP',
@@ -217,7 +218,7 @@ The example below shows how to convert £1 'GBP' to 'EUR' at today's exchange ra
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $result = $exchangeRates->convert(100, 'GBP', 'EUR', Carbon::now());
 
@@ -235,7 +236,7 @@ The example below show how to convert £1 'GBP' to 'EUR' and 'USD' at today's ex
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $result = $exchangeRates->convert(
     100,
@@ -263,7 +264,7 @@ The example below shows how to convert £1 'GBP' to 'EUR' using the exchange rat
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $exchangeRates->convertBetweenDateRange(
     100,
@@ -290,7 +291,7 @@ The example below show how to convert £1 'GBP' to 'EUR' and 'USD' at the past t
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $result = $exchangeRates->exchangeRateBetweenDateRange(
     'GBP',
@@ -341,7 +342,7 @@ This driver will automatically be used when running methods such as:
 
 ```php
 // Using the "ExchangeRate" class:
-$exchangeRates = new ExchangeRate()
+$exchangeRates = app(ExchangeRate::class);
 $result = $exchangeRates->exchangeRate('GBP', ['EUR', 'USD']);
 
 // Using the "ExchangeRate" facade:
@@ -352,7 +353,7 @@ However, if you wish to use a different driver, you can use the `driver` method 
 
 ```php
 // Using the "ExchangeRate" class:
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $result = $exchangeRates
     ->driver('exchange-rates-data-api')
@@ -371,6 +372,7 @@ The following drivers are available with the package:
 |-------------------------|---------------------------|---------------------------------------------------------|
 | Exchange Rates API IO   | `exchange-rates-api-io`   | https://exchangeratesapi.io/                            |
 | Exchange Rates Data API | `exchange-rates-data-api` | https://apilayer.com/marketplace/exchangerates_data-api |
+| Exchange Rate Host      | `exchange-rate-host`      | https://exchangerate.host                               |
 
 ### Validation Rule
 
@@ -385,7 +387,7 @@ $formData = [
 ];
 
 $rules = [
-    'currency' => new ValidCurrency,
+    'currency' => new ValidCurrency(),
 ];
 
 $validator = Validator::make($formData, $rules);
@@ -406,7 +408,7 @@ However, if for any reason you require a fresh result from the API and not a cac
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $exchangeRates->shouldBustCache()
     ->convert(
@@ -425,7 +427,7 @@ method. The example below shows how to get an exchange rate and not cache it:
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
 
-$exchangeRates = new ExchangeRate();
+$exchangeRates = app(ExchangeRate::class);
 
 $exchangeRates->shouldCache(false)
     ->convert(
@@ -659,3 +661,15 @@ Check the [UPGRADE](UPGRADE.md) guide to get more information on how to update t
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## Support Me
+
+If you've found this package useful, please consider buying a copy of [Battle Ready Laravel](https://battle-ready-laravel.com) to support me and my work.
+
+Every sale makes a huge difference to me and allows me to spend more time working on open-source projects and tutorials.
+
+To say a huge thanks, you can use the code **BATTLE20** to get a 20% discount on the book.
+
+[👉 Get Your Copy!](https://battle-ready-laravel.com)
+
+[![Battle Ready Laravel](https://ashallendesign.co.uk/images/custom/sponsors/battle-ready-laravel-horizontal-banner.png)](https://battle-ready-laravel.com)

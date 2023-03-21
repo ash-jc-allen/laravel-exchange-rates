@@ -8,6 +8,22 @@ As of Laravel Exchange Rates v6.0.0, the codebase is no longer tightly coupled t
 
 This means that the `src/Classes/ExchangeRate` class doesn't run any of the exchange rate or currency conversion logic itself anymore. Instead, it forwards your method calls to the driver classes you're using.
 
+So from v6.0.0 onwards, this class should be resolved from the container rather than just using `new ExchangeRate()`. This is how you may have previously interacted with the package:
+
+```php
+use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
+
+$exchangeRate = (new ExchangeRate())->exchangeRate(...);
+```
+
+Instead you should now use the `app` helper to resolve the class from the container like so:
+
+```php
+use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
+
+$exchangeRate = app(ExchangeRate::class)->exchangeRate(...);
+```
+
 If you've been using `http://api.exchangeratesapi.io/v1/` as your `api_url` config field, you shouldn't need to change anything in your config file or code.
 
 However, if you've been using a different API, you won't be able to communicate with it anymore. You'll need to update your `driver` config field (we'll discuss this further down) to use of the supported APIs. If you wish to use an API service that doesn't have a supported driver, please feel free to make a PR to add it.
@@ -87,6 +103,12 @@ The `src/Classes/RequestBuilder` class has been removed because we're no longer 
 For example, the `exchange-rates-api-io` driver has a `src/Drivers/ExchangeRatesApiIo/RequestBuilder.php` class that is used to build requests for the `exchangeratesapi.io` API. The `exchange-rates-data-api` driver has a `src/Drivers/ExchangeRatesDataApi/RequestBuilder.php` class that is used to build requests for the `https://apilayer.com/marketplace/exchangerates_data-api` API.
 
 If you're using or extending the `src/Classes/RequestBuilder` class, you'll need to update your code to use the correct driver's request builder instead.
+
+### Removed the "earliest date" validation
+
+Previously, Laravel Exchange Rates only worked with the `exchangeratesapi.io` API. This API only allowed you to retrieve exchange rates for dates after the 4th January 1999. So, the package used to prevent any dates before this from being used and would throw an `AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException` exception if you tried to use a date before this.
+
+As of v6.0.0, Laravel Exchange Rates now supports multiple APIs. Some of these APIs allow you to retrieve exchange rates for dates before the 4th January 1999. So, the package no longer prevents you from using dates before this. Instead, it will let the API handle the validation. If you'd still like to prevent dates before this from being used, you can add your own validation to your application's code.
 
 ## Upgrading from 4.* to 5.0.0
 

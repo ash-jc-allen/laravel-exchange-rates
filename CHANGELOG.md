@@ -1,6 +1,10 @@
 # Changelog
 
-**v6.0.0 (released 2023-01-30):**
+**v6.1.0 (released 2023-02-10):**
+
+- Added support for the "exchangerate.host" API. [#118](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/118)
+
+**v6.0.0 (released 2023-02-08):**
 
 - Added concept of "drivers" so the package can support multiple APIs. [#84](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/84)
 - Added support for API Layer's "Exchange Rates Data API". [#89](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/89)
@@ -15,6 +19,7 @@
 - Removed the `api_url` config option. [#84](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/84)
 - Removed `existsInCache` method from the `src/Classes/CacheRepository.php` file. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/106)
 - Removed `validateIsStringOrArray` method from the `src/Classes/Validation` file. [#106](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/106)
+- Removed the validation that ensured a date wasn't before the 4th January 1999. [#117](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/117)
 
 **v5.2.0 (released 2023-01-11):**
 - Added support for Laravel 10. [#81](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/81)
