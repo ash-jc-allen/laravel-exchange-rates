@@ -2,7 +2,9 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost;
 
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\Response;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender;
+use AshAllenDesign\LaravelExchangeRates\Interfaces\ResponseContract;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
@@ -15,15 +17,17 @@ class RequestBuilder implements RequestSender
      *
      * @param  string  $path
      * @param  array<string, string>  $queryParams
-     * @return mixed
+     * @return ResponseContract
      *
      * @throws RequestException
      */
-    public function makeRequest(string $path, array $queryParams = []): mixed
+    public function makeRequest(string $path, array $queryParams = []): ResponseContract
     {
-        return Http::baseUrl(self::BASE_URL)
+        $rawResponse = Http::baseUrl(self::BASE_URL)
             ->get($path, $queryParams)
             ->throw()
             ->json();
+
+        return new Response($rawResponse);
     }
 }

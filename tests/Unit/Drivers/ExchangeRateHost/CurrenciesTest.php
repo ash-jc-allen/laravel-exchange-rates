@@ -6,6 +6,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRateHos
 
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost\ExchangeRateHostDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost\Response;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
@@ -77,9 +78,9 @@ final class CurrenciesTest extends TestCase
         $this->assertNull(Cache::get('laravel_xr_currencies'));
     }
 
-    private function mockResponse(): array
+    private function mockResponse(): Response
     {
-        return [
+        return new Response([
             'rates' => [
                 'CAD' => 1.4682,
                 'HKD' => 8.7298,
@@ -116,7 +117,7 @@ final class CurrenciesTest extends TestCase
             ],
             'base'  => 'EUR',
             'date'  => '2019-11-01',
-        ];
+        ]);
     }
 
     private function expectedResponse(): array
