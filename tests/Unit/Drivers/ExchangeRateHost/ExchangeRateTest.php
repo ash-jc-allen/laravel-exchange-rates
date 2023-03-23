@@ -27,7 +27,7 @@ final class ExchangeRateTest extends TestCase
         $exchangeRate = new ExchangeRateHostDriver($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP');
         $this->assertEquals('0.86158', $rate);
-        $this->assertEquals('0.86158', Cache::get('laravel_xr_EUR_GBP_' . now()->format('Y-m-d')));
+        $this->assertEquals('0.86158', Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
     }
 
     /** @test */
@@ -37,14 +37,14 @@ final class ExchangeRateTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/' . $mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRateHostDriver($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP', $mockDate);
         $this->assertEquals('0.87053', $rate);
-        $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_' . $mockDate->format('Y-m-d')));
+        $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -52,7 +52,7 @@ final class ExchangeRateTest extends TestCase
     {
         $mockDate = now();
 
-        Cache::forever('laravel_xr_EUR_GBP_' . $mockDate->format('Y-m-d'), 0.123456);
+        Cache::forever('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d'), 0.123456);
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')->never();
@@ -60,7 +60,7 @@ final class ExchangeRateTest extends TestCase
         $exchangeRate = new ExchangeRateHostDriver($requestBuilderMock);
         $rate = $exchangeRate->exchangeRate('EUR', 'GBP', $mockDate);
         $this->assertEquals('0.123456', $rate);
-        $this->assertEquals('0.123456', Cache::get('laravel_xr_EUR_GBP_' . $mockDate->format('Y-m-d')));
+        $this->assertEquals('0.123456', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -77,7 +77,7 @@ final class ExchangeRateTest extends TestCase
         $this->assertEquals(['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158], $response);
         $this->assertEquals(
             ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158],
-            Cache::get('laravel_xr_EUR_CAD_GBP_USD_' . now()->format('Y-m-d'))
+            Cache::get('laravel_xr_EUR_CAD_GBP_USD_'.now()->format('Y-m-d'))
         );
     }
 
@@ -88,7 +88,7 @@ final class ExchangeRateTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/' . $mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP,CAD,USD']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP,CAD,USD']])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndMultipleSymbols());
 
@@ -97,7 +97,7 @@ final class ExchangeRateTest extends TestCase
         $this->assertEquals(['CAD' => 1.4969, 'USD' => 1.1346, 'GBP' => 0.87053], $response);
         $this->assertEquals(
             ['CAD' => 1.4969, 'USD' => 1.1346, 'GBP' => 0.87053],
-            Cache::get('laravel_xr_EUR_CAD_GBP_USD_' . $mockDate->format('Y-m-d'))
+            Cache::get('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'))
         );
     }
 
@@ -106,9 +106,9 @@ final class ExchangeRateTest extends TestCase
     {
         $mockDate = now();
 
-        Cache::forget('laravel_xr_EUR_CAD_GBP_USD_' . $mockDate->format('Y-m-d'));
+        Cache::forget('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'));
 
-        Cache::forever('laravel_xr_EUR_CAD_GBP_USD_' . $mockDate->format('Y-m-d'),
+        Cache::forever('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'),
             ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158]
         );
 
@@ -120,7 +120,7 @@ final class ExchangeRateTest extends TestCase
         $this->assertEquals(['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158], $rate);
         $this->assertEquals(
             ['CAD' => 1.4561, 'USD' => 1.1034, 'GBP' => 0.86158],
-            Cache::get('laravel_xr_EUR_CAD_GBP_USD_' . $mockDate->format('Y-m-d'))
+            Cache::get('laravel_xr_EUR_CAD_GBP_USD_'.$mockDate->format('Y-m-d'))
         );
     }
 
@@ -129,18 +129,18 @@ final class ExchangeRateTest extends TestCase
     {
         $mockDate = now();
 
-        Cache::forever('laravel_xr_EUR_GBP_' . $mockDate->format('Y-m-d'), '0.123456');
+        Cache::forever('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d'), '0.123456');
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/' . $mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
         $exchangeRate = new ExchangeRateHostDriver($requestBuilderMock);
         $rate = $exchangeRate->shouldBustCache()->exchangeRate('EUR', 'GBP', $mockDate);
         $this->assertEquals('0.87053', $rate);
-        $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_' . $mockDate->format('Y-m-d')));
+        $this->assertEquals('0.87053', Cache::get('laravel_xr_EUR_GBP_'.$mockDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -155,7 +155,7 @@ final class ExchangeRateTest extends TestCase
         $exchangeRate = new ExchangeRateHostDriver($requestBuilderMock);
         $rate = $exchangeRate->shouldCache(false)->exchangeRate('EUR', 'GBP');
         $this->assertEquals('0.86158', $rate);
-        $this->assertNull(Cache::get('laravel_xr_EUR_GBP_' . now()->format('Y-m-d')));
+        $this->assertNull(Cache::get('laravel_xr_EUR_GBP_'.now()->format('Y-m-d')));
     }
 
     /** @test */

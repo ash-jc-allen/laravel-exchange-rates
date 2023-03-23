@@ -6,14 +6,13 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesDa
 
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\Response;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\Response;
-
 
 final class ExchangeRateBetweenDateRangeTest extends TestCase
 {

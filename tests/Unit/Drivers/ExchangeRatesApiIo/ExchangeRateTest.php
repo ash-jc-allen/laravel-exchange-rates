@@ -236,24 +236,24 @@ final class ExchangeRateTest extends TestCase
     private function mockResponseForPastDateAndOneSymbol(): Response
     {
         return new Response([
-                'rates' => [
-                    'GBP' => 0.87053,
-                ],
-                'base'  => 'EUR',
-                'date'  => '2018-11-09',
-            ]);
+            'rates' => [
+                'GBP' => 0.87053,
+            ],
+            'base'  => 'EUR',
+            'date'  => '2018-11-09',
+        ]);
     }
 
     private function mockResponseForPastDateAndMultipleSymbols(): Response
     {
         return new Response([
-                'rates' => [
-                    'CAD' => 1.4969,
-                    'USD' => 1.1346,
-                    'GBP' => 0.87053,
-                ],
-                'base'  => 'EUR',
-                'date'  => '2018-11-09',
-            ]);
+            'rates' => [
+                'CAD' => 1.4969,
+                'USD' => 1.1346,
+                'GBP' => 0.87053,
+            ],
+            'base'  => 'EUR',
+            'date'  => '2018-11-09',
+        ]);
     }
 }
