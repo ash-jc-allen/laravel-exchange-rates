@@ -1,5 +1,17 @@
 # Upgrade Guide
 
+## Upgrading from 6.* to 7.0.0
+
+### Method Signature Change
+
+As of v7.0.0, the `makeRequest` method in the `AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender` interface has been updated to return an `AshAllenDesign\LaravelExchangeRates\Interfaces\ResponseContract` interface instead of `mixed`.
+
+If you are implementing this interface in your own code, you'll need to update the method signature to the new format. The new `makeRequest` method signature is as follows:
+
+```php
+public function makeRequest(string $path, array $queryParams = []): ResponseContract;
+````
+
 ## Upgrading from 5.* to 6.0.0
 
 ### Updated the `ExchangeRate` Class to Use Drivers

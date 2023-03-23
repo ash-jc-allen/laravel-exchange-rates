@@ -1,5 +1,10 @@
 # Changelog
 
+**v7.0.0 (released 2023-03-23):**
+
+- Updated documentation to show the correct way to use the package. [#123](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/123)
+- Updated the `RequestSender` interface (and all classes implementing it) to return a `ResponseContract` interface from the `makeRequest` method instead of `mixed`. [#126](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/126)
+
 **v6.1.0 (released 2023-02-10):**
 
 - Added support for the "exchangerate.host" API. [#118](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/118)
