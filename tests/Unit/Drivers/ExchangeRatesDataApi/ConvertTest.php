@@ -11,6 +11,8 @@ use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\Response;
+
 
 final class ConvertTest extends TestCase
 {
@@ -142,9 +144,9 @@ final class ConvertTest extends TestCase
         $exchangeRate->convert(100, 'GBP', 'INVALID', now()->subMinute());
     }
 
-    private function mockResponseForCurrentDateAndOneSymbol(): array
+    private function mockResponseForCurrentDateAndOneSymbol(): Response
     {
-        return [
+        return new Response([
             'rates' => [
                 'CAD' => 1.4561,
                 'HKD' => 8.6372,
@@ -181,13 +183,13 @@ final class ConvertTest extends TestCase
             ],
             'base'  => 'EUR',
             'date'  => '2019-11-08',
-        ];
+        ]);
     }
 
-    private function mockResponseForPastDateAndOneSymbol(): array
+    private function mockResponseForPastDateAndOneSymbol(): Response
     {
         return
-            [
+            new Response([
                 'rates' => [
                     'CAD' => 1.4969,
                     'HKD' => 8.8843,
@@ -224,12 +226,12 @@ final class ConvertTest extends TestCase
                 ],
                 'base'  => 'EUR',
                 'date'  => '2018-11-09',
-            ];
+            ]);
     }
 
-    private function mockResponseForCurrentDateAndMultipleSymbols(): array
+    private function mockResponseForCurrentDateAndMultipleSymbols(): Response
     {
-        return [
+        return new Response([
             'rates' => [
                 'CAD' => 1.4561,
                 'USD' => 1.1034,
@@ -237,6 +239,6 @@ final class ConvertTest extends TestCase
             ],
             'base'  => 'EUR',
             'date'  => '2019-11-08',
-        ];
+        ]);
     }
 }

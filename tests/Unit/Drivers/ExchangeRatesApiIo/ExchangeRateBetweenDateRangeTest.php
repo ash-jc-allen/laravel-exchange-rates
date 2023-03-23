@@ -6,6 +6,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRatesAp
 
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\Response;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
@@ -282,9 +283,9 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $exchangeRate->exchangeRateBetweenDateRange('GBP', ['USD', 'INVALID'], now()->subWeek(), now()->subDay());
     }
 
-    private function mockResponseForOneSymbol(): array
+    private function mockResponseForOneSymbol(): Response
     {
-        return [
+        return new Response([
             'rates'    => [
                 '2019-11-08' => [
                     'EUR' => 1.1606583254,
@@ -305,12 +306,12 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
             'start_date' => '2019-11-03',
             'base'     => 'GBP',
             'end_date'   => '2019-11-10',
-        ];
+        ]);
     }
 
-    private function mockResponseForMultipleSymbols(): array
+    private function mockResponseForMultipleSymbols(): Response
     {
-        return [
+        return new Response([
             'rates'    => [
                 '2019-11-08' => [
                     'EUR' => 1.1606583254,
@@ -336,6 +337,6 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
             'start_date' => '2019-11-03',
             'base'     => 'GBP',
             'end_date'   => '2019-11-10',
-        ];
+        ]);
     }
 }

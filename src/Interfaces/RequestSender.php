@@ -13,9 +13,9 @@ interface RequestSender
      *
      * @param  string  $path
      * @param  string[]  $queryParams
-     * @return mixed
+     * @return ResponseContract
      *
      * @throws RequestException
      */
-    public function makeRequest(string $path, array $queryParams = []): mixed;
+    public function makeRequest(string $path, array $queryParams = []): ResponseContract;
 }
