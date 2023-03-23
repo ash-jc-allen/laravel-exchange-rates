@@ -12,7 +12,7 @@ class Response implements ResponseContract
 
     public function get(string $key): mixed
     {
-        return $this->rawResponse[$key] ?? collect($this->rawResponse)->flatten()->get($key);
+        return $this->rawResponse[$key];
     }
 
     public function rates(): array
