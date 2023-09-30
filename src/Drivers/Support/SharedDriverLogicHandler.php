@@ -112,7 +112,7 @@ class SharedDriverLogicHandler
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? Carbon::now());
 
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
-            return $cachedExchangeRate;
+            return (float)$cachedExchangeRate;
         }
 
         $symbols = is_string($to) ? $to : implode(',', $to);
