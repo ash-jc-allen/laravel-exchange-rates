@@ -2,7 +2,6 @@
 
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost;
 
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\Response;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\ResponseContract;
 use Illuminate\Http\Client\RequestException;
