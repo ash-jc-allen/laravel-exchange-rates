@@ -19,7 +19,7 @@ abstract class TestCase extends OrchestraTestCase
     /**
      * Load package service provider.
      *
-     * @param $app
+     * @param  $app
      * @return array
      */
     protected function getPackageProviders($app)
