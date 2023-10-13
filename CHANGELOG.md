@@ -1,5 +1,10 @@
 # Changelog
 
+**v7.0.1 (released 2023-10-13):**
+
+- Fixed bug that was using the wrong response class. [#130](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/130)
+- Fixed bug that was caused by returning a string rather than a float. [#128](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/128)
+
 **v7.0.0 (released 2023-03-23):**
 
 - Updated documentation to show the correct way to use the package. [#123](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/123)
