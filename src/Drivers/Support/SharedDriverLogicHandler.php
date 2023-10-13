@@ -112,7 +112,13 @@ class SharedDriverLogicHandler
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? Carbon::now());
 
         if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
-            return $cachedExchangeRate;
+            // If the exchange rate has been retrieved from the cache as a
+            // string (e.g. "1.23"), then cast it to a float (e.g. 1.23).
+            // If we have retrieved the rates for many currencies, it
+            // will be an array of floats, so just return it.
+            return is_string($cachedExchangeRate)
+                ? (float) $cachedExchangeRate
+                : $cachedExchangeRate;
         }
 
         $symbols = is_string($to) ? $to : implode(',', $to);
