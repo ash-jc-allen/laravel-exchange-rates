@@ -40,6 +40,27 @@ final class RequestBuilderTest extends TestCase
     }
 
     /** @test */
+    public function request_protocol_ignores_ssl_config_option(): void
+    {
+        config(['laravel-exchange-rates.ssl' => false]);
+
+        $url = 'https://api.apilayer.com/exchangerates_data/latest?base=USD';
+
+        Http::fake([
+            $url => Http::response(['RESPONSE']),
+            '*' => Http::response('SHOULD NOT HIT THIS!', 500),
+        ]);
+
+        $requestBuilder = new RequestBuilder();
+        $requestBuilder->makeRequest('latest', ['base' => 'USD']);
+
+        Http::assertSent(static function (Request $request) use ($url): bool {
+            return $request->method() === 'GET'
+                && $request->url() === $url;
+        });
+    }
+
+    /** @test */
     public function exception_is_thrown_if_the_request_fails(): void
     {
         $this->expectException(RequestException::class);

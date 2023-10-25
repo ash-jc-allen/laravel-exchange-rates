@@ -46,7 +46,7 @@
 - [Changelog](#changelog)
 - [Upgrading](#upgrading)
 - [License](#license)
-    
+
 ## Overview
 
 A simple Laravel package used for interacting with exchange rates APIs. Laravel Exchange Rates allows you to get the latest or historical exchange rates and convert monetary values between different currencies.
@@ -74,9 +74,9 @@ Laravel Exchange Rates currently supports the following APIs:
 
 ## Configuration
 
-### Publish the Config and Migrations
+### Publish the Config File
 
-You can publish the package's config file and database migrations (so that you can make changes to them) by using the following command:
+You can publish the package's config file using the following command:
 ```bash
 php artisan vendor:publish --provider="AshAllenDesign\LaravelExchangeRates\Providers\ExchangeRatesProvider"
 ```
@@ -86,6 +86,8 @@ If you're using an API that requires an API key, you can put it in your `.env`:
 ``` dotenv
 EXCHANGE_RATES_API_KEY={Your-API-Key-Here}
 ```
+
+If you're using the free tier of `https://exchangeratesapi.io` or `https://exchangerate.host`, you should set the `ssl` config option in `config/laravel-exchange-rates.php` to `false`, as the free tiers of those APIs don't allow SSL requests.
 
 ## Usage
 
