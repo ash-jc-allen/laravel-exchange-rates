@@ -351,7 +351,7 @@ class SharedDriverLogicHandler
      *
      * @throws InvalidArgumentException
      */
-    private function attemptToResolveFromCache(string $cacheKey): mixed
+    public function attemptToResolveFromCache(string $cacheKey): mixed
     {
         if ($this->shouldBustCache) {
             $this->cacheRepository->forget($cacheKey);
@@ -361,5 +361,17 @@ class SharedDriverLogicHandler
         }
 
         return null;
+    }
+
+    public function getRequestBuilder(): RequestSender
+    {
+        return $this->requestBuilder;
+    }
+
+    public function attemptToStoreInCache(string $cacheKey, array $currencies)
+    {
+        if ($this->shouldCache) {
+            $this->cacheRepository->storeInCache($cacheKey, $currencies);
+        }
     }
 }
