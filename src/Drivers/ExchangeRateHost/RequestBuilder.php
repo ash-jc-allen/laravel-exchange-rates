@@ -9,7 +9,15 @@ use Illuminate\Support\Facades\Http;
 
 class RequestBuilder implements RequestSender
 {
-    private const BASE_URL = 'https://api.exchangerate.host/';
+    // TODO Use HTTPS if SSL option enabled.
+    private const BASE_URL = 'http://api.exchangerate.host/';
+
+    private string $apiKey;
+
+    public function __construct()
+    {
+        $this->apiKey = config('laravel-exchange-rates.api_key');
+    }
 
     /**
      * Make an API request to the ExchangeRatesAPI.
@@ -23,7 +31,10 @@ class RequestBuilder implements RequestSender
     public function makeRequest(string $path, array $queryParams = []): ResponseContract
     {
         $rawResponse = Http::baseUrl(self::BASE_URL)
-            ->get($path, $queryParams)
+            ->get(
+                $path,
+                array_merge(['access_key' => $this->apiKey], $queryParams)
+            )
             ->throw()
             ->json();
 
