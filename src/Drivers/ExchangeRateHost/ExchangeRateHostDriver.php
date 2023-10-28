@@ -32,7 +32,21 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
      */
     public function currencies(): array
     {
-        return $this->sharedDriverLogicHandler->currencies();
+        $cacheKey = 'currencies';
+
+        if ($cachedExchangeRate = $this->sharedDriverLogicHandler->attemptToResolveFromCache($cacheKey)) {
+            return $cachedExchangeRate;
+        }
+
+        $response = $this->sharedDriverLogicHandler
+            ->getRequestBuilder()
+            ->makeRequest('/list');
+
+        $currencies = array_keys($response->get('currencies'));
+
+        $this->sharedDriverLogicHandler->attemptToStoreInCache($cacheKey, $currencies);
+
+        return $currencies;
     }
 
     /**
