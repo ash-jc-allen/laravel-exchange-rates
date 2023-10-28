@@ -1,5 +1,10 @@
 # Changelog
 
+**v7.1.0 (released 2023-10-28):**
+
+- Added an `https` config option that can be used to specify whether the API should be accessed over HTTPS or HTTP. [#136](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/136), [#137](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/137)
+- Run CI tests with PHP 8.3. [#134](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/134)
+
 **v7.0.1 (released 2023-10-13):**
 
 - Fixed bug that was using the wrong response class. [#130](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/130)
