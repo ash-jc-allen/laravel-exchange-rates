@@ -11,6 +11,13 @@ class RequestBuilder implements RequestSender
 {
     private const BASE_URL = 'api.exchangerate.host/';
 
+    private string $apiKey;
+
+    public function __construct()
+    {
+        $this->apiKey = config('laravel-exchange-rates.api_key');
+    }
+
     /**
      * Make an API request to the ExchangeRatesAPI.
      *
@@ -25,7 +32,10 @@ class RequestBuilder implements RequestSender
         $protocol = config('laravel-exchange-rates.https') ? 'https://' : 'http://';
 
         $rawResponse = Http::baseUrl($protocol.self::BASE_URL)
-            ->get($path, $queryParams)
+            ->get(
+                $path,
+                array_merge(['access_key' => $this->apiKey], $queryParams)
+            )
             ->throw()
             ->json();
 
