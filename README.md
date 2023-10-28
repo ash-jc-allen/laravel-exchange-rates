@@ -87,7 +87,7 @@ If you're using an API that requires an API key, you can put it in your `.env`:
 EXCHANGE_RATES_API_KEY={Your-API-Key-Here}
 ```
 
-If you're using the free tier of `https://exchangeratesapi.io` or `https://exchangerate.host`, you should set the `ssl` config option in `config/laravel-exchange-rates.php` to `false`, as the free tiers of those APIs don't allow SSL requests.
+If you're using the free tier of `https://exchangeratesapi.io` or `https://exchangerate.host`, you should set the `https` config option in `config/laravel-exchange-rates.php` to `false`, as the free tiers of those APIs don't allow HTTPS requests.
 
 ## Usage
 

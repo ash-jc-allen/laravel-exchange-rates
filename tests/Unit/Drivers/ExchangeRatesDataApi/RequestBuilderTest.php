@@ -40,9 +40,9 @@ final class RequestBuilderTest extends TestCase
     }
 
     /** @test */
-    public function request_protocol_respects_ssl_config_option(): void
+    public function request_protocol_respects_https_config_option(): void
     {
-        config(['laravel-exchange-rates.ssl' => false]);
+        config(['laravel-exchange-rates.https' => false]);
 
         $url = 'http://api.apilayer.com/exchangerates_data/latest?base=USD';
 
