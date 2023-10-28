@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
+use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
 use AshAllenDesign\LaravelExchangeRates\Drivers\Support\SharedDriverLogicHandler;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
 use Carbon\Carbon;
@@ -14,16 +15,18 @@ use Carbon\Carbon;
  */
 class ExchangeRateHostDriver implements ExchangeRateDriver
 {
+    private CacheRepository $cacheRepository;
+
     private SharedDriverLogicHandler $sharedDriverLogicHandler;
 
     public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
     {
         $requestBuilder = $requestBuilder ?? new RequestBuilder();
-        $cacheRepository = $cacheRepository ?? new CacheRepository();
+        $this->cacheRepository = $cacheRepository ?? new CacheRepository();
 
         $this->sharedDriverLogicHandler = new SharedDriverLogicHandler(
             $requestBuilder,
-            $cacheRepository
+            $this->cacheRepository,
         );
     }
 
@@ -54,7 +57,61 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
      */
     public function exchangeRate(string $from, array|string $to, Carbon $date = null): float|array
     {
-        return $this->sharedDriverLogicHandler->exchangeRate($from, $to, $date);
+        // TODO Reduce duplication.
+        if ($date) {
+            Validation::validateDate($date);
+        }
+
+        Validation::validateCurrencyCode($from);
+
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+
+        if ($from === $to) {
+            return 1.0;
+        }
+
+        $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? Carbon::now());
+
+        if ($cachedExchangeRate = $this->sharedDriverLogicHandler->attemptToResolveFromCache($cacheKey)) {
+            // If the exchange rate has been retrieved from the cache as a
+            // string (e.g. "1.23"), then cast it to a float (e.g. 1.23).
+            // If we have retrieved the rates for many currencies, it
+            // will be an array of floats, so just return it.
+            return is_string($cachedExchangeRate)
+                ? (float) $cachedExchangeRate
+                : $cachedExchangeRate;
+        }
+
+        $symbols = is_string($to) ? $to : implode(',', $to);
+        $queryParams = ['source' => $from, 'currencies' => $symbols];
+
+        if ($date) {
+            $queryParams['date'] = $date->format('Y-m-d');
+        }
+
+        $url = $date ? '/historical' : '/live';
+
+        /** @var array<string,float> $response */
+        $response = $this->sharedDriverLogicHandler
+            ->getRequestBuilder()
+            ->makeRequest($url, $queryParams)
+            ->get('quotes');
+
+        $exchangeRate = is_string($to) ? $response[$from.$to] : $response;
+
+        // The quotes are returned in the format of "USDEUR": 0.1234. We only want the
+        // converted currency's code (e.g. EUR), so we need to remove the source
+        // currency from the start of the key (e.g. USD). We can do this by
+        // removing the first three characters from the key.
+        if (!is_string($to)) {
+            $exchangeRate = collect($exchangeRate)
+                ->mapWithKeys(static fn (float $value, string $key): array => [substr($key, 3) => $value])
+                ->all();
+        }
+
+        $this->sharedDriverLogicHandler->attemptToStoreInCache($cacheKey, $exchangeRate);
+
+        return $exchangeRate;
     }
 
     /**
