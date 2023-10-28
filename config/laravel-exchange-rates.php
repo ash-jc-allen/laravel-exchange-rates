@@ -24,4 +24,15 @@ return [
     */
     'api_key' => env('EXCHANGE_RATES_API_KEY'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | SSL Endpoints
+    |--------------------------------------------------------------------------
+    |
+    | Define if the API should be accessed via HTTPS or HTTP. The free tiers of
+    | exchangeratesapi.io and exchangerate.host only allow API access via HTTP.
+    |
+    */
+    'ssl' => true,
+
 ];

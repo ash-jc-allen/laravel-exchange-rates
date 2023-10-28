@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 class RequestBuilder implements RequestSender
 {
-    private const BASE_URL = 'https://api.exchangeratesapi.io/v1/';
+    private const BASE_URL = 'api.exchangeratesapi.io/v1/';
 
     private string $apiKey;
 
@@ -29,7 +29,9 @@ class RequestBuilder implements RequestSender
      */
     public function makeRequest(string $path, array $queryParams = []): ResponseContract
     {
-        $rawResponse = Http::baseUrl(self::BASE_URL)
+        $protocol = config('laravel-exchange-rates.ssl') ? 'https://' : 'http://';
+
+        $rawResponse = Http::baseUrl($protocol.self::BASE_URL)
             ->get(
                 $path,
                 array_merge(['access_key' => $this->apiKey], $queryParams)
