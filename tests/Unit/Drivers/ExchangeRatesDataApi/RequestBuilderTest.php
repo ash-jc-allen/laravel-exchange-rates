@@ -40,11 +40,11 @@ final class RequestBuilderTest extends TestCase
     }
 
     /** @test */
-    public function request_protocol_ignores_ssl_config_option(): void
+    public function request_protocol_respects_ssl_config_option(): void
     {
         config(['laravel-exchange-rates.ssl' => false]);
 
-        $url = 'https://api.apilayer.com/exchangerates_data/latest?base=USD';
+        $url = 'http://api.apilayer.com/exchangerates_data/latest?base=USD';
 
         Http::fake([
             $url => Http::response(['RESPONSE']),
