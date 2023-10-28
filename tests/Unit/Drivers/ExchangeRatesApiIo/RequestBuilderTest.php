@@ -39,23 +39,23 @@ final class RequestBuilderTest extends TestCase
     }
 
     /** @test */
-    public function request_protocol_respects_ssl_config_option(): void
+    public function request_protocol_respects_https_config_option(): void
     {
-        config(['laravel-exchange-rates.ssl' => false]);
+        config(['laravel-exchange-rates.https' => false]);
 
-        $noSslUrl = 'http://api.exchangeratesapi.io/v1/latest?access_key=API-KEY&base=USD';
+        $noHttpsUrl = 'http://api.exchangeratesapi.io/v1/latest?access_key=API-KEY&base=USD';
 
         Http::fake([
-            $noSslUrl => Http::response(['RESPONSE']),
+            $noHttpsUrl => Http::response(['RESPONSE']),
             '*' => Http::response('SHOULD NOT HIT THIS!', 500),
         ]);
 
         $requestBuilder = new RequestBuilder();
         $requestBuilder->makeRequest('latest', ['base' => 'USD']);
 
-        Http::assertSent(static function (Request $request) use ($noSslUrl): bool {
+        Http::assertSent(static function (Request $request) use ($noHttpsUrl): bool {
             return $request->method() === 'GET'
-                && $request->url() === $noSslUrl;
+                && $request->url() === $noHttpsUrl;
         });
     }
 
