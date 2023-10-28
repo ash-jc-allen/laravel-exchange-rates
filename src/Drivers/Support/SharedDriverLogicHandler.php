@@ -363,7 +363,7 @@ class SharedDriverLogicHandler
         return null;
     }
 
-    public function attemptToStoreInCache(string $cacheKey, array $currencies): void
+    public function attemptToStoreInCache(string $cacheKey, mixed $currencies): void
     {
         if ($this->shouldCache) {
             $this->cacheRepository->storeInCache($cacheKey, $currencies);
