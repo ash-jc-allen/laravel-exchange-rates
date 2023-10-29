@@ -390,9 +390,9 @@ class SharedDriverLogicHandler
     /**
      * Use the exchange rates we've just retrieved and convert the given value.
      *
-     * @param float|array<string,float> $exchangeRates
-     * @param string|string[] $to
-     * @param int $value
+     * @param  float|array<string,float>  $exchangeRates
+     * @param  string|string[]  $to
+     * @param  int  $value
      * @return float|array<string,float>
      */
     public function convertUsingRates(float|array $exchangeRates, string|array $to, int $value): float|array
