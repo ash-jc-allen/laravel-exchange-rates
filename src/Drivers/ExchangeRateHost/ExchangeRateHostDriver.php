@@ -103,7 +103,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
         // converted currency's code (e.g. EUR), so we need to remove the source
         // currency from the start of the key (e.g. USD). We can do this by
         // removing the first three characters from the key.
-        if (!is_string($to)) {
+        if (! is_string($to)) {
             $exchangeRate = collect($exchangeRate)
                 ->mapWithKeys(static fn (float $value, string $key): array => [substr($key, 3) => $value])
                 ->all();

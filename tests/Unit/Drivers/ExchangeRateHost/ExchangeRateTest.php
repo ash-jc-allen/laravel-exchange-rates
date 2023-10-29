@@ -98,7 +98,7 @@ final class ExchangeRateTest extends TestCase
                     'source' => 'EUR',
                     'currencies' => 'GBP,CAD,USD',
                     'date' => $mockDate->format('Y-m-d'),
-                ]
+                ],
             ])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndMultipleSymbols());
@@ -150,7 +150,7 @@ final class ExchangeRateTest extends TestCase
                     'source' => 'EUR',
                     'currencies' => 'GBP',
                     'date' => $mockDate->format('Y-m-d'),
-                ]
+                ],
             ])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
@@ -236,7 +236,7 @@ final class ExchangeRateTest extends TestCase
             'timestamp' => 1698536523,
             'source' => 'EUR',
             'quotes' => [
-              'EURGBP' => 0.86158,
+                'EURGBP' => 0.86158,
             ],
         ]);
     }
@@ -250,9 +250,9 @@ final class ExchangeRateTest extends TestCase
             'timestamp' => 1698537243,
             'source' => 'EUR',
             'quotes' => [
-              'EURCAD' => 1.4561,
-              'EURUSD' => 1.1034,
-              'EURGBP' => 0.86158,
+                'EURCAD' => 1.4561,
+                'EURUSD' => 1.1034,
+                'EURGBP' => 0.86158,
             ],
 
         ]);
