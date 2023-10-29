@@ -252,7 +252,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
      * removing the first three characters from the key. Strip these
      * characters from all the rates and then return the array.
      *
-     * @param array<string,float> $rates
+     * @param  array<string,float>  $rates
      * @return array<string,float>
      */
     private function removeSourceCurrencyFromKeys(array $rates): array
