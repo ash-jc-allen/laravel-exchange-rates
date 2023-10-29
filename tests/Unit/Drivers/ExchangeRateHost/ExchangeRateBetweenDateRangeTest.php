@@ -49,7 +49,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $this->assertEquals($expectedArray, $currencies);
         $this->assertEquals($expectedArray,
-            Cache::get('laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -58,7 +58,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $fromDate = now()->subWeek();
         $toDate = now();
 
-        $cacheKey = 'laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d');
+        $cacheKey = 'laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
         $cachedValues = $expectedArray = [
             '2019-11-08' => 1,
             '2019-11-06' => 2,
@@ -76,7 +76,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $this->assertEquals($expectedArray, $currencies);
         $this->assertEquals($expectedArray,
-            Cache::get('laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -85,7 +85,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $fromDate = now()->subWeek();
         $toDate = now();
 
-        $cacheKey = 'GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d');
+        $cacheKey = 'GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
         $cachedValues = [
             '2019-11-08' => 1,
             '2019-11-06' => 2,
@@ -122,7 +122,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $this->assertEquals($expectedArray, $currencies);
         $this->assertEquals($expectedArray,
-            Cache::get('laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -157,7 +157,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         ];
 
         $this->assertEquals($expectedArray, $currencies);
-        $this->assertNull(Cache::get('laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
+        $this->assertNull(Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -193,7 +193,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
 
         $this->assertEquals($expectedArray, $currencies);
         $this->assertEquals($expectedArray,
-            Cache::get('laravel_xr_GBP_EUR_USD_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d'))
+            Cache::get('laravel_xr_GBP_EUR_USD_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d'))
         );
     }
 
@@ -220,7 +220,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         $this->assertEquals($expectedArray, $currencies);
 
         $this->assertEquals($expectedArray,
-            Cache::get('laravel_xr_EUR_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_EUR_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -344,7 +344,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
                     'GBPEUR' => 1.1578362356,
                     'GBPUSD' => 1.5555555555,
                 ],
-            ]
+            ],
         ]);
     }
 }
