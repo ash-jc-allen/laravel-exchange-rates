@@ -131,7 +131,17 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
      */
     public function convert(int $value, string $from, array|string $to, Carbon $date = null): float|array
     {
-        return $this->sharedDriverLogicHandler->convert($value, $from, $to, $date);
+        if (is_string($to)) {
+            return (float) $this->exchangeRate($from, $to, $date) * $value;
+        }
+
+        $exchangeRates = $this->exchangeRate($from, $to, $date);
+
+        foreach ($exchangeRates as $currency => $exchangeRate) {
+            $exchangeRates[$currency] = (float) $exchangeRate * $value;
+        }
+
+        return $exchangeRates;
     }
 
     /**

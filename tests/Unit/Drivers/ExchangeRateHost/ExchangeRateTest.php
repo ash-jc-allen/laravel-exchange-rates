@@ -254,7 +254,6 @@ final class ExchangeRateTest extends TestCase
               'EURUSD' => 1.1034,
               'EURGBP' => 0.86158,
             ],
-
         ]);
     }
 
