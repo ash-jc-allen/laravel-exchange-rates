@@ -58,14 +58,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
      */
     public function exchangeRate(string $from, array|string $to, Carbon $date = null): float|array
     {
-        // TODO Reduce duplication.
-        if ($date) {
-            Validation::validateDate($date);
-        }
-
-        Validation::validateCurrencyCode($from);
-
-        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+        $this->sharedDriverLogicHandler->validateExchangeRateInput($from, $to, $date);
 
         if ($from === $to) {
             return 1.0;

@@ -97,13 +97,7 @@ class SharedDriverLogicHandler
      */
     public function exchangeRate(string $from, string|array $to, Carbon $date = null): float|array
     {
-        if ($date) {
-            Validation::validateDate($date);
-        }
-
-        Validation::validateCurrencyCode($from);
-
-        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+        $this->validateExchangeRateInput($from, $to, $date);
 
         if ($from === $to) {
             return 1.0;
@@ -373,5 +367,20 @@ class SharedDriverLogicHandler
     public function getRequestBuilder(): RequestSender
     {
         return $this->requestBuilder;
+    }
+
+    /**
+     * @throws InvalidCurrencyException
+     * @throws InvalidDateException
+     */
+    public function validateExchangeRateInput(string $from, array|string $to, ?Carbon $date): void
+    {
+        if ($date) {
+            Validation::validateDate($date);
+        }
+
+        Validation::validateCurrencyCode($from);
+
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
     }
 }
