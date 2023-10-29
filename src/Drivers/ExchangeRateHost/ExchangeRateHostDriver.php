@@ -91,17 +91,9 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
             ->makeRequest($url, $queryParams)
             ->rates();
 
-        $exchangeRate = is_string($to) ? $response[$from.$to] : $response;
-
-        // The quotes are returned in the format of "USDEUR": 0.1234. We only want the
-        // converted currency's code (e.g. EUR), so we need to remove the source
-        // currency from the start of the key (e.g. USD). We can do this by
-        // removing the first three characters from the key.
-        if (!is_string($to)) {
-            $exchangeRate = collect($exchangeRate)
-                ->mapWithKeys(static fn (float $value, string $key): array => [substr($key, 3) => $value])
-                ->all();
-        }
+        $exchangeRate = is_string($to)
+            ? $response[$from.$to]
+            : $this->removeSourceCurrencyFromKeys($response);
 
         $this->sharedDriverLogicHandler->attemptToStoreInCache($cacheKey, $exchangeRate);
 
@@ -244,14 +236,29 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
             // currency from the start of the key (e.g. USD). We can do this by
             // removing the first three characters from the key.
             foreach ($conversions as $date => $rates) {
-                $conversions[$date] = collect($rates)
-                    ->mapWithKeys(static fn (float $value, string $key): array => [substr($key, 3) => $value])
-                    ->all();
+                $conversions[$date] = $this->removeSourceCurrencyFromKeys($rates);
             }
         }
 
         ksort($conversions);
 
         return $conversions;
+    }
+
+    /**
+     * The quotes are returned in the format of "USDEUR": 0.1234. We only want the
+     * converted currency's code (e.g. EUR), so we need to remove the source
+     * currency from the start of the key (e.g. USD). We can do this by
+     * removing the first three characters from the key. Strip these
+     * characters from all the rates and then return the array.
+     *
+     * @param array<string,float> $rates
+     * @return array<string,float>
+     */
+    private function removeSourceCurrencyFromKeys(array $rates): array
+    {
+        return collect($rates)
+            ->mapWithKeys(static fn (float $value, string $key): array => [substr($key, 3) => $value])
+            ->all();
     }
 }
