@@ -1,5 +1,9 @@
 # Changelog
 
+**v7.1.1 (released 2023-10-29):**
+
+- Fixed the `exchange-rate-host` driver so it works with the latest, sudden API changes. [#148](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/148)  
+
 **v7.1.0 (released 2023-10-28):**
 
 - Added an `https` config option that can be used to specify whether the API should be accessed over HTTPS or HTTP. [#136](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/136), [#137](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/137)
