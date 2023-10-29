@@ -299,7 +299,7 @@ class SharedDriverLogicHandler
      * @param  Carbon  $endDate
      * @return array<string, float>
      */
-    private function exchangeRateDateRangeResultWithSameCurrency(
+    public function exchangeRateDateRangeResultWithSameCurrency(
         Carbon $startDate,
         Carbon $endDate,
     ): array {
