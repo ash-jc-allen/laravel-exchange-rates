@@ -226,17 +226,11 @@ class SharedDriverLogicHandler
      */
     public function convert(int $value, string $from, string|array $to, Carbon $date = null): float|array
     {
-        if (is_string($to)) {
-            return (float) $this->exchangeRate($from, $to, $date) * $value;
-        }
-
-        $exchangeRates = $this->exchangeRate($from, $to, $date);
-
-        foreach ($exchangeRates as $currency => $exchangeRate) {
-            $exchangeRates[$currency] = (float) $exchangeRate * $value;
-        }
-
-        return $exchangeRates;
+        return $this->convertUsingRates(
+            $this->exchangeRate($from, $to, $date),
+            $to,
+            $value,
+        );
     }
 
     /**
@@ -391,5 +385,26 @@ class SharedDriverLogicHandler
         Validation::validateStartAndEndDates($date, $endDate);
 
         is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+    }
+
+    /**
+     * Use the exchange rates we've just retrieved and convert the given value.
+     *
+     * @param float|array<string,float> $exchangeRates
+     * @param string|string[] $to
+     * @param int $value
+     * @return float|array<string,float>
+     */
+    public function convertUsingRates(float|array $exchangeRates, string|array $to, int $value): float|array
+    {
+        if (is_string($to)) {
+            return (float) $exchangeRates * $value;
+        }
+
+        foreach ($exchangeRates as $currency => $exchangeRate) {
+            $exchangeRates[$currency] = (float) $exchangeRate * $value;
+        }
+
+        return $exchangeRates;
     }
 }
