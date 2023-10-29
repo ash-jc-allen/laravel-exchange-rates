@@ -96,7 +96,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
         $response = $this->sharedDriverLogicHandler
             ->getRequestBuilder()
             ->makeRequest($url, $queryParams)
-            ->get('quotes'); // TODO Use "rates" method instead.
+            ->rates();
 
         $exchangeRate = is_string($to) ? $response[$from.$to] : $response;
 
