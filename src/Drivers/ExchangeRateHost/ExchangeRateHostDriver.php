@@ -148,25 +148,11 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
         Carbon $date,
         Carbon $endDate
     ): array {
-        $exchangeRates = $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
-
-        $conversions = [];
-
-        if (is_array($to)) {
-            foreach ($exchangeRates as $date => $exchangeRate) {
-                foreach ($exchangeRate as $currency => $rate) {
-                    $conversions[$date][$currency] = (float) $rate * $value;
-                }
-            }
-
-            return $conversions;
-        }
-
-        foreach ($exchangeRates as $date => $exchangeRate) {
-            $conversions[$date] = (float) $exchangeRate * $value;
-        }
-
-        return $conversions;
+        return $this->sharedDriverLogicHandler->convertUsingRatesForDateRange(
+            $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate),
+            $to,
+            $value,
+        );
     }
 
     /**

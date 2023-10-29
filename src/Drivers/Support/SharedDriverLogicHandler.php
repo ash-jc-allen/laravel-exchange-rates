@@ -255,25 +255,11 @@ class SharedDriverLogicHandler
         Carbon $date,
         Carbon $endDate,
     ): array {
-        $exchangeRates = $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
-
-        $conversions = [];
-
-        if (is_array($to)) {
-            foreach ($exchangeRates as $date => $exchangeRate) {
-                foreach ($exchangeRate as $currency => $rate) {
-                    $conversions[$date][$currency] = (float) $rate * $value;
-                }
-            }
-
-            return $conversions;
-        }
-
-        foreach ($exchangeRates as $date => $exchangeRate) {
-            $conversions[$date] = (float) $exchangeRate * $value;
-        }
-
-        return $conversions;
+        return $this->convertUsingRatesForDateRange(
+            $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate),
+            $to,
+            $value,
+        );
     }
 
     /**
@@ -406,5 +392,35 @@ class SharedDriverLogicHandler
         }
 
         return $exchangeRates;
+    }
+
+    /**
+     * Use the exchange rates we've just retrieved and convert the given value
+     * for each date in the date range.
+     *
+     * @param array<string,float|array<string,float>> $exchangeRates
+     * @param string|string[] $to
+     * @param int $value
+     * @return array<string,float|array<string,float>>
+     */
+    public function convertUsingRatesForDateRange(array $exchangeRates, string|array $to, int $value): array
+    {
+        $conversions = [];
+
+        if (is_array($to)) {
+            foreach ($exchangeRates as $date => $exchangeRate) {
+                foreach ($exchangeRate as $currency => $rate) {
+                    $conversions[$date][$currency] = (float) $rate * $value;
+                }
+            }
+
+            return $conversions;
+        }
+
+        foreach ($exchangeRates as $date => $exchangeRate) {
+            $conversions[$date] = (float) $exchangeRate * $value;
+        }
+
+        return $conversions;
     }
 }
