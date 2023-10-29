@@ -153,10 +153,7 @@ class SharedDriverLogicHandler
         Carbon $date,
         Carbon $endDate,
     ): array {
-        Validation::validateCurrencyCode($from);
-        Validation::validateStartAndEndDates($date, $endDate);
-
-        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+        $this->validateExchangeRateBetweenDateRangeInput($from, $to, $date, $endDate);
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
 
@@ -380,6 +377,18 @@ class SharedDriverLogicHandler
         }
 
         Validation::validateCurrencyCode($from);
+
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+    }
+
+    /**
+     * @throws InvalidCurrencyException
+     * @throws InvalidDateException
+     */
+    public function validateExchangeRateBetweenDateRangeInput(string $from, array|string $to, Carbon $date, Carbon $endDate): void
+    {
+        Validation::validateCurrencyCode($from);
+        Validation::validateStartAndEndDates($date, $endDate);
 
         is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
     }

@@ -109,10 +109,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
         Carbon $date,
         Carbon $endDate
     ): array {
-        Validation::validateCurrencyCode($from);
-        Validation::validateStartAndEndDates($date, $endDate);
-
-        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+        $this->sharedDriverLogicHandler->validateExchangeRateBetweenDateRangeInput($from, $to, $date, $endDate);
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
 
