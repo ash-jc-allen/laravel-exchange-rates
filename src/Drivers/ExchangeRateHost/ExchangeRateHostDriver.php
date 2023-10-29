@@ -223,18 +223,12 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
 
         $conversions = $result->rates();
 
-        if (is_string($to)) {
-            foreach ($conversions as $date => $rates) {
-                $conversions[$date] = $rates[$from.$to];
-            }
-        } else {
-            // The quotes are returned in the format of "USDEUR": 0.1234. We only want the
-            // converted currency's code (e.g. EUR), so we need to remove the source
-            // currency from the start of the key (e.g. USD). We can do this by
-            // removing the first three characters from the key.
-            foreach ($conversions as $date => $rates) {
-                $conversions[$date] = $this->removeSourceCurrencyFromKeys($rates);
-            }
+        foreach ($conversions as $rateDate => $rates) {
+            $ratesForDay = is_string($to)
+                ? $rates[$from.$to]
+                : $this->removeSourceCurrencyFromKeys($rates);
+
+            $conversions[$rateDate] = $ratesForDay;
         }
 
         ksort($conversions);
