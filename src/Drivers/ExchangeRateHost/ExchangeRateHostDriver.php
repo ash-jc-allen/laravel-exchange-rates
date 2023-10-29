@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
-use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
 use AshAllenDesign\LaravelExchangeRates\Drivers\Support\SharedDriverLogicHandler;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
 use Carbon\Carbon;
@@ -249,7 +248,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
      * removing the first three characters from the key. Strip these
      * characters from all the rates and then return the array.
      *
-     * @param array<string,float> $rates
+     * @param  array<string,float>  $rates
      * @return array<string,float>
      */
     private function removeSourceCurrencyFromKeys(array $rates): array

@@ -43,7 +43,7 @@ final class ConvertTest extends TestCase
                     'source' => 'EUR',
                     'currencies' => 'GBP',
                     'date' => $mockDate->format('Y-m-d'),
-                ]
+                ],
             ])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
@@ -85,7 +85,7 @@ final class ConvertTest extends TestCase
                     'source' => 'EUR',
                     'currencies' => 'GBP',
                     'date' => $mockDate->format('Y-m-d'),
-                ]
+                ],
             ])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
