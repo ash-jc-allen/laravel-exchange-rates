@@ -25,12 +25,12 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
             ->withArgs([
-                '/timeseries',
+                '/timeframe',
                 [
-                    'base'     => 'GBP',
+                    'source' => 'GBP',
                     'start_date' => $fromDate->format('Y-m-d'),
-                    'end_date'   => $toDate->format('Y-m-d'),
-                    'symbols'  => 'EUR',
+                    'end_date' => $toDate->format('Y-m-d'),
+                    'currencies' => 'EUR',
                 ],
             ])
             ->once()
@@ -55,7 +55,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
             '2019-11-04' => 1.1578362356,
         ];
         $this->assertEquals($cachedExchangeRates,
-            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -64,7 +64,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $fromDate = now()->subWeek();
         $toDate = now();
 
-        $cacheKey = 'laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
+        $cacheKey = 'laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d');
         $cachedValues = $expectedArray = [
             '2019-11-08' => 0.111,
             '2019-11-06' => 0.222,
@@ -89,7 +89,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         ], $currencies, self::FLOAT_DELTA);
 
         $this->assertEquals($expectedArray,
-            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -98,7 +98,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $fromDate = now()->subWeek();
         $toDate = now();
 
-        $cacheKey = 'laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d');
+        $cacheKey = 'laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d');
         $cachedValues = $expectedArray = [
             '2019-11-08' => 0.111,
             '2019-11-06' => 0.222,
@@ -111,12 +111,12 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
             ->withArgs([
-                '/timeseries',
+                '/timeframe',
                 [
-                    'base'     => 'GBP',
+                    'source' => 'GBP',
                     'start_date' => $fromDate->format('Y-m-d'),
-                    'end_date'   => $toDate->format('Y-m-d'),
-                    'symbols'  => 'EUR',
+                    'end_date' => $toDate->format('Y-m-d'),
+                    'currencies' => 'EUR',
                 ],
             ])
             ->once()
@@ -141,7 +141,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
             '2019-11-04' => 1.1578362356,
         ];
         $this->assertEquals($cachedExchangeRates,
-            Cache::get('laravel_xr_GBP_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -153,12 +153,12 @@ final class ConvertBetweenDateRangeTest extends TestCase
         $requestBuilderMock = Mockery::mock(RequestBuilder::class)->makePartial();
         $requestBuilderMock->expects('makeRequest')
             ->withArgs([
-                '/timeseries',
+                '/timeframe',
                 [
-                    'base'     => 'GBP',
+                    'source' => 'GBP',
                     'start_date' => $fromDate->format('Y-m-d'),
-                    'end_date'   => $toDate->format('Y-m-d'),
-                    'symbols'  => 'EUR,USD',
+                    'end_date' => $toDate->format('Y-m-d'),
+                    'currencies' => 'EUR,USD',
                 ],
             ])
             ->once()
@@ -185,7 +185,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
             '2019-11-04' => ['EUR' => 1.1578362356, 'USD' => 1.5555555555],
         ];
         $this->assertEquals($cachedExchangeRates,
-            Cache::get('laravel_xr_GBP_EUR_USD_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_GBP_EUR_USD_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -216,7 +216,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
             '2019-11-04' => 1.0,
         ];
         $this->assertEquals($cachedExchangeRates,
-            Cache::get('laravel_xr_EUR_EUR_'.$fromDate->format('Y-m-d').'_'.$toDate->format('Y-m-d')));
+            Cache::get('laravel_xr_EUR_EUR_' . $fromDate->format('Y-m-d') . '_' . $toDate->format('Y-m-d')));
     }
 
     /** @test */
@@ -272,57 +272,65 @@ final class ConvertBetweenDateRangeTest extends TestCase
     private function mockResponseForOneSymbol(): Response
     {
         return new Response([
-            'rates'    => [
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'timeframe' => true,
+            'start_date' => '2019-11-03',
+            'end_date' => '2019-11-10',
+            'source' => 'GBP',
+            'quotes' => [
                 '2019-11-08' => [
-                    'EUR' => 1.1606583254,
+                    'GBPEUR' => 1.1606583254,
                 ],
                 '2019-11-06' => [
-                    'EUR' => 1.1623446817,
+                    'GBPEUR' => 1.1623446817,
                 ],
                 '2019-11-07' => [
-                    'EUR' => 1.1568450522,
+                    'GBPEUR' => 1.1568450522,
                 ],
                 '2019-11-05' => [
-                    'EUR' => 1.1612648497,
+                    'GBPEUR' => 1.1612648497,
                 ],
                 '2019-11-04' => [
-                    'EUR' => 1.1578362356,
+                    'GBPEUR' => 1.1578362356,
                 ],
             ],
-            'start_date' => '2019-11-03',
-            'base'     => 'GBP',
-            'end_date'   => '2019-11-10',
         ]);
     }
 
     private function mockResponseForMultipleSymbols(): Response
     {
         return new Response([
-            'rates'    => [
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'timeframe' => true,
+            'start_date' => '2019-11-03',
+            'end_date' => '2019-11-10',
+            'source' => 'GBP',
+            'quotes' => [
                 '2019-11-08' => [
-                    'EUR' => 1.1606583254,
-                    'USD' => 1.1111111111,
+                    'GBPEUR' => 1.1606583254,
+                    'GBPUSD' => 1.1111111111,
                 ],
                 '2019-11-06' => [
-                    'EUR' => 1.1623446817,
-                    'USD' => 1.2222222222,
+                    'GBPEUR' => 1.1623446817,
+                    'GBPUSD' => 1.2222222222,
                 ],
                 '2019-11-07' => [
-                    'EUR' => 1.1568450522,
-                    'USD' => 1.3333333333,
+                    'GBPEUR' => 1.1568450522,
+                    'GBPUSD' => 1.3333333333,
                 ],
                 '2019-11-05' => [
-                    'EUR' => 1.1612648497,
-                    'USD' => 1.4444444444,
+                    'GBPEUR' => 1.1612648497,
+                    'GBPUSD' => 1.4444444444,
                 ],
                 '2019-11-04' => [
-                    'EUR' => 1.1578362356,
-                    'USD' => 1.5555555555,
+                    'GBPEUR' => 1.1578362356,
+                    'GBPUSD' => 1.5555555555,
                 ],
-            ],
-            'start_date' => '2019-11-03',
-            'base'     => 'GBP',
-            'end_date'   => '2019-11-10',
+            ]
         ]);
     }
 }
