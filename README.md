@@ -95,7 +95,7 @@ If you're using the free tier of `https://exchangeratesapi.io` or `https://excha
 
 #### Available Currencies
 
-To get the available currencies supported by the API, you can use the `currencies` mehtod like so:
+To get the available currencies supported by the API, you can use the `currencies` method like so:
 
 ```php
 use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;

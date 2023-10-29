@@ -20,7 +20,7 @@ final class ExchangeRateTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs(['/live', ['source' => 'EUR', 'currencies' => 'GBP']])
             ->once()
             ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
 
@@ -37,7 +37,11 @@ final class ExchangeRateTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs(['/historical', [
+                'source' => 'EUR',
+                'currencies' => 'GBP',
+                'date' => $mockDate->format('Y-m-d'),
+            ]])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
@@ -68,7 +72,7 @@ final class ExchangeRateTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP,USD,CAD']])
+            ->withArgs(['/live', ['source' => 'EUR', 'currencies' => 'GBP,USD,CAD']])
             ->once()
             ->andReturn($this->mockResponseForCurrentDateAndMultipleSymbols());
 
@@ -88,7 +92,14 @@ final class ExchangeRateTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP,CAD,USD']])
+            ->withArgs([
+                '/historical',
+                [
+                    'source' => 'EUR',
+                    'currencies' => 'GBP,CAD,USD',
+                    'date' => $mockDate->format('Y-m-d'),
+                ],
+            ])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndMultipleSymbols());
 
@@ -133,7 +144,14 @@ final class ExchangeRateTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs([
+                '/historical',
+                [
+                    'source' => 'EUR',
+                    'currencies' => 'GBP',
+                    'date' => $mockDate->format('Y-m-d'),
+                ],
+            ])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
@@ -148,7 +166,7 @@ final class ExchangeRateTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs(['/live', ['source' => 'EUR', 'currencies' => 'GBP']])
             ->once()
             ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
 
@@ -212,48 +230,65 @@ final class ExchangeRateTest extends TestCase
     private function mockResponseForCurrentDateAndOneSymbol(): Response
     {
         return new Response([
-            'rates' => [
-                'GBP' => 0.86158,
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'timestamp' => 1698536523,
+            'source' => 'EUR',
+            'quotes' => [
+                'EURGBP' => 0.86158,
             ],
-            'base' => 'EUR',
-            'date' => '2019-11-08',
         ]);
     }
 
     private function mockResponseForCurrentDateAndMultipleSymbols(): Response
     {
         return new Response([
-            'rates' => [
-                'CAD' => 1.4561,
-                'USD' => 1.1034,
-                'GBP' => 0.86158,
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'timestamp' => 1698537243,
+            'source' => 'EUR',
+            'quotes' => [
+                'EURCAD' => 1.4561,
+                'EURUSD' => 1.1034,
+                'EURGBP' => 0.86158,
             ],
-            'base' => 'EUR',
-            'date' => '2019-11-08',
         ]);
     }
 
     private function mockResponseForPastDateAndOneSymbol(): Response
     {
         return new Response([
-            'rates' => [
-                'GBP' => 0.87053,
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'historical' => true,
+            'date' => '2023-10-27',
+            'timestamp' => 1698451199,
+            'source' => 'EUR',
+            'quotes' => [
+                'EURGBP' => 0.87053,
             ],
-            'base' => 'EUR',
-            'date' => '2018-11-09',
         ]);
     }
 
     private function mockResponseForPastDateAndMultipleSymbols(): Response
     {
         return new Response([
-            'rates' => [
-                'CAD' => 1.4969,
-                'USD' => 1.1346,
-                'GBP' => 0.87053,
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'historical' => true,
+            'date' => '2022-10-29',
+            'timestamp' => 1667087999,
+            'source' => 'EUR',
+            'quotes' => [
+                'EURCAD' => 1.4969,
+                'EURUSD' => 1.1346,
+                'EURGBP' => 0.87053,
             ],
-            'base' => 'EUR',
-            'date' => '2018-11-09',
+
         ]);
     }
 }

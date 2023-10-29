@@ -22,7 +22,7 @@ final class RequestBuilderTest extends TestCase
     /** @test */
     public function request_can_be_made_successfully(): void
     {
-        $url = 'https://api.exchangerate.host/latest?base=USD';
+        $url = 'https://api.exchangerate.host/latest?access_key=API-KEY&base=USD';
 
         Http::fake([
             $url => Http::response(['RESPONSE']),
@@ -43,7 +43,7 @@ final class RequestBuilderTest extends TestCase
     {
         config(['laravel-exchange-rates.https' => false]);
 
-        $noHttpsUrl = 'http://api.exchangerate.host/latest?base=USD';
+        $noHttpsUrl = 'http://api.exchangerate.host/latest?access_key=API-KEY&base=USD';
 
         Http::fake([
             $noHttpsUrl => Http::response(['RESPONSE']),

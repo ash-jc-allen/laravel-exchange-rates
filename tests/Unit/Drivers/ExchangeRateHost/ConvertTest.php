@@ -20,7 +20,7 @@ final class ConvertTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs(['/live', ['source' => 'EUR', 'currencies' => 'GBP']])
             ->once()
             ->andReturn($this->mockResponseForCurrentDateAndOneSymbol());
 
@@ -37,7 +37,14 @@ final class ConvertTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs([
+                '/historical',
+                [
+                    'source' => 'EUR',
+                    'currencies' => 'GBP',
+                    'date' => $mockDate->format('Y-m-d'),
+                ],
+            ])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
@@ -72,7 +79,14 @@ final class ConvertTest extends TestCase
 
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/'.$mockDate->format('Y-m-d'), ['base' => 'EUR', 'symbols' => 'GBP']])
+            ->withArgs([
+                '/historical',
+                [
+                    'source' => 'EUR',
+                    'currencies' => 'GBP',
+                    'date' => $mockDate->format('Y-m-d'),
+                ],
+            ])
             ->once()
             ->andReturn($this->mockResponseForPastDateAndOneSymbol());
 
@@ -98,7 +112,7 @@ final class ConvertTest extends TestCase
     {
         $requestBuilderMock = Mockery::mock(RequestBuilder::class);
         $requestBuilderMock->expects('makeRequest')
-            ->withArgs(['/latest', ['base' => 'EUR', 'symbols' => 'GBP,USD,CAD']])
+            ->withArgs(['/live', ['source' => 'EUR', 'currencies' => 'GBP,USD,CAD']])
             ->once()
             ->andReturn($this->mockResponseForCurrentDateAndMultipleSymbols());
 
@@ -146,97 +160,46 @@ final class ConvertTest extends TestCase
     private function mockResponseForCurrentDateAndOneSymbol(): Response
     {
         return new Response([
-            'rates' => [
-                'CAD' => 1.4561,
-                'HKD' => 8.6372,
-                'ISK' => 137.7,
-                'PHP' => 55.809,
-                'DKK' => 7.4727,
-                'HUF' => 333.37,
-                'CZK' => 25.486,
-                'AUD' => 1.6065,
-                'RON' => 4.7638,
-                'SEK' => 10.7025,
-                'IDR' => 15463.05,
-                'INR' => 78.652,
-                'BRL' => 4.5583,
-                'RUB' => 70.4653,
-                'HRK' => 7.4345,
-                'JPY' => 120.72,
-                'THB' => 33.527,
-                'CHF' => 1.0991,
-                'SGD' => 1.5002,
-                'PLN' => 4.261,
-                'BGN' => 1.9558,
-                'TRY' => 6.3513,
-                'CNY' => 7.7115,
-                'NOK' => 10.0893,
-                'NZD' => 1.7426,
-                'ZAR' => 16.3121,
-                'USD' => 1.1034,
-                'MXN' => 21.1383,
-                'ILS' => 3.8533,
-                'GBP' => 0.86158,
-                'KRW' => 1276.66,
-                'MYR' => 4.5609,
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'timestamp' => 1698536523,
+            'source' => 'EUR',
+            'quotes' => [
+                'EURGBP' => 0.86158,
             ],
-            'base'  => 'EUR',
-            'date'  => '2019-11-08',
         ]);
     }
 
     private function mockResponseForPastDateAndOneSymbol(): Response
     {
         return new Response([
-            'rates' => [
-                'CAD' => 1.4969,
-                'HKD' => 8.8843,
-                'ISK' => 138.5,
-                'PHP' => 60.256,
-                'DKK' => 7.4594,
-                'HUF' => 321.31,
-                'CZK' => 25.936,
-                'AUD' => 1.5663,
-                'RON' => 4.657,
-                'SEK' => 10.2648,
-                'IDR' => 16661.6,
-                'INR' => 82.264,
-                'BRL' => 4.254,
-                'RUB' => 76.4283,
-                'HRK' => 7.43,
-                'JPY' => 129.26,
-                'THB' => 37.453,
-                'CHF' => 1.1414,
-                'SGD' => 1.5627,
-                'PLN' => 4.288,
-                'BGN' => 1.9558,
-                'TRY' => 6.2261,
-                'CNY' => 7.8852,
-                'NOK' => 9.5418,
-                'NZD' => 1.6815,
-                'ZAR' => 16.1884,
-                'USD' => 1.1346,
-                'MXN' => 23.0001,
-                'ILS' => 4.171,
-                'GBP' => 0.87053,
-                'KRW' => 1278.77,
-                'MYR' => 4.7399,
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'historical' => true,
+            'date' => '2023-10-27',
+            'timestamp' => 1698451199,
+            'source' => 'EUR',
+            'quotes' => [
+                'EURGBP' => 0.87053,
             ],
-            'base'  => 'EUR',
-            'date'  => '2018-11-09',
         ]);
     }
 
     private function mockResponseForCurrentDateAndMultipleSymbols(): Response
     {
         return new Response([
-            'rates' => [
-                'CAD' => 1.4561,
-                'USD' => 1.1034,
-                'GBP' => 0.86158,
+            'success' => true,
+            'terms' => 'https://currencylayer.com/terms',
+            'privacy' => 'https://currencylayer.com/privacy',
+            'timestamp' => 1698537243,
+            'source' => 'EUR',
+            'quotes' => [
+                'EURCAD' => 1.4561,
+                'EURUSD' => 1.1034,
+                'EURGBP' => 0.86158,
             ],
-            'base'  => 'EUR',
-            'date'  => '2019-11-08',
         ]);
     }
 }

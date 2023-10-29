@@ -17,7 +17,7 @@ class Response implements ResponseContract
 
     public function rates(): array
     {
-        return $this->get('rates');
+        return $this->get('quotes');
     }
 
     public function raw(): mixed

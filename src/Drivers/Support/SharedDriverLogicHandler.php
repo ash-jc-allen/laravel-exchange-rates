@@ -97,13 +97,7 @@ class SharedDriverLogicHandler
      */
     public function exchangeRate(string $from, string|array $to, Carbon $date = null): float|array
     {
-        if ($date) {
-            Validation::validateDate($date);
-        }
-
-        Validation::validateCurrencyCode($from);
-
-        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+        $this->validateExchangeRateInput($from, $to, $date);
 
         if ($from === $to) {
             return 1.0;
@@ -159,10 +153,7 @@ class SharedDriverLogicHandler
         Carbon $date,
         Carbon $endDate,
     ): array {
-        Validation::validateCurrencyCode($from);
-        Validation::validateStartAndEndDates($date, $endDate);
-
-        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+        $this->validateExchangeRateBetweenDateRangeInput($from, $to, $date, $endDate);
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
 
@@ -235,17 +226,11 @@ class SharedDriverLogicHandler
      */
     public function convert(int $value, string $from, string|array $to, Carbon $date = null): float|array
     {
-        if (is_string($to)) {
-            return (float) $this->exchangeRate($from, $to, $date) * $value;
-        }
-
-        $exchangeRates = $this->exchangeRate($from, $to, $date);
-
-        foreach ($exchangeRates as $currency => $exchangeRate) {
-            $exchangeRates[$currency] = (float) $exchangeRate * $value;
-        }
-
-        return $exchangeRates;
+        return $this->convertUsingRates(
+            $this->exchangeRate($from, $to, $date),
+            $to,
+            $value,
+        );
     }
 
     /**
@@ -270,25 +255,11 @@ class SharedDriverLogicHandler
         Carbon $date,
         Carbon $endDate,
     ): array {
-        $exchangeRates = $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate);
-
-        $conversions = [];
-
-        if (is_array($to)) {
-            foreach ($exchangeRates as $date => $exchangeRate) {
-                foreach ($exchangeRate as $currency => $rate) {
-                    $conversions[$date][$currency] = (float) $rate * $value;
-                }
-            }
-
-            return $conversions;
-        }
-
-        foreach ($exchangeRates as $date => $exchangeRate) {
-            $conversions[$date] = (float) $exchangeRate * $value;
-        }
-
-        return $conversions;
+        return $this->convertUsingRatesForDateRange(
+            $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate),
+            $to,
+            $value,
+        );
     }
 
     /**
@@ -299,7 +270,7 @@ class SharedDriverLogicHandler
      * @param  Carbon  $endDate
      * @return array<string, float>
      */
-    private function exchangeRateDateRangeResultWithSameCurrency(
+    public function exchangeRateDateRangeResultWithSameCurrency(
         Carbon $startDate,
         Carbon $endDate,
     ): array {
@@ -351,7 +322,7 @@ class SharedDriverLogicHandler
      *
      * @throws InvalidArgumentException
      */
-    private function attemptToResolveFromCache(string $cacheKey): mixed
+    public function attemptToResolveFromCache(string $cacheKey): mixed
     {
         if ($this->shouldBustCache) {
             $this->cacheRepository->forget($cacheKey);
@@ -361,5 +332,95 @@ class SharedDriverLogicHandler
         }
 
         return null;
+    }
+
+    public function attemptToStoreInCache(string $cacheKey, mixed $currencies): void
+    {
+        if ($this->shouldCache) {
+            $this->cacheRepository->storeInCache($cacheKey, $currencies);
+        }
+    }
+
+    public function getRequestBuilder(): RequestSender
+    {
+        return $this->requestBuilder;
+    }
+
+    /**
+     * @throws InvalidCurrencyException
+     * @throws InvalidDateException
+     */
+    public function validateExchangeRateInput(string $from, array|string $to, ?Carbon $date): void
+    {
+        if ($date) {
+            Validation::validateDate($date);
+        }
+
+        Validation::validateCurrencyCode($from);
+
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+    }
+
+    /**
+     * @throws InvalidCurrencyException
+     * @throws InvalidDateException
+     */
+    public function validateExchangeRateBetweenDateRangeInput(string $from, array|string $to, Carbon $date, Carbon $endDate): void
+    {
+        Validation::validateCurrencyCode($from);
+        Validation::validateStartAndEndDates($date, $endDate);
+
+        is_string($to) ? Validation::validateCurrencyCode($to) : Validation::validateCurrencyCodes($to);
+    }
+
+    /**
+     * Use the exchange rates we've just retrieved and convert the given value.
+     *
+     * @param  float|array<string,float>  $exchangeRates
+     * @param  string|string[]  $to
+     * @param  int  $value
+     * @return float|array<string,float>
+     */
+    public function convertUsingRates(float|array $exchangeRates, string|array $to, int $value): float|array
+    {
+        if (is_string($to)) {
+            return (float) $exchangeRates * $value;
+        }
+
+        foreach ($exchangeRates as $currency => $exchangeRate) {
+            $exchangeRates[$currency] = (float) $exchangeRate * $value;
+        }
+
+        return $exchangeRates;
+    }
+
+    /**
+     * Use the exchange rates we've just retrieved and convert the given value
+     * for each date in the date range.
+     *
+     * @param  array<string,float|array<string,float>>  $exchangeRates
+     * @param  string|string[]  $to
+     * @param  int  $value
+     * @return array<string,float|array<string,float>>
+     */
+    public function convertUsingRatesForDateRange(array $exchangeRates, string|array $to, int $value): array
+    {
+        $conversions = [];
+
+        if (is_array($to)) {
+            foreach ($exchangeRates as $date => $exchangeRate) {
+                foreach ($exchangeRate as $currency => $rate) {
+                    $conversions[$date][$currency] = (float) $rate * $value;
+                }
+            }
+
+            return $conversions;
+        }
+
+        foreach ($exchangeRates as $date => $exchangeRate) {
+            $conversions[$date] = (float) $exchangeRate * $value;
+        }
+
+        return $conversions;
     }
 }
