@@ -13,6 +13,11 @@ use Illuminate\Support\Manager;
 
 class ExchangeRate extends Manager
 {
+    public function createCurrencyBeaconDriver(): ExchangeRateDriver
+    {
+        return new CurrencyBeaconDriver();
+    }
+
     public function createExchangeRatesDataApiDriver(): ExchangeRateDriver
     {
         return new ExchangeRatesDataApiDriver();
@@ -26,11 +31,6 @@ class ExchangeRate extends Manager
     public function createExchangeRateHostDriver(): ExchangeRateDriver
     {
         return new ExchangeRateHostDriver();
-    }
-
-    public function createCurrencyBeaconDriver(): ExchangeRateDriver
-    {
-        return new CurrencyBeaconDriver();
     }
 
     public function getDefaultDriver()

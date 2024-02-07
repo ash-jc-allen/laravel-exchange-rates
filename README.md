@@ -372,6 +372,7 @@ The following drivers are available with the package:
 
 | API Service             | Driver name               | API URL                                                 |
 |-------------------------|---------------------------|---------------------------------------------------------|
+| CurrencyBeacon          | `currency-beacon`         | https://currencybeacon.com/                             |
 | Exchange Rates API IO   | `exchange-rates-api-io`   | https://exchangeratesapi.io/                            |
 | Exchange Rates Data API | `exchange-rates-data-api` | https://apilayer.com/marketplace/exchangerates_data-api |
 | Exchange Rate Host      | `exchange-rate-host`      | https://exchangerate.host                               |
