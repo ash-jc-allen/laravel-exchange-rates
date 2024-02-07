@@ -162,7 +162,7 @@ final class ConvertTest extends TestCase
         return new Response([
             'meta' => [
                 'code' => 200,
-                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms'
+                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms',
             ],
             'response' => [
                 'date' => '2024-02-07T10:00:07Z',
@@ -179,7 +179,7 @@ final class ConvertTest extends TestCase
         return new Response([
             'meta' => [
                 'code' => 200,
-                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms'
+                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms',
             ],
             'response' => [
                 'date' => '2023-10-27T10:00:07Z',
@@ -196,7 +196,7 @@ final class ConvertTest extends TestCase
         return new Response([
             'meta' => [
                 'code' => 200,
-                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms'
+                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms',
             ],
             'response' => [
                 'date' => '2024-02-07T10:00:07Z',

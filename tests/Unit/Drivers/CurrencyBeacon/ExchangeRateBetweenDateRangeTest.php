@@ -288,7 +288,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         return new Response([
             'meta' => [
                 'code' => 200,
-                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms'
+                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms',
             ],
             'response' => [
                 '2019-11-08' => [
@@ -315,7 +315,7 @@ final class ExchangeRateBetweenDateRangeTest extends TestCase
         return new Response([
             'meta' => [
                 'code' => 200,
-                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms'
+                'disclaimer' => 'Usage subject to terms: https:\/\/currencybeacon.com\/terms',
             ],
             'response' => [
                 '2019-11-08' => [
