@@ -190,10 +190,10 @@ class SharedDriverLogicHandler
         $symbols = is_string($to) ? $to : implode(',', $to);
 
         $result = $this->requestBuilder->makeRequest('/timeseries', [
-            'base'     => $from,
+            'base' => $from,
             'start_date' => $date->format('Y-m-d'),
-            'end_date'   => $endDate->format('Y-m-d'),
-            'symbols'  => $symbols,
+            'end_date' => $endDate->format('Y-m-d'),
+            'symbols' => $symbols,
         ]);
 
         $conversions = $result->rates();
