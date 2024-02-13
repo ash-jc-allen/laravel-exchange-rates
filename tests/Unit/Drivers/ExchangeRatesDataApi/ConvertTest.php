@@ -180,8 +180,8 @@ final class ConvertTest extends TestCase
                 'KRW' => 1276.66,
                 'MYR' => 4.5609,
             ],
-            'base'  => 'EUR',
-            'date'  => '2019-11-08',
+            'base' => 'EUR',
+            'date' => '2019-11-08',
         ]);
     }
 
@@ -223,8 +223,8 @@ final class ConvertTest extends TestCase
                     'KRW' => 1278.77,
                     'MYR' => 4.7399,
                 ],
-                'base'  => 'EUR',
-                'date'  => '2018-11-09',
+                'base' => 'EUR',
+                'date' => '2018-11-09',
             ]);
     }
 
@@ -236,8 +236,8 @@ final class ConvertTest extends TestCase
                 'USD' => 1.1034,
                 'GBP' => 0.86158,
             ],
-            'base'  => 'EUR',
-            'date'  => '2019-11-08',
+            'base' => 'EUR',
+            'date' => '2019-11-08',
         ]);
     }
 }

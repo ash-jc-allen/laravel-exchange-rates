@@ -27,10 +27,10 @@ final class ConvertBetweenDateRangeTest extends TestCase
             ->withArgs([
                 '/timeseries',
                 [
-                    'base'     => 'GBP',
+                    'base' => 'GBP',
                     'start_date' => $fromDate->format('Y-m-d'),
-                    'end_date'   => $toDate->format('Y-m-d'),
-                    'symbols'  => 'EUR',
+                    'end_date' => $toDate->format('Y-m-d'),
+                    'symbols' => 'EUR',
                 ],
             ])
             ->once()
@@ -113,10 +113,10 @@ final class ConvertBetweenDateRangeTest extends TestCase
             ->withArgs([
                 '/timeseries',
                 [
-                    'base'     => 'GBP',
+                    'base' => 'GBP',
                     'start_date' => $fromDate->format('Y-m-d'),
-                    'end_date'   => $toDate->format('Y-m-d'),
-                    'symbols'  => 'EUR',
+                    'end_date' => $toDate->format('Y-m-d'),
+                    'symbols' => 'EUR',
                 ],
             ])
             ->once()
@@ -155,10 +155,10 @@ final class ConvertBetweenDateRangeTest extends TestCase
             ->withArgs([
                 '/timeseries',
                 [
-                    'base'     => 'GBP',
+                    'base' => 'GBP',
                     'start_date' => $fromDate->format('Y-m-d'),
-                    'end_date'   => $toDate->format('Y-m-d'),
-                    'symbols'  => 'EUR,USD',
+                    'end_date' => $toDate->format('Y-m-d'),
+                    'symbols' => 'EUR,USD',
                 ],
             ])
             ->once()
@@ -272,7 +272,7 @@ final class ConvertBetweenDateRangeTest extends TestCase
     private function mockResponseForOneSymbol(): Response
     {
         return new Response([
-            'rates'    => [
+            'rates' => [
                 '2019-11-08' => [
                     'EUR' => 1.1606583254,
                 ],
@@ -290,15 +290,15 @@ final class ConvertBetweenDateRangeTest extends TestCase
                 ],
             ],
             'start_date' => '2019-11-03',
-            'base'     => 'GBP',
-            'end_date'   => '2019-11-10',
+            'base' => 'GBP',
+            'end_date' => '2019-11-10',
         ]);
     }
 
     private function mockResponseForMultipleSymbols(): Response
     {
         return new Response([
-            'rates'    => [
+            'rates' => [
                 '2019-11-08' => [
                     'EUR' => 1.1606583254,
                     'USD' => 1.1111111111,
@@ -321,8 +321,8 @@ final class ConvertBetweenDateRangeTest extends TestCase
                 ],
             ],
             'start_date' => '2019-11-03',
-            'base'     => 'GBP',
-            'end_date'   => '2019-11-10',
+            'base' => 'GBP',
+            'end_date' => '2019-11-10',
         ]);
     }
 }

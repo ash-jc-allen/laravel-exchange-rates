@@ -115,8 +115,8 @@ final class CurrenciesTest extends TestCase
                 'KRW' => 1300.09,
                 'MYR' => 4.64,
             ],
-            'base'  => 'EUR',
-            'date'  => '2019-11-01',
+            'base' => 'EUR',
+            'date' => '2019-11-01',
         ]);
     }
 
