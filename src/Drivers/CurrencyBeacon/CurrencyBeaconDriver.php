@@ -45,7 +45,10 @@ class CurrencyBeaconDriver implements ExchangeRateDriver
             ->getRequestBuilder()
             ->makeRequest('/currencies', ['type' => 'fiat']);
 
-        $currencies = collect($response->get('response'))->pluck('short_code')->toArray();
+        /** @var array<int,array<string,string|int|bool>> $currenciesFromResponse */
+        $currenciesFromResponse = $response->get('response');
+
+        $currencies = collect($currenciesFromResponse)->pluck('short_code')->toArray();
 
         $this->sharedDriverLogicHandler->attemptToStoreInCache($cacheKey, $currencies);
 
