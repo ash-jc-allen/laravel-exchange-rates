@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\ExchangeRateHost;
+namespace AshAllenDesign\LaravelExchangeRates\Tests\Unit\Drivers\CurrencyBeacon;
 
-use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost\RequestBuilder;
+use AshAllenDesign\LaravelExchangeRates\Drivers\CurrencyBeacon\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Tests\Unit\TestCase;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\RequestException;
@@ -22,7 +22,7 @@ final class RequestBuilderTest extends TestCase
     /** @test */
     public function request_can_be_made_successfully(): void
     {
-        $url = 'https://api.exchangerate.host/latest?access_key=API-KEY&base=USD';
+        $url = 'https://api.currencybeacon.com/v1/latest?api_key=API-KEY&base=USD';
 
         Http::fake([
             $url => Http::response(['RESPONSE']),
@@ -43,7 +43,7 @@ final class RequestBuilderTest extends TestCase
     {
         config(['laravel-exchange-rates.https' => false]);
 
-        $noHttpsUrl = 'http://api.exchangerate.host/latest?access_key=API-KEY&base=USD';
+        $noHttpsUrl = 'http://api.currencybeacon.com/v1/latest?api_key=API-KEY&base=USD';
 
         Http::fake([
             $noHttpsUrl => Http::response(['RESPONSE']),
@@ -64,7 +64,7 @@ final class RequestBuilderTest extends TestCase
     {
         $this->expectException(RequestException::class);
 
-        $url = 'https://api.exchangerate.host/latest?access_key=API-KEY&base=USD';
+        $url = 'https://api.currencybeacon.com/v1/latest?api_key=API-KEY&base=USD';
 
         Http::fake([
             $url => Http::response(['RESPONSE'], 401),
