@@ -1,5 +1,9 @@
 # Changelog
 
+**v7.2.0 (released 2024-02-13):**
+
+- Added support for the CurrencyBeacon API. [#149](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/149)
+
 **v7.1.1 (released 2023-10-29):**
 
 - Fixed the `exchange-rate-host` driver so it works with the latest, sudden API changes. [#148](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/148)  
