@@ -215,8 +215,8 @@ final class ExchangeRateTest extends TestCase
             'rates' => [
                 'GBP' => 0.86158,
             ],
-            'base'  => 'EUR',
-            'date'  => '2019-11-08',
+            'base' => 'EUR',
+            'date' => '2019-11-08',
         ]);
     }
 
@@ -228,8 +228,8 @@ final class ExchangeRateTest extends TestCase
                 'USD' => 1.1034,
                 'GBP' => 0.86158,
             ],
-            'base'  => 'EUR',
-            'date'  => '2019-11-08',
+            'base' => 'EUR',
+            'date' => '2019-11-08',
         ]);
     }
 
@@ -240,8 +240,8 @@ final class ExchangeRateTest extends TestCase
                 'rates' => [
                     'GBP' => 0.87053,
                 ],
-                'base'  => 'EUR',
-                'date'  => '2018-11-09',
+                'base' => 'EUR',
+                'date' => '2018-11-09',
             ]);
     }
 
@@ -253,8 +253,8 @@ final class ExchangeRateTest extends TestCase
                 'USD' => 1.1346,
                 'GBP' => 0.87053,
             ],
-            'base'  => 'EUR',
-            'date'  => '2018-11-09',
+            'base' => 'EUR',
+            'date' => '2018-11-09',
         ]);
     }
 }
