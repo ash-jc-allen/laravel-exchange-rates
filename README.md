@@ -71,6 +71,7 @@ Laravel Exchange Rates currently supports the following APIs:
 - [Exchange Rates API](https://exchangeratesapi.io/)
 - [Exchange Rates Data API](https://apilayer.com/marketplace/exchangerates_data-api)
 - [Exchange Rate Host](https://exchangerate.host/)
+- [CurrencyBeacon](https://currencybeacon.com/)
 
 ## Configuration
 
