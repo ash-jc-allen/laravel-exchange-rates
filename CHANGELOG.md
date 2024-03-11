@@ -1,5 +1,9 @@
 # Changelog
 
+**v7.3.0 (released 2024-03-13):**
+
+- Added support for Laravel 11. [#153](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/153)
+
 **v7.2.0 (released 2024-02-13):**
 
 - Added support for the CurrencyBeacon API. [#149](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/149)
