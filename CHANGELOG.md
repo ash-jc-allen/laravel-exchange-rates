@@ -1,5 +1,9 @@
 # Changelog
 
+**7.4.0 (released 2024-03-19):**
+
+- Added support for `nesbot/carbon 3.0`. [#154](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/154)
+
 **v7.3.0 (released 2024-03-13):**
 
 - Added support for Laravel 11. [#153](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/153)
