@@ -10,11 +10,17 @@ use Illuminate\Support\Facades\Validator;
 
 final class ValidCurrencyTest extends TestCase
 {
-    /** @test */
-    public function validator_returns_true_if_the_currency_is_valid(): void
+    /**
+     * @test
+     *
+     * @testWith ["GBP"]
+     *           ["BYR"]
+     *           ["BYN"]
+     */
+    public function validator_returns_true_if_the_currency_is_valid(string $currency): void
     {
         $testData = [
-            'currency' => 'GBP',
+            'currency' => $currency,
         ];
 
         $rules = [

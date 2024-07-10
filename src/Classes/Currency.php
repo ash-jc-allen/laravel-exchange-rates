@@ -32,6 +32,7 @@ class Currency
         'BTN',
         'BWP',
         'BYR',
+        'BYN',
         'BZD',
         'CAD',
         'CDF',
