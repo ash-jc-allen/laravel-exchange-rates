@@ -12,6 +12,7 @@ final class ValidCurrencyTest extends TestCase
 {
     /**
      * @test
+     *
      * @testWith ["GBP"]
      *           ["BYR"]
      *           ["BYN"]
