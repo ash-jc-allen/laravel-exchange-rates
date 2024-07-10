@@ -1,5 +1,9 @@
 # Changelog
 
+**v7.5.0 (released 2024-07-10):**
+
+- Added "BYN" as a valid currency symbol. [#157](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/157)
+
 **7.4.0 (released 2024-03-19):**
 
 - Added support for `nesbot/carbon 3.0`. [#154](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/154)
