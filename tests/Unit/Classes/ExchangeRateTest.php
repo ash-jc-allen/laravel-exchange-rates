@@ -44,7 +44,7 @@ final class ExchangeRateTest extends TestCase
         app(ExchangeRate::class)->driver('INVALID');
     }
 
-    public function validDriversProvider(): array
+    public static function validDriversProvider(): array
     {
         return [
             ['exchange-rates-api-io', ExchangeRatesApiIoDriver::class],
