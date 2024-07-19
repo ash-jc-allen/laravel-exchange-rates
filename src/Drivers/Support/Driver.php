@@ -6,6 +6,7 @@ namespace AshAllenDesign\LaravelExchangeRates\Drivers\Support;
 
 use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
 use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
+use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\RequestBuilder;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
@@ -23,6 +24,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 class Driver implements ExchangeRateDriver
 {
+    protected array $driverRequestBuilder = [RequestBuilder::class];
+
     /**
      * The object used for making requests to the currency conversion API.
      */
