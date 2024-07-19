@@ -76,9 +76,7 @@ class Driver implements ExchangeRateDriver
             $currencies[] = $currency;
         }
 
-        if ($this->shouldCache) {
-            $this->cacheRepository->storeInCache($cacheKey, $currencies);
-        }
+        $this->attemptToStoreInCache($cacheKey, $currencies);
 
         return $currencies;
     }
@@ -130,9 +128,7 @@ class Driver implements ExchangeRateDriver
 
         $exchangeRate = is_string($to) ? $response[$to] : $response;
 
-        if ($this->shouldCache) {
-            $this->cacheRepository->storeInCache($cacheKey, $exchangeRate);
-        }
+        $this->attemptToStoreInCache($cacheKey, $exchangeRate);
 
         return $exchangeRate;
     }
@@ -169,9 +165,7 @@ class Driver implements ExchangeRateDriver
             ? $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate)
             : $this->makeRequestForExchangeRates($from, $to, $date, $endDate);
 
-        if ($this->shouldCache) {
-            $this->cacheRepository->storeInCache($cacheKey, $conversions);
-        }
+        $this->attemptToStoreInCache($cacheKey, $conversions);
 
         return $conversions;
     }
