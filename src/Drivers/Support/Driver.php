@@ -68,7 +68,7 @@ class Driver implements ExchangeRateDriver
             return $cachedExchangeRate;
         }
 
-        $response = $this->requestBuilder->makeRequest('/latest');
+        $response = $this->requestBuilder->makeRequest('/latest', []);
 
         $currencies = [$response->get('base')];
 
