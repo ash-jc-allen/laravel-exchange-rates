@@ -8,6 +8,7 @@ use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
 use AshAllenDesign\LaravelExchangeRates\Classes\Validation;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidCurrencyException;
 use AshAllenDesign\LaravelExchangeRates\Exceptions\InvalidDateException;
+use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
 use AshAllenDesign\LaravelExchangeRates\Interfaces\RequestSender;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
@@ -20,7 +21,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @interal
  */
-class SharedDriverLogicHandler
+class Driver implements ExchangeRateDriver
 {
     /**
      * The object used for making requests to the currency conversion API.
@@ -30,7 +31,7 @@ class SharedDriverLogicHandler
     /**
      * The repository used for accessing the cache.
      */
-    private CacheRepository $cacheRepository;
+    protected CacheRepository $cacheRepository;
 
     /**
      * Whether the exchange rate should be cached after being fetched from the API.
@@ -42,10 +43,10 @@ class SharedDriverLogicHandler
      */
     private bool $shouldBustCache = false;
 
-    public function __construct(RequestSender $requestBuilder, CacheRepository $cacheRepository)
+    public function __construct(?RequestSender $requestBuilder = null, ?CacheRepository $cacheRepository = null)
     {
-        $this->requestBuilder = $requestBuilder;
-        $this->cacheRepository = $cacheRepository;
+        $this->requestBuilder = $requestBuilder ?? new $this->driverRequestBuilder[0];
+        $this->cacheRepository = $cacheRepository ?? new CacheRepository();
     }
 
     /**

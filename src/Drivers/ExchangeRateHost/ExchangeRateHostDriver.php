@@ -4,31 +4,16 @@ declare(strict_types=1);
 
 namespace AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost;
 
-use AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository;
-use AshAllenDesign\LaravelExchangeRates\Drivers\Support\SharedDriverLogicHandler;
-use AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver;
+use AshAllenDesign\LaravelExchangeRates\Drivers\Support\Driver;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 
 /**
  * @see https://exchangerate.host
  */
-class ExchangeRateHostDriver implements ExchangeRateDriver
+class ExchangeRateHostDriver extends Driver
 {
-    private CacheRepository $cacheRepository;
-
-    private SharedDriverLogicHandler $sharedDriverLogicHandler;
-
-    public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
-    {
-        $requestBuilder = $requestBuilder ?? new RequestBuilder();
-        $this->cacheRepository = $cacheRepository ?? new CacheRepository();
-
-        $this->sharedDriverLogicHandler = new SharedDriverLogicHandler(
-            $requestBuilder,
-            $this->cacheRepository,
-        );
-    }
+    public array $driverRequestBuilder = [RequestBuilder::class];
 
     /**
      * @inheritDoc
@@ -37,17 +22,16 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
     {
         $cacheKey = 'currencies';
 
-        if ($cachedExchangeRate = $this->sharedDriverLogicHandler->attemptToResolveFromCache($cacheKey)) {
+        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
             return $cachedExchangeRate;
         }
 
-        $response = $this->sharedDriverLogicHandler
-            ->getRequestBuilder()
+        $response = $this->getRequestBuilder()
             ->makeRequest('/list');
 
         $currencies = array_keys($response->get('currencies'));
 
-        $this->sharedDriverLogicHandler->attemptToStoreInCache($cacheKey, $currencies);
+        $this->attemptToStoreInCache($cacheKey, $currencies);
 
         return $currencies;
     }
@@ -57,7 +41,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
      */
     public function exchangeRate(string $from, array|string $to, Carbon $date = null): float|array
     {
-        $this->sharedDriverLogicHandler->validateExchangeRateInput($from, $to, $date);
+        $this->validateExchangeRateInput($from, $to, $date);
 
         if ($from === $to) {
             return 1.0;
@@ -65,7 +49,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date ?? Carbon::now());
 
-        if ($cachedExchangeRate = $this->sharedDriverLogicHandler->attemptToResolveFromCache($cacheKey)) {
+        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
             // If the exchange rate has been retrieved from the cache as a
             // string (e.g. "1.23"), then cast it to a float (e.g. 1.23).
             // If we have retrieved the rates for many currencies, it
@@ -85,8 +69,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
         $url = $date ? '/historical' : '/live';
 
         /** @var array<string,float> $response */
-        $response = $this->sharedDriverLogicHandler
-            ->getRequestBuilder()
+        $response = $this->getRequestBuilder()
             ->makeRequest($url, $queryParams)
             ->rates();
 
@@ -94,7 +77,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
             ? $response[$from.$to]
             : $this->removeSourceCurrencyFromKeys($response);
 
-        $this->sharedDriverLogicHandler->attemptToStoreInCache($cacheKey, $exchangeRate);
+        $this->attemptToStoreInCache($cacheKey, $exchangeRate);
 
         return $exchangeRate;
     }
@@ -108,19 +91,19 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
         Carbon $date,
         Carbon $endDate
     ): array {
-        $this->sharedDriverLogicHandler->validateExchangeRateBetweenDateRangeInput($from, $to, $date, $endDate);
+        $this->validateExchangeRateBetweenDateRangeInput($from, $to, $date, $endDate);
 
         $cacheKey = $this->cacheRepository->buildCacheKey($from, $to, $date, $endDate);
 
-        if ($cachedExchangeRate = $this->sharedDriverLogicHandler->attemptToResolveFromCache($cacheKey)) {
+        if ($cachedExchangeRate = $this->attemptToResolveFromCache($cacheKey)) {
             return $cachedExchangeRate;
         }
 
         $conversions = $from === $to
-            ? $this->sharedDriverLogicHandler->exchangeRateDateRangeResultWithSameCurrency($date, $endDate)
+            ? $this->exchangeRateDateRangeResultWithSameCurrency($date, $endDate)
             : $this->makeRequestForExchangeRates($from, $to, $date, $endDate);
 
-        $this->sharedDriverLogicHandler->attemptToStoreInCache($cacheKey, $conversions);
+        $this->attemptToStoreInCache($cacheKey, $conversions);
 
         return $conversions;
     }
@@ -130,7 +113,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
      */
     public function convert(int $value, string $from, array|string $to, Carbon $date = null): float|array
     {
-        return $this->sharedDriverLogicHandler->convertUsingRates(
+        return $this->convertUsingRates(
             $this->exchangeRate($from, $to, $date),
             $to,
             $value,
@@ -147,31 +130,11 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
         Carbon $date,
         Carbon $endDate
     ): array {
-        return $this->sharedDriverLogicHandler->convertUsingRatesForDateRange(
+        return $this->convertUsingRatesForDateRange(
             $this->exchangeRateBetweenDateRange($from, $to, $date, $endDate),
             $to,
             $value,
         );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function shouldCache(bool $shouldCache = true): ExchangeRateDriver
-    {
-        $this->sharedDriverLogicHandler->shouldCache($shouldCache);
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function shouldBustCache(bool $bustCache = true): ExchangeRateDriver
-    {
-        $this->sharedDriverLogicHandler->shouldBustCache($bustCache);
-
-        return $this;
     }
 
     /**
@@ -191,8 +154,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
     {
         $symbols = is_string($to) ? $to : implode(',', $to);
 
-        $result = $this->sharedDriverLogicHandler
-            ->getRequestBuilder()
+        $result = $this->getRequestBuilder()
             ->makeRequest('/timeframe', [
                 'source' => $from,
                 'start_date' => $date->format('Y-m-d'),
