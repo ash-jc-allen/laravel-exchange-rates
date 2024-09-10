@@ -160,6 +160,7 @@ class Currency
         'UYU',
         'UZS',
         'VEF',
+        'VES',
         'VND',
         'VUV',
         'WST',
