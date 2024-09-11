@@ -3,6 +3,7 @@
 **v7.6.0 (released 2024-09-11):**
 
 - Added "VES" as a valid currency symbol. [#161](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/161)
+- Updated the test data providers methods to be static. [#158](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/158)
 
 **v7.5.0 (released 2024-07-10):**
 
