@@ -16,6 +16,7 @@ final class ValidCurrencyTest extends TestCase
      * @testWith ["GBP"]
      *           ["BYR"]
      *           ["BYN"]
+     *           ["VES"]
      */
     public function validator_returns_true_if_the_currency_is_valid(string $currency): void
     {
