@@ -80,7 +80,7 @@ class CacheRepository
      * @param  Carbon|null  $endDate
      * @return string
      */
-    public function buildCacheKey(string $from, string|array $to, Carbon $date, Carbon $endDate = null): string
+    public function buildCacheKey(string $from, string|array $to, Carbon $date, ?Carbon $endDate = null): string
     {
         if (is_array($to)) {
             asort($to);

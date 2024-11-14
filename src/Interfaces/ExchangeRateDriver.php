@@ -38,7 +38,7 @@ interface ExchangeRateDriver
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function exchangeRate(string $from, array|string $to, Carbon $date = null): float|array;
+    public function exchangeRate(string $from, array|string $to, ?Carbon $date = null): float|array;
 
     /**
      * Return the exchange rates between the given date range.
@@ -76,7 +76,7 @@ interface ExchangeRateDriver
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function convert(int $value, string $from, array|string $to, Carbon $date = null): float|array;
+    public function convert(int $value, string $from, array|string $to, ?Carbon $date = null): float|array;
 
     /**
      * Return an array of the converted values between the given date range.
