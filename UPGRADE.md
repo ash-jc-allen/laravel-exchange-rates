@@ -1,5 +1,16 @@
 # Upgrade Guide
 
+## Upgrading from 7.* to 8.0.0
+
+### Method Signature Change for PHP8.4 support
+
+Several method signatures have been changed for PHP8.4 support now that implicitly marking parameters as nullable is deprecated, the explicit nullable type must be used instead.
+The following methods have been updated to have the nullable type explicitly defined:
+
+- `buildCacheKey` in `AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository`
+
+If you are extending this class and overriding this method, you'll need to update your method signature to match the new one.
+
 ## Upgrading from 6.* to 7.0.0
 
 ### Method Signature Change
