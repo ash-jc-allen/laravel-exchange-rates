@@ -1,5 +1,9 @@
 # Changelog
 
+**v7.7.0 (released 2024-12-01):**
+
+- Added support for PHP 8.4, updating method signature compatibility. [#162](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/162)
+
 **v7.6.0 (released 2024-09-11):**
 
 - Added "VES" as a valid currency symbol. [#161](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/161)
@@ -9,7 +13,7 @@
 
 - Added "BYN" as a valid currency symbol. [#157](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/157)
 
-**7.4.0 (released 2024-03-19):**
+**v7.4.0 (released 2024-03-19):**
 
 - Added support for `nesbot/carbon 3.0`. [#154](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/154)
 

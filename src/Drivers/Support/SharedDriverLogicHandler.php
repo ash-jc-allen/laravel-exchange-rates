@@ -95,7 +95,7 @@ class SharedDriverLogicHandler
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function exchangeRate(string $from, string|array $to, Carbon $date = null): float|array
+    public function exchangeRate(string $from, string|array $to, ?Carbon $date = null): float|array
     {
         $this->validateExchangeRateInput($from, $to, $date);
 
@@ -224,7 +224,7 @@ class SharedDriverLogicHandler
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function convert(int $value, string $from, string|array $to, Carbon $date = null): float|array
+    public function convert(int $value, string $from, string|array $to, ?Carbon $date = null): float|array
     {
         return $this->convertUsingRates(
             $this->exchangeRate($from, $to, $date),

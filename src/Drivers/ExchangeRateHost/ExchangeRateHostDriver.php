@@ -19,7 +19,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
 
     private SharedDriverLogicHandler $sharedDriverLogicHandler;
 
-    public function __construct(RequestBuilder $requestBuilder = null, CacheRepository $cacheRepository = null)
+    public function __construct(?RequestBuilder $requestBuilder = null, ?CacheRepository $cacheRepository = null)
     {
         $requestBuilder = $requestBuilder ?? new RequestBuilder();
         $this->cacheRepository = $cacheRepository ?? new CacheRepository();
@@ -55,7 +55,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
     /**
      * @inheritDoc
      */
-    public function exchangeRate(string $from, array|string $to, Carbon $date = null): float|array
+    public function exchangeRate(string $from, array|string $to, ?Carbon $date = null): float|array
     {
         $this->sharedDriverLogicHandler->validateExchangeRateInput($from, $to, $date);
 
@@ -128,7 +128,7 @@ class ExchangeRateHostDriver implements ExchangeRateDriver
     /**
      * @inheritDoc
      */
-    public function convert(int $value, string $from, array|string $to, Carbon $date = null): float|array
+    public function convert(int $value, string $from, array|string $to, ?Carbon $date = null): float|array
     {
         return $this->sharedDriverLogicHandler->convertUsingRates(
             $this->exchangeRate($from, $to, $date),
