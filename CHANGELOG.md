@@ -1,6 +1,6 @@
 # Changelog
 
-**v8.0.0 (released 2024-11-14):**
+**v7.7.0 (released 2024-12-01):**
 
 - Added support for PHP 8.4, updating method signature compatibility. [#162](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/162)
 

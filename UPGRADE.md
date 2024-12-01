@@ -1,44 +1,5 @@
 # Upgrade Guide
 
-## Upgrading from 7.* to 8.0.0
-
-### Method Signature Changes for PHP 8.4 Support
-
-With the release of PHP 8.4, implicit nullable types are deprecated. In this update, all affected method signatures have been adjusted to use explicit nullable types.
-
-The following methods have been updated:
-
-1. `AshAllenDesign\LaravelExchangeRates\Classes\CacheRepository`:
-    - `buildCacheKey`: Changed the parameter type `Carbon $endDate` to `?Carbon $endDate`.
-
-2. `AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost\ExchangeRateHostDriver`:
-    - `__construct`: Changed `RequestBuilder $requestBuilder` and `CacheRepository $cacheRepository` to `?RequestBuilder $requestBuilder` and `?CacheRepository $cacheRepository`.
-    - `exchangeRate`: Changed `Carbon $date` to `?Carbon $date`.
-    - `convert`: Changed `Carbon $date` to `?Carbon $date`.
-
-3. `AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver`:
-    - `__construct`: Changed `RequestBuilder $requestBuilder` and `CacheRepository $cacheRepository` to `?RequestBuilder $requestBuilder` and `?CacheRepository $cacheRepository`.
-    - `exchangeRate`: Changed `Carbon $date` to `?Carbon $date`.
-    - `convert`: Changed `Carbon $date` to `?Carbon $date`.
-
-4. `AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesDataApi\ExchangeRatesDataApiDriver`:
-    - `__construct`: Changed `RequestBuilder $requestBuilder` and `CacheRepository $cacheRepository` to `?RequestBuilder $requestBuilder` and `?CacheRepository $cacheRepository`.
-    - `exchangeRate`: Changed `Carbon $date` to `?Carbon $date`.
-    - `convert`: Changed `Carbon $date` to `?Carbon $date`.
-
-5. `AshAllenDesign\LaravelExchangeRates\Drivers\Support\SharedDriverLogicHandler`:
-    - `exchangeRate`: Changed `Carbon $date` to `?Carbon $date`.
-    - `convert`: Changed `Carbon $date` to `?Carbon $date`.
-
-6. `AshAllenDesign\LaravelExchangeRates\Facades\ExchangeRate`:
-    - `convert`: Changed `Carbon $date` to `?Carbon $date`.
-
-7. `AshAllenDesign\LaravelExchangeRates\Interfaces\ExchangeRateDriver`:
-    - `exchangeRate`: Changed `Carbon $date` to `?Carbon $date`.
-    - `convert`: Changed `Carbon $date` to `?Carbon $date`.
-
-If you are extending or implementing any of these classes and overriding the mentioned methods, you'll need to update your method signatures to match the new ones.
-
 ## Upgrading from 6.* to 7.0.0
 
 ### Method Signature Change
