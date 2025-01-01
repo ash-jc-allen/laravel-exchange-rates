@@ -51,9 +51,5 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-suggest
 
-      - name: Copy Laravel 8 Specific Files
-        if: matrix.laravel == '8.*'
-        run: cp phpstan-laravel-8.neon phpstan.neon
-
       - name: Run Larastan
         run: vendor/bin/phpstan analyse
