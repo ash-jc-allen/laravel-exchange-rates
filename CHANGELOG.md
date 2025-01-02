@@ -1,5 +1,11 @@
 # Changelog
 
+**v7.8.0 (released 2025-01-02):**
+
+- Added support for PHPUnit 11. [#165](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/165)
+- Added support for Larastan 3. [#163](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/163)
+- Dropped support for Laravel 8. [#164](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/164)
+
 **v7.7.0 (released 2024-12-01):**
 
 - Added support for PHP 8.4, updating method signature compatibility. [#162](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/162)
