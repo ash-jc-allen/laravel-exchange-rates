@@ -1,5 +1,9 @@
 # Changelog
 
+**v7.9.0 (released 2025-02-23):**
+
+- Added support for Laravel 12. [#167](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/167)
+
 **v7.8.0 (released 2025-01-02):**
 
 - Added support for PHPUnit 11. [#165](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/165)
