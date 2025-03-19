@@ -9,7 +9,7 @@ return [
     |
     | Define which API service should be used to retrieve the exchange rates.
     |
-    | Supported: "exchange-rates-api-io", "exchange-rates-data-api", "exchange-rate-host"
+    | Supported: "exchange-rates-api-io", "exchange-rates-data-api", "exchange-rate-host", "currency-beacon"
     |
     */
     'driver' => 'exchange-rates-api-io',
