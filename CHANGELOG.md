@@ -2,6 +2,7 @@
 
 **v7.10.0 (released 2025-10-17):**
 
+- Add`currency-beacon` driver in supported APIs comment in config file. [#170](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/170)
 - Added `.gitattributes` file. [#173](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/173)
 
 **v7.9.0 (released 2025-02-23):**
