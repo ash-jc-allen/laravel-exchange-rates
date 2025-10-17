@@ -1,5 +1,9 @@
 # Changelog
 
+**v7.10.0 (released 2025-10-17):**
+
+- Added `.gitattributes` file. [#173](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/173)
+
 **v7.9.0 (released 2025-02-23):**
 
 - Added support for Laravel 12. [#167](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/167)
