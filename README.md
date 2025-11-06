@@ -67,8 +67,8 @@ The package has been developed and tested to work with the following minimum req
 
 Laravel Exchange Rates currently supports the following APIs:
 
-- [Exchange Rates API](https://exchangeratesapi.io/)
-- [Exchange Rates Data API](https://apilayer.com/marketplace/exchangerates_data-api)
+- [Exchange Rates API](https://exchangeratesapi.io/?fpr=ashley37)
+- [Exchange Rates Data API](https://apilayer.com/marketplace/exchangerates_data-api?fpr=ashley37)
 - [Exchange Rate Host](https://exchangerate.host/)
 - [CurrencyBeacon](https://currencybeacon.com/)
 
@@ -370,12 +370,12 @@ ExchangeRate::driver('exchange-rates-data-api')
 
 The following drivers are available with the package:
 
-| API Service             | Driver name               | API URL                                                 |
-|-------------------------|---------------------------|---------------------------------------------------------|
-| CurrencyBeacon          | `currency-beacon`         | https://currencybeacon.com/                             |
-| Exchange Rates API IO   | `exchange-rates-api-io`   | https://exchangeratesapi.io/                            |
-| Exchange Rates Data API | `exchange-rates-data-api` | https://apilayer.com/marketplace/exchangerates_data-api |
-| Exchange Rate Host      | `exchange-rate-host`      | https://exchangerate.host                               |
+| API Service             | Driver name               | API URL                                                                                                                                   |
+|-------------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| Exchange Rates API IO   | `exchange-rates-api-io`   | [https://exchangeratesapi.io](https://exchangeratesapi.io/?fpr=ashley37)                                                                  |
+| Exchange Rates Data API | `exchange-rates-data-api` | [https://apilayer.com/marketplace/exchangerates_data-api](https://apilayer.com/marketplace/exchangerates_data-api?fpr=ashley37)           |
+| Exchange Rate Host      | `exchange-rate-host`      | [https://exchangerate.host](https://exchangerate.host)                                                                                    |
+| CurrencyBeacon          | `currency-beacon`         | [https://currencybeacon.com/](https://currencybeacon.com/)                                                                                |
 
 ### Validation Rule
 
