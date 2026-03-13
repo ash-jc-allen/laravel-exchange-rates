@@ -60,8 +60,8 @@ composer require ashallendesign/laravel-exchange-rates
 
 The package has been developed and tested to work with the following minimum requirements:
 
-- PHP 8.0
-- Laravel 8
+- PHP 8.2
+- Laravel 9
 
 ## Supported APIs
 
