@@ -1,5 +1,11 @@
 # Changelog
 
+**v7.11.0 (released 2026-03-13):**
+
+- Added support for Laravel 13. [#175](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/175)
+- Dropped support for PHP 8.0 and 8.1. [#174](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/174)
+- Run CI workflows using PHP 8.5. [#176](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/176)
+
 **v7.10.0 (released 2025-10-17):**
 
 - Add`currency-beacon` driver in supported APIs comment in config file. [#170](https://github.com/ash-jc-allen/laravel-exchange-rates/pull/170)
