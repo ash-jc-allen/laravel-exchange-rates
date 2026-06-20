@@ -7,6 +7,7 @@
 <a href="https://packagist.org/packages/ashallendesign/laravel-exchange-rates"><img src="https://img.shields.io/packagist/dt/ashallendesign/laravel-exchange-rates.svg?style=flat-square" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/ashallendesign/laravel-exchange-rates"><img src="https://img.shields.io/packagist/php-v/ashallendesign/laravel-exchange-rates?style=flat-square" alt="PHP from Packagist"></a>
 <a href="https://github.com/ash-jc-allen/short-url/blob/master/LICENSE"><img src="https://img.shields.io/github/license/ash-jc-allen/laravel-exchange-rates?style=flat-square" alt="GitHub license"></a>
+<a href="https://github.com/ash-jc-allen/laravel-exchange-rates/blob/master/composer.json"><img src="https://badge.laravel.cloud/badge/ashallendesign/laravel-exchange-rates?style=flat" alt="Laravel Compatibility"></a>
 </p>
 
 ## Table of Contents
