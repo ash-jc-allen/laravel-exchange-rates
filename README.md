@@ -72,6 +72,7 @@ Laravel Exchange Rates currently supports the following APIs:
 - [Exchange Rates Data API](https://apilayer.com/marketplace/exchangerates_data-api?fpr=ashley37)
 - [Exchange Rate Host](https://exchangerate.host/)
 - [CurrencyBeacon](https://currencybeacon.com/)
+- [AllRatesToday](https://allratestoday.com)
 
 ## Configuration
 
@@ -377,6 +378,9 @@ The following drivers are available with the package:
 | Exchange Rates Data API | `exchange-rates-data-api` | [https://apilayer.com/marketplace/exchangerates_data-api](https://apilayer.com/marketplace/exchangerates_data-api?fpr=ashley37)           |
 | Exchange Rate Host      | `exchange-rate-host`      | [https://exchangerate.host](https://exchangerate.host)                                                                                    |
 | CurrencyBeacon          | `currency-beacon`         | [https://currencybeacon.com/](https://currencybeacon.com/)                                                                                |
+| AllRatesToday           | `all-rates-today`         | [https://allratestoday.com](https://allratestoday.com)                                                                                    |
+
+The `all-rates-today` driver works without an API key, using the latest European Central Bank reference rates (about 30 currencies). Calls with a date or a date range throw an `ExchangeRateException` unless `EXCHANGE_RATES_API_KEY` is set, and historical rates also need a plan that includes them. Each currency in a date range is a separate request. If you display the keyless rates on a public page, the provider's [terms](https://allratestoday.com/terms/#attribution) require an attribution link.
 
 ### Validation Rule
 

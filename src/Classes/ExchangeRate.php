@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AshAllenDesign\LaravelExchangeRates\Classes;
 
+use AshAllenDesign\LaravelExchangeRates\Drivers\AllRatesToday\AllRatesTodayDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\CurrencyBeacon\CurrencyBeaconDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRateHost\ExchangeRateHostDriver;
 use AshAllenDesign\LaravelExchangeRates\Drivers\ExchangeRatesApiIo\ExchangeRatesApiIoDriver;
@@ -13,6 +14,11 @@ use Illuminate\Support\Manager;
 
 class ExchangeRate extends Manager
 {
+    public function createAllRatesTodayDriver(): ExchangeRateDriver
+    {
+        return new AllRatesTodayDriver();
+    }
+
     public function createCurrencyBeaconDriver(): ExchangeRateDriver
     {
         return new CurrencyBeaconDriver();
